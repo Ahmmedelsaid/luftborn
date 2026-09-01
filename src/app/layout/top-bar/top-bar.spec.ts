@@ -1,5 +1,6 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
+import { provideTestTranslate, useTranslations } from '../../../testing/translate-helpers';
 import { click, exists, query, text } from '../../../testing/component-helpers';
 import { provideAppIcons } from '../../shared/icons/provide-icons';
 import { TopBar } from './top-bar';
@@ -10,9 +11,10 @@ describe('TopBar', () => {
   beforeEach(async () => {
     TestBed.configureTestingModule({
       imports: [TopBar],
-      providers: [provideAppIcons()],
+      providers: [provideAppIcons(), provideTestTranslate()],
     });
 
+    useTranslations();
     fixture = TestBed.createComponent(TopBar);
     await fixture.whenStable();
   });

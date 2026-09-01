@@ -1,6 +1,7 @@
 import { CdkDragDrop } from '@angular/cdk/drag-drop';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
+import { provideTestTranslate, useTranslations } from '../../../../testing/translate-helpers';
 import { click, exists, text, texts } from '../../../../testing/component-helpers';
 import { createTask, TEST_NOW } from '../../../../testing/task.factory';
 import { BoardColumn, Task, TaskStatus, TaskView } from '../../../core/interfaces';
@@ -50,8 +51,9 @@ describe('TaskBoard', () => {
   beforeEach(() => {
     TestBed.configureTestingModule({
       imports: [TaskBoard],
-      providers: [provideAppIcons()],
+      providers: [provideAppIcons(), provideTestTranslate()],
     });
+    useTranslations();
     fixture = TestBed.createComponent(TaskBoard);
   });
 

@@ -39,7 +39,7 @@ export class ActivityStore {
     const optimistic: ActivityView = {
       ...draft,
       id: `pending-${draft.taskId}-${draft.timestamp}`,
-      relativeTime: 'just now',
+      relativeTime: { key: 'time.justNow' },
     };
 
     patchResource(this.resource, (entries) => [optimistic, ...entries]);

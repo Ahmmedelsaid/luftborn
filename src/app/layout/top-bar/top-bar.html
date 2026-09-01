@@ -2,7 +2,7 @@
   <button
     type="button"
     class="bar__menu"
-    aria-label="Open navigation menu"
+    [attr.aria-label]="'app.openMenu' | translate"
     (click)="menuToggle.emit()"
   >
     <mat-icon svgIcon="menu" aria-hidden="true" />
@@ -13,17 +13,17 @@
   <span class="bar__logo" aria-hidden="true">
     <mat-icon svgIcon="logo" />
   </span>
-  <span class="bar__title">Task Manager</span>
+  <span class="bar__title">{{ 'app.name' | translate }}</span>
 </div>
 
 <div class="bar__search" [class.bar__search--focused]="searchFocused()">
   <mat-icon class="bar__search-icon" svgIcon="search" aria-hidden="true" />
-  <label class="app-visually-hidden" for="global-search">Search tasks</label>
+  <label class="app-visually-hidden" for="global-search">{{ 'app.searchLabel' | translate }}</label>
   <input
     id="global-search"
     class="bar__search-input"
     type="search"
-    placeholder="Search tasks..."
+    [placeholder]="'app.searchPlaceholder' | translate"
     autocomplete="off"
     [value]="search()"
     (input)="onSearchInput($event)"
@@ -34,7 +34,7 @@
     <button
       type="button"
       class="bar__search-clear"
-      aria-label="Clear search"
+      [attr.aria-label]="'app.clearSearch' | translate"
       (click)="clearSearch()"
     >
       <mat-icon svgIcon="close" aria-hidden="true" />
@@ -43,13 +43,17 @@
 </div>
 
 <div class="bar__actions">
+  <app-language-switcher />
+
   <button
     type="button"
     class="bar__icon-button"
     [attr.aria-label]="
-      notificationCount() > 0 ? notificationCount() + ' unread notifications' : 'Notifications'
+      notificationCount() > 0
+        ? ('app.notificationsUnread' | translate: { count: notificationCount() })
+        : ('app.notifications' | translate)
     "
-    matTooltip="Notifications"
+    [matTooltip]="'app.notifications' | translate"
   >
     <mat-icon svgIcon="bell" aria-hidden="true" />
     @if (notificationCount() > 0) {
@@ -60,7 +64,7 @@
   <button
     type="button"
     class="bar__avatar"
-    [attr.aria-label]="'Signed in as ' + userName()"
+    [attr.aria-label]="'app.signedInAs' | translate: { name: userName() }"
     [matTooltip]="userName()"
   >
     {{ userInitials() }}

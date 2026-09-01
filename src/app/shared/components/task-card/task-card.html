@@ -4,7 +4,7 @@
   <button
     type="button"
     class="card__menu"
-    [attr.aria-label]="'Actions for ' + task().title"
+    [attr.aria-label]="'task.actionsFor' | translate: { title: task().title }"
     [matMenuTriggerFor]="menu"
     (click)="$event.stopPropagation()"
   >
@@ -14,19 +14,21 @@
   <mat-menu #menu="matMenu">
     <button mat-menu-item type="button" (click)="edit.emit(task())">
       <mat-icon svgIcon="edit" aria-hidden="true" />
-      <span>Edit</span>
+      <span>{{ 'actions.edit' | translate }}</span>
     </button>
 
     @for (status of moveTargets(); track status) {
       <button mat-menu-item type="button" (click)="moveTo.emit(status)">
         <mat-icon svgIcon="chevron-right" aria-hidden="true" />
-        <span>Move to {{ statusLabels[status] }}</span>
+        <span>
+          {{ 'task.moveTo' | translate: { status: statusLabelKeys[status] | translate } }}
+        </span>
       </button>
     }
 
     <button mat-menu-item type="button" class="card__menu-danger" (click)="remove.emit(task())">
       <mat-icon svgIcon="delete" aria-hidden="true" />
-      <span>Delete</span>
+      <span>{{ 'actions.delete' | translate }}</span>
     </button>
   </mat-menu>
 </div>
@@ -37,7 +39,7 @@
 
   <p class="card__due" [class]="'card__due--' + task().dueState">
     <mat-icon class="card__due-icon" [svgIcon]="dueIcon()" aria-hidden="true" />
-    <span>{{ task().dueLabel }}</span>
+    <span>{{ task().dueLabel | localise }}</span>
   </p>
 
   @if (task().tags.length > 0) {

@@ -1,6 +1,8 @@
 import { ChangeDetectionStrategy, Component, input, output, signal } from '@angular/core';
 import { MatIconModule } from '@angular/material/icon';
 import { MatTooltipModule } from '@angular/material/tooltip';
+import { TranslatePipe } from '@ngx-translate/core';
+import { LanguageSwitcher } from '../../shared/components/language-switcher/language-switcher';
 
 /**
  * Presentational top bar. Search text is passed in and changes are emitted out,
@@ -8,7 +10,7 @@ import { MatTooltipModule } from '@angular/material/tooltip';
  */
 @Component({
   selector: 'app-top-bar',
-  imports: [MatIconModule, MatTooltipModule],
+  imports: [LanguageSwitcher, MatIconModule, MatTooltipModule, TranslatePipe],
   templateUrl: './top-bar.html',
   styleUrl: './top-bar.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,

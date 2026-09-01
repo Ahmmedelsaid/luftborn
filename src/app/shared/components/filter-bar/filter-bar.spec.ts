@@ -1,5 +1,6 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
+import { provideTestTranslate, useTranslations } from '../../../../testing/translate-helpers';
 import { click, exists, texts } from '../../../../testing/component-helpers';
 import { createUser } from '../../../../testing/task.factory';
 import { TaskPriority, TaskStatus, User } from '../../../core/interfaces';
@@ -12,8 +13,9 @@ describe('FilterBar', () => {
   beforeEach(() => {
     TestBed.configureTestingModule({
       imports: [FilterBar],
-      providers: [provideAppIcons()],
+      providers: [provideAppIcons(), provideTestTranslate()],
     });
+    useTranslations();
     fixture = TestBed.createComponent(FilterBar);
   });
 
@@ -100,13 +102,13 @@ describe('FilterBar', () => {
     it('names the single selected priority', async () => {
       await render({ activePriorities: ['high'] });
 
-      expect(fixture.componentInstance['priorityButtonLabel']()).toBe('High');
+      expect(fixture.componentInstance['priorityLabel']()).toBe('High');
     });
 
     it('counts multiple selected priorities', async () => {
       await render({ activePriorities: ['high', 'low'] });
 
-      expect(fixture.componentInstance['priorityButtonLabel']()).toBe('Priority (2)');
+      expect(fixture.componentInstance['priorityLabel']()).toBe('Priority (2)');
     });
 
     it('emits a toggle for the chosen priority', async () => {
@@ -133,7 +135,7 @@ describe('FilterBar', () => {
     it('is hidden when there are no assignees to choose from', async () => {
       await render({ assignees: [] });
 
-      expect(fixture.componentInstance['assigneeButtonLabel']()).toBe('Assignee');
+      expect(fixture.componentInstance['assigneeLabel']()).toBe('Assignee');
       expect(texts(fixture, '.bar__dropdown')).toEqual(['Priority']);
     });
 
@@ -143,7 +145,7 @@ describe('FilterBar', () => {
         activeAssigneeIds: ['u1'],
       });
 
-      expect(fixture.componentInstance['assigneeButtonLabel']()).toBe('Sarah');
+      expect(fixture.componentInstance['assigneeLabel']()).toBe('Sarah');
     });
 
     it('summarises multiple selected assignees', async () => {
@@ -152,7 +154,7 @@ describe('FilterBar', () => {
         activeAssigneeIds: ['u1', 'u2'],
       });
 
-      expect(fixture.componentInstance['assigneeButtonLabel']()).toBe('Sarah +1');
+      expect(fixture.componentInstance['assigneeLabel']()).toBe('Sarah +1');
     });
   });
 

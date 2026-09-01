@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
+import { ChangeDetectionStrategy, Component, inject, Injector } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { ActivatedRoute, Router } from '@angular/router';
 import { firstValueFrom } from 'rxjs';
@@ -22,6 +22,7 @@ export class TaskFormPage {
   private readonly dialog = inject(MatDialog);
   private readonly route = inject(ActivatedRoute);
   private readonly router = inject(Router);
+  private readonly injector = inject(Injector);
 
   constructor() {
     const taskId = this.route.snapshot.paramMap.get('id') ?? undefined;
@@ -34,6 +35,11 @@ export class TaskFormPage {
       TaskFormDialog,
       {
         data: { taskId },
+        // A dialog is created against the root environment injector, so the
+        // route-scoped `provideNativeDateAdapter()` would be invisible to the
+        // datepicker inside it. Passing this component's injector keeps the
+        // adapter out of the initial bundle without breaking the form.
+        injector: this.injector,
         width: '640px',
         maxWidth: 'calc(100vw - 32px)',
         maxHeight: 'calc(100dvh - 48px)',

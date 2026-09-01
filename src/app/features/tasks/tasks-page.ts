@@ -4,6 +4,8 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatMenuModule } from '@angular/material/menu';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Router, RouterOutlet } from '@angular/router';
+import { toSignal } from '@angular/core/rxjs-interop';
+import { TranslatePipe, TranslateService } from '@ngx-translate/core';
 import { TaskPriority, TaskSortKey, TaskStatus, TaskView } from '../../core/interfaces';
 import { TaskStore } from '../../core/state/task-store';
 import { UserStore } from '../../core/state/user-store';
@@ -15,12 +17,12 @@ import { PageHeader } from '../../shared/components/page-header/page-header';
 import { TaskMove } from '../../shared/interfaces';
 
 /** Sort options offered in the toolbar, with the copy the user reads. */
-const SORT_OPTIONS: readonly { readonly key: TaskSortKey; readonly label: string }[] = [
-  { key: 'manual', label: 'Board order' },
-  { key: 'dueDate', label: 'Due date' },
-  { key: 'priority', label: 'Priority' },
-  { key: 'title', label: 'Title' },
-  { key: 'updatedAt', label: 'Recently updated' },
+const SORT_OPTIONS: readonly { readonly key: TaskSortKey; readonly labelKey: string }[] = [
+  { key: 'manual', labelKey: 'sort.manual' },
+  { key: 'dueDate', labelKey: 'sort.dueDate' },
+  { key: 'priority', labelKey: 'sort.priority' },
+  { key: 'title', labelKey: 'sort.title' },
+  { key: 'updatedAt', labelKey: 'sort.updatedAt' },
 ];
 
 /**
@@ -41,6 +43,7 @@ const SORT_OPTIONS: readonly { readonly key: TaskSortKey; readonly label: string
     PageHeader,
     RouterOutlet,
     TaskBoard,
+    TranslatePipe,
   ],
   templateUrl: './tasks-page.html',
   styleUrl: './tasks-page.scss',
@@ -52,6 +55,7 @@ export class TasksPage {
   private readonly confirm = inject(ConfirmDialogService);
   private readonly snackBar = inject(MatSnackBar);
   private readonly router = inject(Router);
+  private readonly translate = inject(TranslateService);
 
   protected readonly board = this.tasks.board;
   protected readonly loading = this.tasks.isLoading;
@@ -68,13 +72,22 @@ export class TasksPage {
     () => this.filters().statuses[0] ?? null,
   );
 
-  protected readonly sortLabel = computed(
-    () => SORT_OPTIONS.find((option) => option.key === this.sortKey())?.label ?? 'Sort',
+  protected readonly sortLabelKey = computed(
+    () => SORT_OPTIONS.find((option) => option.key === this.sortKey())?.labelKey ?? 'sort.manual',
   );
 
+  private readonly languageRevision = toSignal(this.translate.onLangChange, {
+    initialValue: null,
+  });
+
   protected readonly summary = computed(() => {
+    this.languageRevision();
     const totals = this.tasks.filteredTotals();
-    return `${totals.total} shown · ${totals.overdue} overdue · ${totals.done} done`;
+    return this.translate.instant('tasks.summary', {
+      shown: totals.total,
+      overdue: totals.overdue,
+      done: totals.done,
+    }) as string;
   });
 
   constructor() {
@@ -85,7 +98,9 @@ export class TasksPage {
         return;
       }
 
-      this.snackBar.open(error.message, 'Dismiss', { duration: 6000 });
+      this.snackBar.open(error.message, this.translate.instant('errors.dismiss') as string, {
+        duration: 6000,
+      });
       this.tasks.dismissError();
     });
   }
@@ -145,9 +160,10 @@ export class TasksPage {
 
   protected async onDeleteTask(task: TaskView): Promise<void> {
     const confirmed = await this.confirm.ask({
-      title: 'Delete task?',
-      message: `"${task.title}" will be permanently removed. This cannot be undone.`,
-      confirmLabel: 'Delete',
+      title: this.translate.instant('delete.title') as string,
+      message: this.translate.instant('delete.message', { title: task.title }) as string,
+      confirmLabel: this.translate.instant('actions.delete') as string,
+      cancelLabel: this.translate.instant('actions.cancel') as string,
       destructive: true,
     });
 
@@ -156,7 +172,11 @@ export class TasksPage {
     }
 
     if (await this.tasks.remove(task.id)) {
-      this.snackBar.open('Task deleted', 'Dismiss', { duration: 4000 });
+      this.snackBar.open(
+        this.translate.instant('delete.success') as string,
+        this.translate.instant('errors.dismiss') as string,
+        { duration: 4000 },
+      );
     }
   }
 }

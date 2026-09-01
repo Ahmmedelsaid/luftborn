@@ -1,14 +1,14 @@
-<app-page-header title="Tasks" [subtitle]="summary()">
+<app-page-header [title]="'tasks.title' | translate" [subtitle]="summary()">
   <button matButton="outlined" type="button" [matMenuTriggerFor]="sortMenu">
     <mat-icon svgIcon="filter" aria-hidden="true" />
-    {{ sortLabel() }}
+    {{ sortLabelKey() | translate }}
     <mat-icon svgIcon="chevron-down" aria-hidden="true" />
   </button>
 
   <mat-menu #sortMenu="matMenu">
     @for (option of sortOptions; track option.key) {
       <button mat-menu-item type="button" (click)="onSort(option.key)">
-        <span>{{ option.label }}</span>
+        <span>{{ option.labelKey | translate }}</span>
         @if (sortKey() === option.key) {
           <mat-icon svgIcon="tasks" aria-hidden="true" />
         }
@@ -18,7 +18,7 @@
 
   <button matButton="outlined" type="button" (click)="onReload()">
     <mat-icon svgIcon="refresh" aria-hidden="true" />
-    Refresh
+    {{ 'actions.refresh' | translate }}
   </button>
 </app-page-header>
 
@@ -39,7 +39,7 @@
   <app-error-state
     class="tasks__error"
     [error]="error"
-    title="Could not load your tasks"
+    [title]="'dashboard.loadFailed' | translate"
     (retry)="onReload()"
   />
 } @else {
@@ -57,5 +57,4 @@
   />
 }
 
-<!-- The create and edit modals are rendered by their own routes. -->
 <router-outlet />

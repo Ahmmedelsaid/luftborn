@@ -9,6 +9,7 @@ import {
 import { MatButtonModule } from '@angular/material/button';
 import { MAT_DIALOG_DATA, MatDialogModule, MatDialogRef } from '@angular/material/dialog';
 import { MatIconModule } from '@angular/material/icon';
+import { TranslatePipe, TranslateService } from '@ngx-translate/core';
 import { TaskDraft } from '../../../core/interfaces';
 import { TaskStore } from '../../../core/state/task-store';
 import { UserStore } from '../../../core/state/user-store';
@@ -25,14 +26,14 @@ export type TaskFormDialogResult = 'saved' | 'cancelled';
 
 @Component({
   selector: 'app-task-form-dialog',
-  imports: [MatButtonModule, MatDialogModule, MatIconModule, TaskForm],
+  imports: [MatButtonModule, MatDialogModule, MatIconModule, TaskForm, TranslatePipe],
   template: `
     <div class="dialog__head">
-      <h2 mat-dialog-title class="dialog__title">{{ title() }}</h2>
+      <h2 mat-dialog-title class="dialog__title">{{ titleKey() | translate }}</h2>
       <button
         type="button"
         class="dialog__close"
-        aria-label="Close"
+        [attr.aria-label]="'actions.close' | translate"
         [disabled]="saving()"
         (click)="close()"
       >
@@ -105,6 +106,7 @@ export class TaskFormDialog {
   private readonly tasks = inject(TaskStore);
   private readonly users = inject(UserStore);
   private readonly confirm = inject(ConfirmDialogService);
+  private readonly translate = inject(TranslateService);
 
   private readonly form = viewChild.required(TaskForm);
 
@@ -127,7 +129,7 @@ export class TaskFormDialog {
     this.data.taskId ? this.tasks.taskById(this.data.taskId) : undefined,
   );
 
-  protected readonly title = computed(() => (this.task() ? 'Edit task' : 'New task'));
+  protected readonly titleKey = computed(() => (this.task() ? 'form.editTitle' : 'form.newTitle'));
 
   protected async onSave(draft: TaskDraft): Promise<void> {
     this.saving.set(true);
@@ -152,10 +154,10 @@ export class TaskFormDialog {
     }
 
     const discard = await this.confirm.ask({
-      title: 'Discard changes?',
-      message: 'Your edits to this task have not been saved.',
-      confirmLabel: 'Discard',
-      cancelLabel: 'Keep editing',
+      title: this.translate.instant('form.discardTitle') as string,
+      message: this.translate.instant('form.discardMessage') as string,
+      confirmLabel: this.translate.instant('actions.discard') as string,
+      cancelLabel: this.translate.instant('actions.keepEditing') as string,
       destructive: true,
     });
 

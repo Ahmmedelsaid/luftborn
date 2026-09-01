@@ -3,6 +3,7 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { provideRouter, Router } from '@angular/router';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
+import { provideTestTranslate, useTranslations } from '../../../testing/translate-helpers';
 import { click, exists, text, texts } from '../../../testing/component-helpers';
 import {
   createActivity,
@@ -70,11 +71,13 @@ describe('DashboardPage', () => {
         provideFrozenClock(),
         provideAppIcons(),
         provideRouter([{ path: 'tasks/new', children: [] }]),
+        provideTestTranslate(),
         { provide: ConfirmDialogService, useValue: { ask: confirmSpy } },
         { provide: MatSnackBar, useValue: { open: snackBarSpy } },
       ],
     });
 
+    useTranslations();
     fixture = TestBed.createComponent(DashboardPage);
     await settle();
 

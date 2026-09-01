@@ -1,6 +1,7 @@
 import { provideNativeDateAdapter } from '@angular/material/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
+import { provideTestTranslate, useTranslations } from '../../../../testing/translate-helpers';
 import { click, exists, query, text, texts } from '../../../../testing/component-helpers';
 import { createTask, createUser, TEST_NOW } from '../../../../testing/task.factory';
 import { provideFrozenClock } from '../../../../testing/test-helpers';
@@ -32,9 +33,15 @@ describe('TaskForm', () => {
   beforeEach(async () => {
     TestBed.configureTestingModule({
       imports: [TaskForm],
-      providers: [provideAppIcons(), provideFrozenClock(), provideNativeDateAdapter()],
+      providers: [
+        provideAppIcons(),
+        provideFrozenClock(),
+        provideNativeDateAdapter(),
+        provideTestTranslate(),
+      ],
     });
 
+    useTranslations();
     fixture = TestBed.createComponent(TaskForm);
     fixture.componentRef.setInput('assignees', USERS);
     await fixture.whenStable();

@@ -2,6 +2,7 @@ import { Component, inject } from '@angular/core';
 import { TestBed } from '@angular/core/testing';
 import { afterEach, beforeEach, describe, expect, it } from 'vitest';
 import { settle } from '../../../../testing/test-helpers';
+import { provideTestTranslate, useTranslations } from '../../../../testing/translate-helpers';
 import { ConfirmDialogService } from './confirm-dialog.service';
 
 /** Host that opens the dialog, so the spec exercises the real service path. */
@@ -31,7 +32,11 @@ describe('ConfirmDialogService', () => {
   let host: ConfirmHost;
 
   beforeEach(async () => {
-    TestBed.configureTestingModule({ imports: [ConfirmHost] });
+    TestBed.configureTestingModule({
+      imports: [ConfirmHost],
+      providers: [provideTestTranslate()],
+    });
+    useTranslations();
     const fixture = TestBed.createComponent(ConfirmHost);
     host = fixture.componentInstance;
     await fixture.whenStable();

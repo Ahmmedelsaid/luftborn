@@ -7,7 +7,7 @@
     } @else {
       <span class="stat__icon stat__icon--emoji" aria-hidden="true">{{ stat.icon }}</span>
     }
-    <span>{{ stat.title }}</span>
+    <span>{{ titleFor(stat) }}</span>
   </p>
 
   <p class="stat__value">{{ stat.value }}</p>

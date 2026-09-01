@@ -1,5 +1,6 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { beforeEach, describe, expect, it } from 'vitest';
+import { provideTestTranslate, useTranslations } from '../../../../testing/translate-helpers';
 import { exists, text, texts } from '../../../../testing/component-helpers';
 import { createActivity } from '../../../../testing/task.factory';
 import { ActivityView } from '../../../core/interfaces';
@@ -7,7 +8,11 @@ import { provideAppIcons } from '../../icons/provide-icons';
 import { ActivityFeed } from './activity-feed';
 
 function entry(overrides: Partial<ActivityView> = {}): ActivityView {
-  return { ...createActivity(), relativeTime: '2 hours ago', ...overrides };
+  return {
+    ...createActivity(),
+    relativeTime: { key: 'time.hoursAgo', params: { count: 2 }, count: 2 },
+    ...overrides,
+  };
 }
 
 describe('ActivityFeed', () => {
@@ -16,8 +21,9 @@ describe('ActivityFeed', () => {
   beforeEach(() => {
     TestBed.configureTestingModule({
       imports: [ActivityFeed],
-      providers: [provideAppIcons()],
+      providers: [provideAppIcons(), provideTestTranslate()],
     });
+    useTranslations();
     fixture = TestBed.createComponent(ActivityFeed);
   });
 
@@ -35,20 +41,32 @@ describe('ActivityFeed', () => {
 
   it('shows the actor, the message and the relative time', async () => {
     await render([
-      entry({ userName: 'Sarah Smith', message: 'completed "Ship it"', relativeTime: 'yesterday' }),
+      entry({
+        userName: 'Sarah Smith',
+        type: 'completed',
+        taskTitle: 'Ship it',
+        relativeTime: { key: 'time.yesterday' },
+      }),
     ]);
 
     expect(text(fixture, '.feed__actor')).toBe('Sarah Smith');
+    // Composed from `type` and `taskTitle`, not from the API's English sentence.
     expect(text(fixture, '.feed__text')).toContain('completed "Ship it"');
     expect(text(fixture, '.feed__meta')).toContain('yesterday');
   });
 
   it('separates the actor from the message', async () => {
-    await render([entry({ userName: 'John Doe', message: 'updated "Task"' })]);
+    await render([entry({ userName: 'John Doe', type: 'updated', taskTitle: 'Task' })]);
 
     // Guards a real defect: without an explicit separator these ran together as
     // "John Doeupdated".
     expect(text(fixture, '.feed__text')).toMatch(/John Doe\s+updated "Task"/);
+  });
+
+  it('falls back to the API sentence for an unmapped activity type', async () => {
+    await render([entry({ type: 'archived' as never, message: 'archived "Old task"' })]);
+
+    expect(text(fixture, '.feed__text')).toContain('archived "Old task"');
   });
 
   it('shows skeleton rows while loading, and no entries', async () => {
@@ -65,13 +83,10 @@ describe('ActivityFeed', () => {
     expect(text(fixture, 'app-empty-state')).toContain('No activity yet');
   });
 
-  it('uses its own heading, overridable by the caller', async () => {
+  it('renders its heading from the translation bundle', async () => {
     await render([entry()]);
-    expect(text(fixture, '.feed__title')).toBe('Recent Activity');
 
-    fixture.componentRef.setInput('title', 'Team activity');
-    await fixture.whenStable();
-    expect(text(fixture, '.feed__title')).toBe('Team activity');
+    expect(text(fixture, '.feed__title')).toBe('Recent Activity');
   });
 
   it.each([

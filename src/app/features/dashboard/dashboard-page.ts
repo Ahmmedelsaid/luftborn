@@ -3,6 +3,8 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Router } from '@angular/router';
+import { toSignal } from '@angular/core/rxjs-interop';
+import { TranslatePipe, TranslateService } from '@ngx-translate/core';
 import { Statistic, TaskPriority, TaskStatus, TaskView } from '../../core/interfaces';
 import { ActivityStore } from '../../core/state/activity-store';
 import { StatisticStore } from '../../core/state/statistic-store';
@@ -38,6 +40,7 @@ import { StatCard } from '../../shared/components/stat-card/stat-card';
     Skeleton,
     StatCard,
     TaskBoard,
+    TranslatePipe,
   ],
   templateUrl: './dashboard-page.html',
   styleUrl: './dashboard-page.scss',
@@ -51,6 +54,7 @@ export class DashboardPage {
   private readonly confirm = inject(ConfirmDialogService);
   private readonly snackBar = inject(MatSnackBar);
   private readonly router = inject(Router);
+  private readonly translate = inject(TranslateService);
 
   protected readonly statisticCards = this.statistics.statistics;
   protected readonly statisticsLoading = this.statistics.isLoading;
@@ -69,9 +73,21 @@ export class DashboardPage {
     () => this.filters().statuses[0] ?? null,
   );
 
+  /**
+   * `translate.instant` is not reactive, so anything resolved imperatively has
+   * to depend on the language stream or it goes stale on a switch.
+   */
+  private readonly languageRevision = toSignal(this.translate.onLangChange, {
+    initialValue: null,
+  });
+
   protected readonly summary = computed(() => {
+    this.languageRevision();
     const totals = this.tasks.filteredTotals();
-    return `${totals.total} tasks · ${totals.overdue} overdue`;
+    return this.translate.instant('dashboard.summary', {
+      total: totals.total,
+      overdue: totals.overdue,
+    }) as string;
   });
 
   protected readonly statisticSkeletons = [0, 1, 2, 3];
@@ -136,7 +152,9 @@ export class DashboardPage {
         return;
       }
 
-      this.snackBar.open(error.message, 'Dismiss', { duration: 6000 });
+      this.snackBar.open(error.message, this.translate.instant('errors.dismiss') as string, {
+        duration: 6000,
+      });
       this.tasks.dismissError();
     });
   }
@@ -190,9 +208,10 @@ export class DashboardPage {
 
   protected async onDeleteTask(task: TaskView): Promise<void> {
     const confirmed = await this.confirm.ask({
-      title: 'Delete task?',
-      message: `"${task.title}" will be permanently removed. This cannot be undone.`,
-      confirmLabel: 'Delete',
+      title: this.translate.instant('delete.title') as string,
+      message: this.translate.instant('delete.message', { title: task.title }) as string,
+      confirmLabel: this.translate.instant('actions.delete') as string,
+      cancelLabel: this.translate.instant('actions.cancel') as string,
       destructive: true,
     });
 
@@ -201,7 +220,11 @@ export class DashboardPage {
     }
 
     if (await this.tasks.remove(task.id)) {
-      this.snackBar.open('Task deleted', 'Dismiss', { duration: 4000 });
+      this.snackBar.open(
+        this.translate.instant('delete.success') as string,
+        this.translate.instant('errors.dismiss') as string,
+        { duration: 4000 },
+      );
     }
   }
 }

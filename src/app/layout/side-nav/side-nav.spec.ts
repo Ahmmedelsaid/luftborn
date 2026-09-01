@@ -1,14 +1,15 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { provideRouter, Router } from '@angular/router';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
+import { provideTestTranslate, useTranslations } from '../../../testing/translate-helpers';
 import { click, query, texts } from '../../../testing/component-helpers';
 import { provideAppIcons } from '../../shared/icons/provide-icons';
 import { NavItem } from '../interfaces/nav-item.interface';
 import { SideNav } from './side-nav';
 
 const ITEMS: NavItem[] = [
-  { label: 'Dashboard', icon: 'dashboard', route: '/dashboard' },
-  { label: 'Tasks', icon: 'tasks', route: '/tasks' },
+  { labelKey: 'nav.dashboard', icon: 'dashboard', route: '/dashboard' },
+  { labelKey: 'nav.tasks', icon: 'tasks', route: '/tasks' },
 ];
 
 describe('SideNav', () => {
@@ -23,9 +24,11 @@ describe('SideNav', () => {
           { path: 'dashboard', children: [] },
           { path: 'tasks', children: [] },
         ]),
+        provideTestTranslate(),
       ],
     });
 
+    useTranslations();
     fixture = TestBed.createComponent(SideNav);
     fixture.componentRef.setInput('items', ITEMS);
     await fixture.whenStable();
@@ -36,10 +39,9 @@ describe('SideNav', () => {
   });
 
   it('is a labelled navigation landmark', () => {
-    const host = fixture.nativeElement as HTMLElement;
+    const nav = query(fixture, 'nav');
 
-    expect(host.getAttribute('role')).toBe('navigation');
-    expect(host.getAttribute('aria-label')).toBe('Main navigation');
+    expect(nav.getAttribute('aria-label')).toBe('Main navigation');
   });
 
   it('marks the current route with aria-current', async () => {

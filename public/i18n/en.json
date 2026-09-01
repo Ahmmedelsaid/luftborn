@@ -1,0 +1,203 @@
+{
+  "app": {
+    "name": "Task Manager",
+    "skipToContent": "Skip to main content",
+    "searchPlaceholder": "Search tasks...",
+    "searchLabel": "Search tasks",
+    "clearSearch": "Clear search",
+    "notifications": "Notifications",
+    "notificationsUnread": "{{count}} unread notifications",
+    "openMenu": "Open navigation menu",
+    "signedInAs": "Signed in as {{name}}",
+    "language": "Language",
+    "chooseLanguage": "Choose language"
+  },
+  "nav": {
+    "dashboard": "Dashboard",
+    "tasks": "Tasks",
+    "calendar": "Calendar",
+    "analytics": "Analytics",
+    "team": "Team",
+    "settings": "Settings",
+    "main": "Main navigation"
+  },
+  "actions": {
+    "newTask": "New Task",
+    "refresh": "Refresh",
+    "clear": "Clear",
+    "cancel": "Cancel",
+    "confirm": "Confirm",
+    "delete": "Delete",
+    "edit": "Edit",
+    "save": "Save changes",
+    "create": "Create task",
+    "tryAgain": "Try again",
+    "addTag": "Add tag",
+    "keepEditing": "Keep editing",
+    "discard": "Discard",
+    "close": "Close",
+    "backToDashboard": "Back to dashboard"
+  },
+  "status": {
+    "all": "All",
+    "todo": "To Do",
+    "in_progress": "In Progress",
+    "done": "Done"
+  },
+  "priority": {
+    "label": "Priority",
+    "high": "High",
+    "medium": "Medium",
+    "low": "Low",
+    "selected": "Priority ({{count}})",
+    "aria": "Priority: {{value}}"
+  },
+  "filters": {
+    "byStatus": "Filter tasks by status",
+    "assignee": "Assignee",
+    "assigneeMore": "{{name}} +{{count}}"
+  },
+  "sort": {
+    "manual": "Board order",
+    "dueDate": "Due date",
+    "priority": "Priority",
+    "title": "Title",
+    "updatedAt": "Recently updated"
+  },
+  "task": {
+    "actionsFor": "Actions for {{title}}",
+    "moveTo": "Move to {{status}}",
+    "due": {
+      "today": "Due today",
+      "tomorrow": "Due tomorrow",
+      "inOneWeek": "Due in 1 week",
+      "inDays": {
+        "one": "Due in {{count}} day",
+        "other": "Due in {{count}} days"
+      },
+      "overdue": {
+        "one": "Overdue by {{count}} day",
+        "other": "Overdue by {{count}} days"
+      }
+    },
+    "completed": {
+      "today": "Completed today",
+      "yesterday": "Completed yesterday",
+      "daysAgo": {
+        "one": "Completed {{count}} day ago",
+        "other": "Completed {{count}} days ago"
+      },
+      "onDate": "Completed on {{date}}"
+    }
+  },
+  "time": {
+    "justNow": "just now",
+    "yesterday": "yesterday",
+    "minutesAgo": {
+      "one": "{{count}} minute ago",
+      "other": "{{count}} minutes ago"
+    },
+    "hoursAgo": {
+      "one": "{{count}} hour ago",
+      "other": "{{count}} hours ago"
+    },
+    "daysAgo": {
+      "one": "{{count}} day ago",
+      "other": "{{count}} days ago"
+    },
+    "onDate": "{{date}}"
+  },
+  "dashboard": {
+    "title": "Dashboard",
+    "summary": "{{total}} tasks · {{overdue}} overdue",
+    "statistics": "Task statistics",
+    "loadFailed": "Could not load your tasks",
+    "activateFilter": "Activates the matching filter",
+    "stat": {
+      "stat-001": "Total Tasks",
+      "stat-002": "Completed",
+      "stat-003": "In Progress",
+      "stat-004": "Overdue"
+    }
+  },
+  "tasks": {
+    "title": "Tasks",
+    "summary": "{{shown}} shown · {{overdue}} overdue · {{done}} done",
+    "column": "{{status}} column",
+    "columnEmpty": "Nothing here yet",
+    "loading": "Loading tasks",
+    "empty": {
+      "title": "No tasks yet",
+      "message": "Create your first task to start filling the board."
+    },
+    "filtered": {
+      "title": "No tasks match your filters",
+      "message": "Try widening the search or clearing the active filters."
+    }
+  },
+  "activity": {
+    "title": "Recent Activity",
+    "emptyTitle": "No activity yet",
+    "emptyMessage": "Changes to tasks will show up here.",
+    "message": {
+      "created": "created \"{{title}}\"",
+      "updated": "updated \"{{title}}\"",
+      "status_changed": "moved \"{{title}}\"",
+      "completed": "completed \"{{title}}\"",
+      "deleted": "deleted \"{{title}}\""
+    }
+  },
+  "form": {
+    "newTitle": "New task",
+    "editTitle": "Edit task",
+    "title": "Title",
+    "titlePlaceholder": "What needs doing?",
+    "description": "Description",
+    "descriptionPlaceholder": "Add the detail someone else would need",
+    "status": "Status",
+    "priority": "Priority",
+    "dueDate": "Due date",
+    "assignee": "Assignee",
+    "tags": "Tags",
+    "tagsEmpty": "No tags yet.",
+    "tagLabel": "Tag {{index}}",
+    "removeTag": "Remove tag {{index}}",
+    "discardTitle": "Discard changes?",
+    "discardMessage": "Your edits to this task have not been saved."
+  },
+  "validation": {
+    "required": "This field is required.",
+    "notBlank": "This cannot be only spaces.",
+    "minlength": "Use at least {{length}} characters.",
+    "maxlength": "Use at most {{length}} characters.",
+    "dueDateInPast": {
+      "one": "That date is {{count}} day in the past.",
+      "other": "That date is {{count}} days in the past."
+    },
+    "dueDateInvalid": "Enter a valid date.",
+    "dueDateTooFar": "Pick a date within {{years}} years.",
+    "duplicateTags": {
+      "one": "Remove the duplicate tag: {{tags}}.",
+      "other": "Remove the duplicate tags: {{tags}}."
+    },
+    "highPriorityNeedsDueDate": "A high-priority task needs a due date.",
+    "doneCannotBeDueLater": "A task marked done cannot be due in the future.",
+    "generic": "This value is not valid."
+  },
+  "delete": {
+    "title": "Delete task?",
+    "message": "\"{{title}}\" will be permanently removed. This cannot be undone.",
+    "success": "Task deleted"
+  },
+  "errors": {
+    "genericTitle": "Could not load this content",
+    "dismiss": "Dismiss"
+  },
+  "notFound": {
+    "title": "Page not found",
+    "message": "The page you were looking for does not exist or has been moved."
+  },
+  "placeholder": {
+    "message": "This section is not implemented yet."
+  }
+}

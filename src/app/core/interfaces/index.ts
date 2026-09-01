@@ -2,6 +2,7 @@ export * from './activity.interface';
 export * from './api.interface';
 export * from './board.interface';
 export * from './http.interface';
+export * from './i18n.interface';
 export * from './statistic.interface';
 export * from './task.interface';
 export * from './task-filters.interface';

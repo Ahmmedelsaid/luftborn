@@ -53,7 +53,11 @@ describe('ActivityStore', () => {
       createActivity({ id: 'a', timestamp: new Date(2026, 8, 1, 11, 45).toISOString() }),
     ]);
 
-    expect(store.activities()[0].relativeTime).toBe('15 minutes ago');
+    expect(store.activities()[0].relativeTime).toEqual({
+      key: 'time.minutesAgo',
+      params: { count: 15 },
+      count: 15,
+    });
   });
 
   it('shows a new entry immediately and reconciles with the server response', async () => {
@@ -63,7 +67,7 @@ describe('ActivityStore', () => {
     const pending = store.record(draft);
 
     expect(store.activities()).toHaveLength(1);
-    expect(store.activities()[0].relativeTime).toBe('just now');
+    expect(store.activities()[0].relativeTime).toEqual({ key: 'time.justNow' });
 
     httpBackend()
       .expectOne((request) => request.method === 'POST')

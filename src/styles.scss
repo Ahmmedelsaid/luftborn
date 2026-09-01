@@ -64,7 +64,7 @@ button {
 .app-skip-link {
   position: absolute;
   top: var(--app-space-2);
-  left: var(--app-space-2);
+  inset-inline-start: var(--app-space-2);
   z-index: 1000;
   padding: var(--app-space-2) var(--app-space-4);
   background: var(--app-surface);

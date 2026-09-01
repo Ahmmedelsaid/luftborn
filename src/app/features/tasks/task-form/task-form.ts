@@ -23,6 +23,7 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
+import { TranslatePipe } from '@ngx-translate/core';
 import { map, startWith } from 'rxjs';
 import {
   TaskDraft,
@@ -30,9 +31,9 @@ import {
   TaskStatus,
   TaskView,
   TASK_PRIORITIES,
-  TASK_PRIORITY_LABELS,
+  TASK_PRIORITY_LABEL_KEYS,
   TASK_STATUSES,
-  TASK_STATUS_LABELS,
+  TASK_STATUS_LABEL_KEYS,
   User,
 } from '../../../core/interfaces';
 import { CLOCK, parseApiDate, toApiDateString } from '../../../core/utils/date.utils';
@@ -81,6 +82,7 @@ interface TaskFormShape {
     MatInputModule,
     MatSelectModule,
     ReactiveFormsModule,
+    TranslatePipe,
   ],
   templateUrl: './task-form.html',
   styleUrl: './task-form.scss',
@@ -106,8 +108,8 @@ export class TaskForm {
 
   protected readonly statuses = TASK_STATUSES;
   protected readonly priorities = TASK_PRIORITIES;
-  protected readonly statusLabels = TASK_STATUS_LABELS;
-  protected readonly priorityLabels = TASK_PRIORITY_LABELS;
+  protected readonly statusLabelKeys = TASK_STATUS_LABEL_KEYS;
+  protected readonly priorityLabelKeys = TASK_PRIORITY_LABEL_KEYS;
 
   protected readonly titleMax = TITLE_MAX;
   protected readonly descriptionMax = DESCRIPTION_MAX;
@@ -217,8 +219,8 @@ export class TaskForm {
     initialValue: null,
   });
 
-  /** Group-level failure to show above the actions, if any. */
-  protected readonly formError = computed<string | null>(() => {
+  /** Translation key for the group-level failure shown above the actions. */
+  protected readonly formErrorKey = computed<string | null>(() => {
     this.formEvents();
 
     if (!this.submitted()) {
@@ -228,11 +230,11 @@ export class TaskForm {
     const errors = this.form.errors;
 
     if (errors?.['highPriorityNeedsDueDate']) {
-      return 'A high-priority task needs a due date.';
+      return 'validation.highPriorityNeedsDueDate';
     }
 
     if (errors?.['doneCannotBeDueLater']) {
-      return 'A task marked done cannot be due in the future.';
+      return 'validation.doneCannotBeDueLater';
     }
 
     return null;

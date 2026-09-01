@@ -99,7 +99,11 @@ describe('TaskStore', () => {
       ]);
 
       expect(store.tasks()[0].overdue).toBe(true);
-      expect(store.tasks()[0].dueLabel).toBe('Overdue by 2 days');
+      expect(store.tasks()[0].dueLabel).toEqual({
+        key: 'task.due.overdue',
+        params: { count: 2 },
+        count: 2,
+      });
     });
 
     it('surfaces a normalised load error', async () => {

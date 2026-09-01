@@ -76,7 +76,7 @@ describe('toTaskView', () => {
 
     expect(view.overdue).toBe(true);
     expect(view.dueState).toBe('overdue');
-    expect(view.dueLabel).toBe('Overdue by 2 days');
+    expect(view.dueLabel).toEqual({ key: 'task.due.overdue', params: { count: 2 }, count: 2 });
     expect(view.daysUntilDue).toBe(-2);
   });
 
@@ -91,7 +91,7 @@ describe('toTaskView', () => {
     );
 
     expect(view.dueState).toBe('completed');
-    expect(view.dueLabel).toBe('Completed today');
+    expect(view.dueLabel).toEqual({ key: 'task.completed.today' });
   });
 
   it('backfills order from the index when the API omits it', () => {

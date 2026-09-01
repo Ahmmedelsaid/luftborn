@@ -23,7 +23,7 @@ app-top-bar {
 
 .shell__nav {
   width: 210px;
-  border-right: 1px solid var(--app-border);
+  border-inline-end: 1px solid var(--app-border);
   // The rail is chrome, not content, so it must never scroll the page with it.
   overflow: hidden;
 

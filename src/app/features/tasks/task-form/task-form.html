@@ -1,38 +1,42 @@
 <form class="form" [formGroup]="form" (ngSubmit)="onSubmit()" novalidate>
   <mat-form-field appearance="outline" class="form__field">
-    <mat-label>Title</mat-label>
+    <mat-label>{{ 'form.title' | translate }}</mat-label>
     <input
       matInput
       formControlName="title"
       [maxlength]="titleMax"
-      placeholder="What needs doing?"
+      [placeholder]="'form.titlePlaceholder' | translate"
       autocomplete="off"
       cdkFocusInitial
     />
-    <mat-hint align="end">{{ titleLength() }} / {{ titleMax }}</mat-hint>
+    <mat-hint align="end"
+      ><span dir="ltr">{{ titleLength() }} / {{ titleMax }}</span></mat-hint
+    >
   </mat-form-field>
   <app-field-error [control]="form.controls.title" [submitted]="submitted()" />
 
   <mat-form-field appearance="outline" class="form__field">
-    <mat-label>Description</mat-label>
+    <mat-label>{{ 'form.description' | translate }}</mat-label>
     <textarea
       matInput
       formControlName="description"
       rows="3"
       [maxlength]="descriptionMax"
-      placeholder="Add the detail someone else would need"
+      [placeholder]="'form.descriptionPlaceholder' | translate"
     ></textarea>
-    <mat-hint align="end">{{ descriptionLength() }} / {{ descriptionMax }}</mat-hint>
+    <mat-hint align="end"
+      ><span dir="ltr">{{ descriptionLength() }} / {{ descriptionMax }}</span></mat-hint
+    >
   </mat-form-field>
   <app-field-error [control]="form.controls.description" [submitted]="submitted()" />
 
   <div class="form__row">
     <div class="form__cell">
       <mat-form-field appearance="outline" class="form__field">
-        <mat-label>Status</mat-label>
+        <mat-label>{{ 'form.status' | translate }}</mat-label>
         <mat-select formControlName="status">
           @for (status of statuses; track status) {
-            <mat-option [value]="status">{{ statusLabels[status] }}</mat-option>
+            <mat-option [value]="status">{{ statusLabelKeys[status] | translate }}</mat-option>
           }
         </mat-select>
       </mat-form-field>
@@ -41,10 +45,12 @@
 
     <div class="form__cell">
       <mat-form-field appearance="outline" class="form__field">
-        <mat-label>Priority</mat-label>
+        <mat-label>{{ 'form.priority' | translate }}</mat-label>
         <mat-select formControlName="priority">
           @for (priority of priorities; track priority) {
-            <mat-option [value]="priority">{{ priorityLabels[priority] }}</mat-option>
+            <mat-option [value]="priority">{{
+              priorityLabelKeys[priority] | translate
+            }}</mat-option>
           }
         </mat-select>
       </mat-form-field>
@@ -55,7 +61,7 @@
   <div class="form__row">
     <div class="form__cell">
       <mat-form-field appearance="outline" class="form__field">
-        <mat-label>Due date</mat-label>
+        <mat-label>{{ 'form.dueDate' | translate }}</mat-label>
         <input matInput formControlName="dueDate" [matDatepicker]="picker" />
         <mat-datepicker-toggle matIconSuffix [for]="picker" />
         <mat-datepicker #picker />
@@ -65,7 +71,7 @@
 
     <div class="form__cell">
       <mat-form-field appearance="outline" class="form__field">
-        <mat-label>Assignee</mat-label>
+        <mat-label>{{ 'form.assignee' | translate }}</mat-label>
         <mat-select formControlName="assigneeId">
           <!-- The default trigger concatenates the avatar initials with the
                name; a custom trigger shows the name alone. -->
@@ -92,21 +98,21 @@
 
   <fieldset class="form__tags">
     <legend class="form__tags-legend">
-      Tags
-      <span class="form__tags-count">{{ tags.length }} / {{ maxTags }}</span>
+      {{ 'form.tags' | translate }}
+      <span class="form__tags-count" dir="ltr">{{ tags.length }} / {{ maxTags }}</span>
     </legend>
 
     @for (tag of tags.controls; track $index) {
       <div class="form__tag-row">
         <mat-form-field appearance="outline" class="form__field form__field--tag">
-          <mat-label>Tag {{ $index + 1 }}</mat-label>
+          <mat-label>{{ 'form.tagLabel' | translate: { index: $index + 1 } }}</mat-label>
           <input matInput [formControl]="tag" autocomplete="off" />
         </mat-form-field>
 
         <button
           type="button"
           class="form__tag-remove"
-          [attr.aria-label]="'Remove tag ' + ($index + 1)"
+          [attr.aria-label]="'form.removeTag' | translate: { index: $index + 1 }"
           (click)="removeTag($index)"
         >
           <mat-icon svgIcon="close" aria-hidden="true" />
@@ -114,7 +120,7 @@
       </div>
       <app-field-error [control]="tag" [submitted]="submitted()" />
     } @empty {
-      <p class="form__tags-empty">No tags yet.</p>
+      <p class="form__tags-empty">{{ 'form.tagsEmpty' | translate }}</p>
     }
 
     <app-field-error [control]="tags" [submitted]="submitted()" />
@@ -127,18 +133,20 @@
       (click)="addTag()"
     >
       <mat-icon svgIcon="plus" aria-hidden="true" />
-      Add tag
+      {{ 'actions.addTag' | translate }}
     </button>
   </fieldset>
 
-  @if (formError(); as error) {
-    <p class="form__error" role="alert">{{ error }}</p>
+  @if (formErrorKey(); as key) {
+    <p class="form__error" role="alert">{{ key | translate }}</p>
   }
 
   <div class="form__actions">
-    <button matButton type="button" [disabled]="saving()" (click)="onCancel()">Cancel</button>
+    <button matButton type="button" [disabled]="saving()" (click)="onCancel()">
+      {{ 'actions.cancel' | translate }}
+    </button>
     <button matButton="filled" type="submit" [disabled]="saving()">
-      {{ isEdit() ? 'Save changes' : 'Create task' }}
+      {{ (isEdit() ? 'actions.save' : 'actions.create') | translate }}
     </button>
   </div>
 </form>
