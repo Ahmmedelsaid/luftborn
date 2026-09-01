@@ -1,0 +1,64 @@
+<app-page-header [title]="'nav.settings' | translate" [subtitle]="summary()" />
+
+<div class="settings__grid">
+  <section class="settings__panel">
+    <h2 class="settings__title">{{ 'app.language' | translate }}</h2>
+    <p class="settings__hint">{{ 'settings.languageHint' | translate }}</p>
+
+    <div
+      class="settings__choices"
+      role="radiogroup"
+      [attr.aria-label]="'app.chooseLanguage' | translate"
+    >
+      @for (option of language.languages; track option.code) {
+        <button
+          type="button"
+          role="radio"
+          class="settings__choice"
+          [class.settings__choice--active]="option.code === language.current()"
+          [attr.aria-checked]="option.code === language.current()"
+          [attr.lang]="option.code"
+          (click)="chooseLanguage(option.code)"
+        >
+          <span class="settings__choice-label">{{ option.nativeLabel }}</span>
+          <span class="settings__choice-meta" dir="ltr"
+            >{{ option.locale }} · {{ option.dir }}</span
+          >
+        </button>
+      }
+    </div>
+  </section>
+
+  <section class="settings__panel">
+    <h2 class="settings__title">{{ 'settings.cacheTitle' | translate }}</h2>
+    <p class="settings__hint">{{ 'settings.cacheHint' | translate }}</p>
+
+    <dl class="settings__stats">
+      <div class="settings__stat">
+        <dt>{{ 'settings.cacheEntries' | translate }}</dt>
+        <dd>{{ stats().entries }}</dd>
+      </div>
+      <div class="settings__stat">
+        <dt>{{ 'settings.cacheHits' | translate }}</dt>
+        <dd>{{ stats().hits }}</dd>
+      </div>
+      <div class="settings__stat">
+        <dt>{{ 'settings.cacheMisses' | translate }}</dt>
+        <dd>{{ stats().misses }}</dd>
+      </div>
+      <div class="settings__stat">
+        <dt>{{ 'settings.cacheDeduplicated' | translate }}</dt>
+        <dd>{{ stats().deduplicated }}</dd>
+      </div>
+      <div class="settings__stat settings__stat--wide">
+        <dt>{{ 'settings.cacheHitRate' | translate }}</dt>
+        <dd dir="ltr">{{ hitRate() }}%</dd>
+      </div>
+    </dl>
+
+    <button matButton="outlined" type="button" (click)="clearCache()">
+      <mat-icon svgIcon="refresh" aria-hidden="true" />
+      {{ 'settings.clearCache' | translate }}
+    </button>
+  </section>
+</div>
