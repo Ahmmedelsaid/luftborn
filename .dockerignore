@@ -1,0 +1,14 @@
+# Anything the image builds for itself, or has no business in a build context.
+node_modules
+dist
+coverage
+.angular
+.git
+.github
+.husky
+.vscode
+out-tsc
+*.log
+npm-debug.log*
+docs
+README.md

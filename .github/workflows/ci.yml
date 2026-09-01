@@ -1,0 +1,151 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+# A new push to the same branch cancels the previous run: nobody needs the
+# results of a commit that has already been superseded.
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+env:
+  NODE_VERSION: '24'
+
+jobs:
+  quality:
+    name: Lint and format
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+
+      - uses: actions/setup-node@v7
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: npm
+
+      # `npm ci` rather than `npm install`: it installs exactly the lockfile and
+      # fails if the two have drifted, which is what CI should do.
+      - run: npm ci
+
+      - name: Lint
+        run: npm run lint
+
+      - name: Check formatting
+        run: npm run format:check
+
+  test:
+    name: Unit tests and coverage
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+
+      - uses: actions/setup-node@v7
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: npm
+
+      - run: npm ci
+
+      # The 80% thresholds in angular.json fail this step on a shortfall, so
+      # coverage is enforced rather than merely reported.
+      - name: Test with coverage
+        run: npm run test:coverage
+
+      - name: Upload coverage report
+        if: always()
+        uses: actions/upload-artifact@v7
+        with:
+          name: coverage
+          path: coverage/
+          retention-days: 7
+
+  build:
+    name: Production build
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+
+      - uses: actions/setup-node@v7
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: npm
+
+      - run: npm ci
+
+      # Regenerated so the committed fixtures are proven reproducible and the
+      # relative due dates in a deployed build are never stale.
+      - name: Regenerate fixtures
+        run: npm run generate:data
+
+      - name: Build
+        run: npm run build
+
+      - name: Upload build output
+        uses: actions/upload-artifact@v7
+        with:
+          name: dist
+          path: dist/
+          retention-days: 7
+
+  docker:
+    name: Docker image
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+
+      # Building the image in CI is what keeps the Dockerfile honest: a
+      # container that only ever built on one laptop is not a deliverable.
+      - name: Build image
+        run: docker build --tag task-management-dashboard:ci .
+
+      # nginx validates its own config far more precisely than any YAML linter,
+      # and a bad directive here would otherwise surface as a container that
+      # exits instantly with no obvious cause.
+      - name: Validate the nginx config
+        run: docker run --rm task-management-dashboard:ci nginx -t
+
+      - name: Validate docker-compose
+        run: docker compose config --quiet
+
+      - name: Smoke test the container
+        run: |
+          docker run --detach --name smoke --publish 8080:80 task-management-dashboard:ci
+          for attempt in $(seq 1 20); do
+            if curl --silent --fail http://localhost:8080/ > /dev/null; then
+              echo "container is serving"
+              break
+            fi
+            if [ "$attempt" -eq 20 ]; then
+              echo "container did not become ready"
+              docker logs smoke
+              exit 1
+            fi
+            sleep 1
+          done
+
+          # A deep link has to return the app shell, not a 404 — that is the one
+          # thing an SPA behind nginx gets wrong most often.
+          status=$(curl --silent --output /dev/null --write-out '%{http_code}' http://localhost:8080/tasks/new)
+          echo "deep link /tasks/new -> $status"
+          test "$status" = "200"
+
+          # And the translation bundles have to be served, or the app boots
+          # showing raw keys.
+          curl --silent --fail http://localhost:8080/i18n/ar.json > /dev/null
+          echo "translation bundles are served"
+
+          # This image has no API upstream on its own, so /api must answer with
+          # the explanatory 503 rather than hanging or 502-ing. Asserting the
+          # failure path keeps the fallback from silently rotting.
+          api_status=$(curl --silent --output /dev/null --write-out '%{http_code}' http://localhost:8080/api/tasks)
+          echo "standalone /api/tasks -> $api_status"
+          test "$api_status" = "503"
+
+          docker rm --force smoke > /dev/null
