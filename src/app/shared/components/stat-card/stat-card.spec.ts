@@ -2,7 +2,7 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { click, exists, query, text } from '../../../../testing/component-helpers';
 import { createStatistic } from '../../../../testing/task.factory';
-import { Statistic } from '../../../core/models';
+import { Statistic } from '../../../core/interfaces';
 import { provideAppIcons } from '../../icons/provide-icons';
 import { StatCard } from './stat-card';
 

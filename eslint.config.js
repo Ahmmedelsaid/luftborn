@@ -60,6 +60,9 @@ module.exports = tseslint.config(
       ],
       '@typescript-eslint/consistent-type-definitions': ['error', 'interface'],
       '@typescript-eslint/no-non-null-assertion': 'error',
+      // `Validators.required` and friends are static references, which this rule
+      // flags by default even though they never touch `this`.
+      '@typescript-eslint/unbound-method': ['error', { ignoreStatic: true }],
 
       // --- Correctness ------------------------------------------------------
       eqeqeq: ['error', 'always'],

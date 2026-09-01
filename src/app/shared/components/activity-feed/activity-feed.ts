@@ -1,6 +1,6 @@
 import { ChangeDetectionStrategy, Component, input } from '@angular/core';
 import { MatIconModule } from '@angular/material/icon';
-import { ActivityType, ActivityView } from '../../../core/models';
+import { ActivityType, ActivityView } from '../../../core/interfaces';
 import { Avatar } from '../avatar/avatar';
 import { EmptyState } from '../empty-state/empty-state';
 import { Skeleton } from '../skeleton/skeleton';

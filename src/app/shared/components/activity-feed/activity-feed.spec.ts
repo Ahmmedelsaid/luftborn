@@ -2,7 +2,7 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { beforeEach, describe, expect, it } from 'vitest';
 import { exists, text, texts } from '../../../../testing/component-helpers';
 import { createActivity } from '../../../../testing/task.factory';
-import { ActivityView } from '../../../core/models';
+import { ActivityView } from '../../../core/interfaces';
 import { provideAppIcons } from '../../icons/provide-icons';
 import { ActivityFeed } from './activity-feed';
 

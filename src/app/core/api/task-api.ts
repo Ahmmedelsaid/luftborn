@@ -1,8 +1,8 @@
 import { HttpClient, httpResource, HttpResourceRef } from '@angular/common/http';
 import { inject, Injectable, Signal } from '@angular/core';
 import { Observable } from 'rxjs';
-import { Task, TaskDraft, TaskPatch } from '../models';
-import { API_BASE_URL, httpOptions, noCache, ResourceFactoryOptions } from './api.config';
+import { Task, TaskDraft, TaskPatch, ResourceFactoryOptions } from '../interfaces';
+import { API_BASE_URL, httpOptions, noCache } from './api.config';
 import { createId } from './id.util';
 
 /** Guards against a response shape change surfacing far from its cause. */

@@ -13,7 +13,7 @@ import {
   provideTestHttpWithErrorNormalisation,
   settle,
 } from '../../../testing/test-helpers';
-import { Task, TaskDraft } from '../models';
+import { Task, TaskDraft } from '../interfaces';
 import { TaskStore } from './task-store';
 
 /** Body shape `TestRequest.flush` accepts. */

@@ -1,0 +1,119 @@
+@use "mixins";
+
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: var(--app-space-1);
+}
+
+.form__field {
+  width: 100%;
+}
+
+.form__row {
+  display: grid;
+  gap: var(--app-space-1) var(--app-space-3);
+  grid-template-columns: 1fr;
+
+  @include mixins.from("tablet") {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+.form__cell {
+  min-width: 0;
+}
+
+.form__assignee {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--app-space-2);
+}
+
+.form__tags {
+  margin-block: var(--app-space-3) 0;
+  padding: var(--app-space-3) var(--app-space-4) var(--app-space-4);
+  border: 1px solid var(--app-border);
+  border-radius: var(--app-radius-md);
+}
+
+.form__tags-legend {
+  display: flex;
+  align-items: baseline;
+  gap: var(--app-space-2);
+  padding-inline: var(--app-space-2);
+  color: var(--app-text-secondary);
+  font-size: 12.5px;
+  font-weight: 600;
+}
+
+.form__tags-count {
+  color: var(--app-text-muted);
+  font-size: 11.5px;
+  font-weight: 500;
+}
+
+.form__tags-empty {
+  padding-block: var(--app-space-2);
+  color: var(--app-text-muted);
+  font-size: 12.5px;
+}
+
+.form__tag-row {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--app-space-2);
+}
+
+.form__field--tag {
+  flex: 1 1 auto;
+}
+
+.form__tag-remove {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex: 0 0 auto;
+  width: 32px;
+  height: 32px;
+  // Aligns with the input rather than the field wrapper, which includes the hint.
+  margin-block-start: 8px;
+  padding: 0;
+  border: 1px solid var(--app-border);
+  border-radius: var(--app-radius-md);
+  background: var(--app-surface);
+  color: var(--app-text-secondary);
+  cursor: pointer;
+
+  &:hover {
+    border-color: var(--app-overdue-border);
+    color: var(--app-overdue-fg);
+  }
+
+  mat-icon {
+    width: 14px;
+    height: 14px;
+    font-size: 14px;
+  }
+}
+
+.form__tag-add {
+  margin-block-start: var(--app-space-2);
+}
+
+.form__error {
+  margin-block-start: var(--app-space-2);
+  padding: var(--app-space-2) var(--app-space-3);
+  border: 1px solid var(--app-overdue-border);
+  border-radius: var(--app-radius-md);
+  background: var(--app-overdue-bg);
+  color: var(--app-overdue-fg);
+  font-size: 12.5px;
+}
+
+.form__actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: var(--app-space-2);
+  margin-block-start: var(--app-space-5);
+}

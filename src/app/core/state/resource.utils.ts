@@ -1,6 +1,6 @@
 import { HttpResourceRef } from '@angular/common/http';
 import { computed, Signal } from '@angular/core';
-import { ApiError, isApiError } from '../models';
+import { ApiError, isApiError } from '../interfaces';
 
 /**
  * The resource's value, or `fallback` while it is in the error state.

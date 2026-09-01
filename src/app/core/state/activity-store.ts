@@ -1,7 +1,7 @@
 import { computed, inject, Injectable } from '@angular/core';
 import { firstValueFrom } from 'rxjs';
 import { ActivityApi } from '../api/activity-api';
-import { ActivityDraft, ActivityView } from '../models';
+import { ActivityDraft, ActivityView } from '../interfaces';
 import { ClockService } from '../services/clock';
 import { formatRelativeTime } from '../utils/date.utils';
 import { patchResource, resourceError, resourceValue } from './resource.utils';

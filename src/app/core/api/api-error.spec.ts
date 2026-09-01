@@ -1,6 +1,6 @@
 import { HttpErrorResponse } from '@angular/common/http';
 import { describe, expect, it } from 'vitest';
-import { isApiError } from '../models';
+import { isApiError } from '../interfaces';
 import { ApiRequestError } from './api-error';
 
 function httpError(status: number, error: unknown = null): HttpErrorResponse {

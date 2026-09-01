@@ -17,7 +17,7 @@ import {
   provideTestHttpWithErrorNormalisation,
   settle,
 } from '../../../testing/test-helpers';
-import { Task } from '../../core/models';
+import { Task } from '../../core/interfaces';
 import { TaskStore } from '../../core/state/task-store';
 import { ConfirmDialogService } from '../../shared/components/confirm-dialog/confirm-dialog.service';
 import { provideAppIcons } from '../../shared/icons/provide-icons';

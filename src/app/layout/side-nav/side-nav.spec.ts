@@ -3,7 +3,8 @@ import { provideRouter, Router } from '@angular/router';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { click, query, texts } from '../../../testing/component-helpers';
 import { provideAppIcons } from '../../shared/icons/provide-icons';
-import { NavItem, SideNav } from './side-nav';
+import { NavItem } from '../interfaces/nav-item.interface';
+import { SideNav } from './side-nav';
 
 const ITEMS: NavItem[] = [
   { label: 'Dashboard', icon: 'dashboard', route: '/dashboard' },

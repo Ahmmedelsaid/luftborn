@@ -1,17 +1,11 @@
 import { HttpEvent, HttpRequest, HttpResponse } from '@angular/common/http';
 import { Injectable, signal } from '@angular/core';
 import { Observable } from 'rxjs';
+import { HttpCacheStats } from '../interfaces';
 
 interface CacheEntry {
   readonly response: HttpResponse<unknown>;
   readonly expiresAt: number;
-}
-
-export interface HttpCacheStats {
-  readonly entries: number;
-  readonly hits: number;
-  readonly misses: number;
-  readonly deduplicated: number;
 }
 
 /** TTL cache plus in-flight de-duplication, backing `cacheInterceptor`. */

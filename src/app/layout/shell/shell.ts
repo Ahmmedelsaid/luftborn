@@ -5,7 +5,8 @@ import { MatSidenavModule } from '@angular/material/sidenav';
 import { Router, RouterOutlet } from '@angular/router';
 import { map } from 'rxjs';
 import { TaskStore } from '../../core/state/task-store';
-import { NavItem, SideNav } from '../side-nav/side-nav';
+import { NavItem } from '../interfaces/nav-item.interface';
+import { SideNav } from '../side-nav/side-nav';
 import { TopBar } from '../top-bar/top-bar';
 
 /** Kept in sync with the `desktop` breakpoint in `_tokens.scss`. */

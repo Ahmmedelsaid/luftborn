@@ -1,6 +1,6 @@
 import { TestBed } from '@angular/core/testing';
 import { beforeEach, describe, expect, it } from 'vitest';
-import { TaskPriority } from '../../../core/models';
+import { TaskPriority } from '../../../core/interfaces';
 import { PriorityBadge } from './priority-badge';
 
 describe('PriorityBadge', () => {

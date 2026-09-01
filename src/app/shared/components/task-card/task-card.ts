@@ -1,7 +1,7 @@
 import { ChangeDetectionStrategy, Component, computed, input, output } from '@angular/core';
 import { MatIconModule } from '@angular/material/icon';
 import { MatMenuModule } from '@angular/material/menu';
-import { DueDateState, TaskStatus, TaskView } from '../../../core/models';
+import { DueDateState, TaskStatus, TaskView } from '../../../core/interfaces';
 import { Avatar } from '../avatar/avatar';
 import { PriorityBadge } from '../priority-badge/priority-badge';
 

@@ -3,8 +3,8 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { click, exists, text, texts } from '../../../../testing/component-helpers';
 import { createTask, TEST_NOW } from '../../../../testing/task.factory';
-import { Task, TaskStatus, TaskView } from '../../../core/models';
-import { BoardColumn } from '../../../core/state/task-store';
+import { BoardColumn, Task, TaskStatus, TaskView } from '../../../core/interfaces';
+
 import { toTaskView } from '../../../core/utils/task.utils';
 import { provideAppIcons } from '../../icons/provide-icons';
 import { TaskBoard } from './task-board';
