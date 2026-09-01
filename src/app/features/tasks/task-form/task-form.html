@@ -1,0 +1,144 @@
+<form class="form" [formGroup]="form" (ngSubmit)="onSubmit()" novalidate>
+  <mat-form-field appearance="outline" class="form__field">
+    <mat-label>Title</mat-label>
+    <input
+      matInput
+      formControlName="title"
+      [maxlength]="titleMax"
+      placeholder="What needs doing?"
+      autocomplete="off"
+      cdkFocusInitial
+    />
+    <mat-hint align="end">{{ titleLength() }} / {{ titleMax }}</mat-hint>
+  </mat-form-field>
+  <app-field-error [control]="form.controls.title" [submitted]="submitted()" />
+
+  <mat-form-field appearance="outline" class="form__field">
+    <mat-label>Description</mat-label>
+    <textarea
+      matInput
+      formControlName="description"
+      rows="3"
+      [maxlength]="descriptionMax"
+      placeholder="Add the detail someone else would need"
+    ></textarea>
+    <mat-hint align="end">{{ descriptionLength() }} / {{ descriptionMax }}</mat-hint>
+  </mat-form-field>
+  <app-field-error [control]="form.controls.description" [submitted]="submitted()" />
+
+  <div class="form__row">
+    <div class="form__cell">
+      <mat-form-field appearance="outline" class="form__field">
+        <mat-label>Status</mat-label>
+        <mat-select formControlName="status">
+          @for (status of statuses; track status) {
+            <mat-option [value]="status">{{ statusLabels[status] }}</mat-option>
+          }
+        </mat-select>
+      </mat-form-field>
+      <app-field-error [control]="form.controls.status" [submitted]="submitted()" />
+    </div>
+
+    <div class="form__cell">
+      <mat-form-field appearance="outline" class="form__field">
+        <mat-label>Priority</mat-label>
+        <mat-select formControlName="priority">
+          @for (priority of priorities; track priority) {
+            <mat-option [value]="priority">{{ priorityLabels[priority] }}</mat-option>
+          }
+        </mat-select>
+      </mat-form-field>
+      <app-field-error [control]="form.controls.priority" [submitted]="submitted()" />
+    </div>
+  </div>
+
+  <div class="form__row">
+    <div class="form__cell">
+      <mat-form-field appearance="outline" class="form__field">
+        <mat-label>Due date</mat-label>
+        <input matInput formControlName="dueDate" [matDatepicker]="picker" />
+        <mat-datepicker-toggle matIconSuffix [for]="picker" />
+        <mat-datepicker #picker />
+      </mat-form-field>
+      <app-field-error [control]="form.controls.dueDate" [submitted]="submitted()" />
+    </div>
+
+    <div class="form__cell">
+      <mat-form-field appearance="outline" class="form__field">
+        <mat-label>Assignee</mat-label>
+        <mat-select formControlName="assigneeId">
+          <!-- The default trigger concatenates the avatar initials with the
+               name; a custom trigger shows the name alone. -->
+          <mat-select-trigger>{{ selectedAssigneeName() }}</mat-select-trigger>
+
+          @for (user of assignees(); track user.id) {
+            <mat-option [value]="user.id">
+              <span class="form__assignee">
+                <app-avatar
+                  [name]="user.name"
+                  [avatar]="user.avatar"
+                  [color]="user.color"
+                  [size]="20"
+                />
+                <span>{{ user.name }}</span>
+              </span>
+            </mat-option>
+          }
+        </mat-select>
+      </mat-form-field>
+      <app-field-error [control]="form.controls.assigneeId" [submitted]="submitted()" />
+    </div>
+  </div>
+
+  <fieldset class="form__tags">
+    <legend class="form__tags-legend">
+      Tags
+      <span class="form__tags-count">{{ tags.length }} / {{ maxTags }}</span>
+    </legend>
+
+    @for (tag of tags.controls; track $index) {
+      <div class="form__tag-row">
+        <mat-form-field appearance="outline" class="form__field form__field--tag">
+          <mat-label>Tag {{ $index + 1 }}</mat-label>
+          <input matInput [formControl]="tag" autocomplete="off" />
+        </mat-form-field>
+
+        <button
+          type="button"
+          class="form__tag-remove"
+          [attr.aria-label]="'Remove tag ' + ($index + 1)"
+          (click)="removeTag($index)"
+        >
+          <mat-icon svgIcon="close" aria-hidden="true" />
+        </button>
+      </div>
+      <app-field-error [control]="tag" [submitted]="submitted()" />
+    } @empty {
+      <p class="form__tags-empty">No tags yet.</p>
+    }
+
+    <app-field-error [control]="tags" [submitted]="submitted()" />
+
+    <button
+      matButton="outlined"
+      type="button"
+      class="form__tag-add"
+      [disabled]="tags.length >= maxTags || form.disabled"
+      (click)="addTag()"
+    >
+      <mat-icon svgIcon="plus" aria-hidden="true" />
+      Add tag
+    </button>
+  </fieldset>
+
+  @if (formError(); as error) {
+    <p class="form__error" role="alert">{{ error }}</p>
+  }
+
+  <div class="form__actions">
+    <button matButton type="button" [disabled]="saving()" (click)="onCancel()">Cancel</button>
+    <button matButton="filled" type="submit" [disabled]="saving()">
+      {{ isEdit() ? 'Save changes' : 'Create task' }}
+    </button>
+  </div>
+</form>
