@@ -33,6 +33,11 @@ export class Shell {
     { initialValue: this.breakpoints.isMatched(DESKTOP_QUERY) },
   );
 
+  /**
+   * Overlay-drawer visibility. Only user intent writes to it — the drawer's own
+   * close events are not wired back, since a close animation triggered by a
+   * breakpoint change would otherwise cancel a fresh open.
+   */
   protected readonly drawerOpen = signal(false);
 
   protected readonly search = computed(() => this.tasks.filters().search);

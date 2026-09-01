@@ -3,7 +3,7 @@
 :host {
   display: flex;
   flex-direction: column;
-  gap: var(--app-space-4);
+  gap: var(--app-space-6);
   height: 100%;
   padding: var(--app-space-4) var(--app-space-3);
   background: var(--app-surface);
@@ -19,7 +19,7 @@
 .nav__list {
   display: flex;
   flex-direction: column;
-  gap: 2px;
+  gap: var(--app-space-2);
   margin: 0;
   padding: 0;
   list-style: none;
@@ -29,10 +29,11 @@
   display: flex;
   align-items: center;
   gap: var(--app-space-3);
-  padding: 10px var(--app-space-3);
+  padding-block: 11px;
+  padding-inline: var(--app-space-3);
   border-radius: var(--app-radius-md);
-  color: var(--app-text-secondary);
-  font-size: 14px;
+  color: var(--app-text);
+  font-size: 14.5px;
   font-weight: 500;
   text-decoration: none;
   transition:
@@ -50,6 +51,10 @@
     background: var(--app-primary);
     color: var(--app-text-on-accent);
 
+    .nav__icon {
+      color: var(--app-text-on-accent);
+    }
+
     &:hover {
       background: var(--app-primary-hover);
       color: var(--app-text-on-accent);
@@ -59,9 +64,10 @@
 
 .nav__icon {
   flex: 0 0 auto;
-  width: 20px;
-  height: 20px;
-  font-size: 20px;
+  width: 19px;
+  height: 19px;
+  font-size: 19px;
+  color: var(--app-text-secondary);
 }
 
 .nav__label {

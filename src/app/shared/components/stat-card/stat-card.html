@@ -1,0 +1,37 @@
+@let stat = statistic();
+
+<ng-template #content>
+  <p class="stat__label">
+    @if (icon()) {
+      <mat-icon class="stat__icon" [svgIcon]="icon()!" aria-hidden="true" />
+    } @else {
+      <span class="stat__icon stat__icon--emoji" aria-hidden="true">{{ stat.icon }}</span>
+    }
+    <span>{{ stat.title }}</span>
+  </p>
+
+  <p class="stat__value">{{ stat.value }}</p>
+
+  <p class="stat__delta" [class]="'stat__delta--' + stat.changeType">
+    @if (delta()) {
+      <span class="stat__delta-change">{{ delta() }}</span>
+    }
+    <span>{{ stat.changeLabel }}</span>
+  </p>
+</ng-template>
+
+@if (interactive()) {
+  <button
+    type="button"
+    class="stat__button"
+    [attr.aria-label]="ariaLabel()"
+    [attr.aria-pressed]="active()"
+    (click)="filter.emit(stat)"
+  >
+    <ng-container [ngTemplateOutlet]="content" />
+  </button>
+} @else {
+  <div class="stat__static" role="group" [attr.aria-label]="ariaLabel()">
+    <ng-container [ngTemplateOutlet]="content" />
+  </div>
+}

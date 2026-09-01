@@ -1,0 +1,117 @@
+@use "mixins";
+
+:host {
+  display: block;
+}
+
+.board__grid {
+  display: grid;
+  gap: var(--app-space-4);
+  // One column on mobile, two on tablet, the three the design shows on desktop.
+  grid-template-columns: 1fr;
+  align-items: start;
+
+  @include mixins.from("tablet") {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  @include mixins.from("desktop") {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+
+.board__column {
+  display: flex;
+  flex-direction: column;
+  gap: var(--app-space-3);
+  min-width: 0;
+  padding: var(--app-space-5);
+  background: var(--app-surface);
+  border: 1px solid var(--app-border);
+  border-radius: 10px;
+}
+
+.board__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--app-space-2);
+  // The frames rule a line under each column header.
+  padding-block-end: var(--app-space-3);
+  border-block-end: 1px solid var(--app-border);
+}
+
+.board__title {
+  font-size: 12.5px;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--app-text);
+}
+
+.board__count {
+  min-width: 26px;
+  padding-block: 2px;
+  padding-inline: 8px;
+  border-radius: var(--app-radius-pill);
+  background: var(--app-surface-hover);
+  color: var(--app-text-secondary);
+  font-size: 12px;
+  font-weight: 600;
+  line-height: 18px;
+  text-align: center;
+}
+
+.board__list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--app-space-3);
+  // Keeps a column droppable while empty, and stops the grid from jumping as
+  // cards move between columns.
+  min-height: 96px;
+}
+
+.board__column-empty {
+  padding-block: var(--app-space-6);
+  color: var(--app-text-muted);
+  font-size: 12.5px;
+  text-align: center;
+}
+
+// CDK drag-and-drop treatments.
+.board__list.cdk-drop-list-dragging .app-task-card:not(.cdk-drag-placeholder) {
+  transition: transform var(--app-duration-base) var(--app-easing-standard);
+}
+
+.board__list.cdk-drop-list-receiving {
+  outline: 2px dashed var(--app-primary);
+  outline-offset: 6px;
+  border-radius: var(--app-radius-md);
+}
+
+::ng-deep .cdk-drag-preview.app-task-card {
+  box-shadow: var(--app-shadow-lg);
+  // Slight tilt so the dragged card reads as lifted off the board.
+  transform: rotate(1.5deg);
+  opacity: 0.96;
+}
+
+::ng-deep .cdk-drag-placeholder.app-task-card {
+  opacity: 0;
+  // Collapses to a dashed slot rather than leaving a full-height gap.
+  min-height: 0;
+  height: 8px;
+  padding: 0;
+  border-style: dashed;
+  border-color: var(--app-primary);
+  background: var(--app-primary-soft);
+  box-shadow: none;
+
+  * {
+    display: none;
+  }
+}
+
+::ng-deep .cdk-drag-animating {
+  transition: transform var(--app-duration-slow) var(--app-easing-emphasised);
+}

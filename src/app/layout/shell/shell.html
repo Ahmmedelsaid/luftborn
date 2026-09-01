@@ -8,13 +8,18 @@
   (menuToggle)="toggleDrawer()"
 />
 
-<mat-sidenav-container class="shell__body" [hasBackdrop]="!isDesktop()" autosize>
+<mat-sidenav-container
+  class="shell__body"
+  [hasBackdrop]="!isDesktop()"
+  (backdropClick)="closeDrawer()"
+  autosize
+>
   <mat-sidenav
     class="shell__nav"
     [mode]="isDesktop() ? 'side' : 'over'"
     [opened]="isDesktop() || drawerOpen()"
     [disableClose]="isDesktop()"
-    (closedStart)="closeDrawer()"
+    (keydown.escape)="closeDrawer()"
   >
     <app-side-nav
       [items]="navItems"

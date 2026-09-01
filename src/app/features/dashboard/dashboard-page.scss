@@ -1,0 +1,38 @@
+@use "mixins";
+
+.dash__stats {
+  display: grid;
+  gap: var(--app-space-3);
+  // Two up even on the narrowest viewport: four stacked tiles would push the
+  // board a full screen down before the user sees a single task.
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+
+  @include mixins.from("tablet") {
+    gap: var(--app-space-4);
+  }
+
+  @include mixins.from("desktop") {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+}
+
+.dash__filters {
+  margin-block: var(--app-space-5) var(--app-space-4);
+}
+
+.dash__content {
+  display: grid;
+  gap: var(--app-space-4);
+  grid-template-columns: 1fr;
+  align-items: start;
+
+  // The feed sits beside the board only where there is room for both; below
+  // that it stacks underneath rather than squeezing the columns.
+  @include mixins.from("wide") {
+    grid-template-columns: minmax(0, 1fr) 300px;
+  }
+}
+
+.dash__error {
+  margin-block-start: var(--app-space-4);
+}

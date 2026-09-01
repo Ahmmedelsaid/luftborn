@@ -1,0 +1,44 @@
+<h2 class="feed__title">{{ title() }}</h2>
+
+@if (loading()) {
+  <ul class="feed__list" aria-busy="true">
+    @for (row of skeletonRows; track row) {
+      <li class="feed__item">
+        <app-skeleton width="26px" height="26px" radius="50%" />
+        <div class="feed__item-lines">
+          <app-skeleton width="80%" height="11px" />
+          <app-skeleton width="34%" height="10px" />
+        </div>
+      </li>
+    }
+  </ul>
+} @else if (activities().length === 0) {
+  <app-empty-state
+    icon="clock"
+    title="No activity yet"
+    message="Changes to tasks will show up here."
+  />
+} @else {
+  <ul class="feed__list">
+    @for (activity of activities(); track activity.id) {
+      <li class="feed__item">
+        <app-avatar [name]="activity.userName" [avatar]="activity.userAvatar" [size]="26" />
+
+        <div class="feed__item-lines">
+          <p class="feed__text">
+            <span class="feed__actor">{{ activity.userName }}</span>
+            <span>&nbsp;{{ activity.message }}</span>
+          </p>
+          <p class="feed__meta">
+            <mat-icon
+              class="feed__type-icon"
+              [svgIcon]="iconFor(activity.type)"
+              aria-hidden="true"
+            />
+            <span>{{ activity.relativeTime }}</span>
+          </p>
+        </div>
+      </li>
+    }
+  </ul>
+}
