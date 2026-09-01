@@ -1,0 +1,51 @@
+<div class="card__head">
+  <app-priority-badge [priority]="task().priority" />
+
+  <button
+    type="button"
+    class="card__menu"
+    [attr.aria-label]="'Actions for ' + task().title"
+    [matMenuTriggerFor]="menu"
+    (click)="$event.stopPropagation()"
+  >
+    <mat-icon svgIcon="more-vertical" aria-hidden="true" />
+  </button>
+
+  <mat-menu #menu="matMenu">
+    <button mat-menu-item type="button" (click)="edit.emit(task())">
+      <mat-icon svgIcon="edit" aria-hidden="true" />
+      <span>Edit</span>
+    </button>
+
+    @for (status of moveTargets(); track status) {
+      <button mat-menu-item type="button" (click)="moveTo.emit(status)">
+        <mat-icon svgIcon="chevron-right" aria-hidden="true" />
+        <span>Move to {{ statusLabels[status] }}</span>
+      </button>
+    }
+
+    <button mat-menu-item type="button" class="card__menu-danger" (click)="remove.emit(task())">
+      <mat-icon svgIcon="delete" aria-hidden="true" />
+      <span>Delete</span>
+    </button>
+  </mat-menu>
+</div>
+
+<button type="button" class="card__body" (click)="open.emit(task())">
+  <h3 class="card__title">{{ task().title }}</h3>
+  <p class="card__description">{{ task().description }}</p>
+
+  <p class="card__due" [class]="'card__due--' + task().dueState">
+    <mat-icon class="card__due-icon" [svgIcon]="dueIcon()" aria-hidden="true" />
+    <span>{{ task().dueLabel }}</span>
+  </p>
+
+  @if (task().tags.length > 0) {
+    <p class="card__tags">{{ task().tags.join(', ') }}</p>
+  }
+</button>
+
+<div class="card__footer">
+  <app-avatar [name]="task().assignee.name" [avatar]="task().assignee.avatar" [size]="22" />
+  <span class="card__handle">{{ handle() }}</span>
+</div>
