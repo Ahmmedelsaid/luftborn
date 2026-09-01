@@ -223,5 +223,27 @@
   },
   "placeholder": {
     "message": "هذا القسم غير مُنفَّذ بعد."
+  },
+  "analytics": {
+    "summary": "{{total}} مهمة · {{rate}}% منجزة",
+    "byStatus": "المهام حسب الحالة",
+    "byPriority": "المهام حسب الأولوية",
+    "byAssignee": "التوزيع حسب المسؤول",
+    "emptyTitle": "لا توجد بيانات للرسم بعد",
+    "emptyMessage": "أنشئ بعض المهام وستظهر التوزيعات هنا.",
+    "statusChartLabel": "رسم دائري: {{todo}} للتنفيذ، {{inProgress}} قيد التنفيذ، {{done}} منجزة.",
+    "priorityChartLabel": "رسم أعمدة: {{high}} أولوية عالية، {{medium}} متوسطة، {{low}} منخفضة.",
+    "workloadChartLabel": "رسم أعمدة متراكمة لحالة المهام عبر {{count}} مسؤولين."
+  },
+  "team": {
+    "summary": "{{members}} أعضاء · {{assigned}} مهمة مُسندة",
+    "busiest": "الأكثر انشغالًا",
+    "overdue": "متأخرة",
+    "completion": "نسبة الإنجاز",
+    "completionFor": "نسبة إنجاز {{name}}",
+    "viewTasks": "عرض {{count}} مهمة",
+    "loadFailed": "تعذّر تحميل الفريق",
+    "emptyTitle": "لا يوجد أعضاء فريق بعد",
+    "emptyMessage": "يظهر المسؤولون هنا بمجرد إسناد مهام إليهم."
   }
 }

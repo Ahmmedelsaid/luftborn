@@ -1,0 +1,39 @@
+@use "mixins";
+
+.analytics__grid {
+  display: grid;
+  gap: var(--app-space-4);
+  grid-template-columns: 1fr;
+
+  @include mixins.from("desktop") {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+.analytics__panel {
+  display: flex;
+  flex-direction: column;
+  gap: var(--app-space-3);
+  padding: var(--app-space-5);
+  background: var(--app-surface);
+  border: 1px solid var(--app-border);
+  border-radius: 10px;
+
+  &--wide {
+    @include mixins.from("desktop") {
+      grid-column: 1 / -1;
+    }
+  }
+}
+
+.analytics__panel-title {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--app-text);
+}
+
+.analytics__chart {
+  // Charts need an explicit height: `maintainAspectRatio: false` means Chart.js
+  // fills its container rather than sizing itself.
+  height: 260px;
+}
