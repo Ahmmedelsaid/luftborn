@@ -1,0 +1,79 @@
+<app-page-header [title]="'nav.team' | translate" [subtitle]="summary()">
+  <button matButton="outlined" type="button" (click)="onReload()">
+    <mat-icon svgIcon="refresh" aria-hidden="true" />
+    {{ 'actions.refresh' | translate }}
+  </button>
+</app-page-header>
+
+@if (loadError(); as error) {
+  <app-error-state [error]="error" [title]="'team.loadFailed' | translate" (retry)="onReload()" />
+} @else if (loading()) {
+  <div class="team__grid">
+    @for (row of skeletonRows; track row) {
+      <app-skeleton height="176px" radius="10px" />
+    }
+  </div>
+} @else if (workloads().length === 0) {
+  <app-empty-state
+    icon="team"
+    [title]="'team.emptyTitle' | translate"
+    [message]="'team.emptyMessage' | translate"
+  />
+} @else {
+  <ul class="team__grid">
+    @for (user of workloads(); track user.id) {
+      <li class="team__card" [class.team__card--busiest]="user.id === busiest()">
+        <header class="team__head">
+          <app-avatar [name]="user.name" [avatar]="user.avatar" [color]="user.color" [size]="40" />
+          <div class="team__identity">
+            <p class="team__name">{{ user.name }}</p>
+            <p class="team__email">{{ user.email }}</p>
+          </div>
+          @if (user.id === busiest() && user.totalTasks > 0) {
+            <span class="team__flag">{{ 'team.busiest' | translate }}</span>
+          }
+        </header>
+
+        <dl class="team__stats">
+          <div class="team__stat">
+            <dt>{{ 'status.todo' | translate }}</dt>
+            <dd>{{ user.todoTasks }}</dd>
+          </div>
+          <div class="team__stat">
+            <dt>{{ 'status.in_progress' | translate }}</dt>
+            <dd>{{ user.inProgressTasks }}</dd>
+          </div>
+          <div class="team__stat">
+            <dt>{{ 'status.done' | translate }}</dt>
+            <dd>{{ user.doneTasks }}</dd>
+          </div>
+          <div class="team__stat team__stat--overdue">
+            <dt>{{ 'team.overdue' | translate }}</dt>
+            <dd>{{ user.overdueTasks }}</dd>
+          </div>
+        </dl>
+
+        <div class="team__progress">
+          <div class="team__progress-head">
+            <span>{{ 'team.completion' | translate }}</span>
+            <span dir="ltr">{{ user.completionRate }}%</span>
+          </div>
+          <div
+            class="team__bar"
+            role="progressbar"
+            [attr.aria-valuenow]="user.completionRate"
+            aria-valuemin="0"
+            aria-valuemax="100"
+            [attr.aria-label]="'team.completionFor' | translate: { name: user.name }"
+          >
+            <span class="team__bar-fill" [style.inline-size.%]="user.completionRate"></span>
+          </div>
+        </div>
+
+        <button matButton="outlined" type="button" class="team__action" (click)="onViewTasks(user)">
+          {{ 'team.viewTasks' | translate: { count: user.totalTasks } }}
+        </button>
+      </li>
+    }
+  </ul>
+}

@@ -199,5 +199,27 @@
   },
   "placeholder": {
     "message": "This section is not implemented yet."
+  },
+  "analytics": {
+    "summary": "{{total}} tasks · {{rate}}% complete",
+    "byStatus": "Tasks by status",
+    "byPriority": "Tasks by priority",
+    "byAssignee": "Workload by assignee",
+    "emptyTitle": "Nothing to chart yet",
+    "emptyMessage": "Create a few tasks and the breakdowns will appear here.",
+    "statusChartLabel": "Doughnut chart: {{todo}} to do, {{inProgress}} in progress, {{done}} done.",
+    "priorityChartLabel": "Bar chart: {{high}} high priority, {{medium}} medium, {{low}} low.",
+    "workloadChartLabel": "Stacked bar chart of task status across {{count}} assignees."
+  },
+  "team": {
+    "summary": "{{members}} members · {{assigned}} tasks assigned",
+    "busiest": "Busiest",
+    "overdue": "Overdue",
+    "completion": "Completion",
+    "completionFor": "Completion rate for {{name}}",
+    "viewTasks": "View {{count}} tasks",
+    "loadFailed": "Could not load the team",
+    "emptyTitle": "No team members yet",
+    "emptyMessage": "Assignees appear here once tasks reference them."
   }
 }

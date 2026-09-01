@@ -1,0 +1,55 @@
+<app-page-header [title]="'nav.analytics' | translate" [subtitle]="summary()">
+  <button matButton="outlined" type="button" (click)="onReload()">
+    <mat-icon svgIcon="refresh" aria-hidden="true" />
+    {{ 'actions.refresh' | translate }}
+  </button>
+</app-page-header>
+
+@if (loadError(); as error) {
+  <app-error-state
+    [error]="error"
+    [title]="'dashboard.loadFailed' | translate"
+    (retry)="onReload()"
+  />
+} @else if (loading()) {
+  <div class="analytics__grid">
+    <app-skeleton height="320px" radius="10px" />
+    <app-skeleton height="320px" radius="10px" />
+    <app-skeleton height="320px" radius="10px" />
+  </div>
+} @else if (isEmpty()) {
+  <app-empty-state
+    icon="analytics"
+    [title]="'analytics.emptyTitle' | translate"
+    [message]="'analytics.emptyMessage' | translate"
+  />
+} @else {
+  <div class="analytics__grid">
+    <section class="analytics__panel">
+      <h2 class="analytics__panel-title">{{ 'analytics.byStatus' | translate }}</h2>
+      <app-chart
+        class="analytics__chart"
+        [configuration]="statusChart()"
+        [ariaLabel]="statusChartLabel()"
+      />
+    </section>
+
+    <section class="analytics__panel">
+      <h2 class="analytics__panel-title">{{ 'analytics.byPriority' | translate }}</h2>
+      <app-chart
+        class="analytics__chart"
+        [configuration]="priorityChart()"
+        [ariaLabel]="priorityChartLabel()"
+      />
+    </section>
+
+    <section class="analytics__panel analytics__panel--wide">
+      <h2 class="analytics__panel-title">{{ 'analytics.byAssignee' | translate }}</h2>
+      <app-chart
+        class="analytics__chart"
+        [configuration]="workloadChart()"
+        [ariaLabel]="workloadChartLabel()"
+      />
+    </section>
+  </div>
+}
