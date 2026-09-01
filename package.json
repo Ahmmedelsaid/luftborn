@@ -1,0 +1,60 @@
+{
+  "name": "task-management-dashboard",
+  "version": "0.0.0",
+  "scripts": {
+    "ng": "ng",
+    "start": "ng serve",
+    "dev": "concurrently -k -n api,web -c magenta,cyan \"npm:api\" \"npm:start\"",
+    "api": "json-server --watch server/db.js --port 3000 --routes server/routes.json --middlewares server/middlewares.js",
+    "build": "ng build",
+    "build:stats": "ng build --stats-json",
+    "watch": "ng build --watch --configuration development",
+    "test": "ng test",
+    "test:watch": "ng test --watch",
+    "test:coverage": "ng test --coverage",
+    "lint": "ng lint",
+    "lint:fix": "ng lint --fix",
+    "format": "prettier --write .",
+    "format:check": "prettier --check .",
+    "generate:data": "node data-fetching/generate-data.js",
+    "prepare": "husky"
+  },
+  "private": true,
+  "packageManager": "npm@11.12.1",
+  "dependencies": {
+    "@angular/cdk": "^21.2.14",
+    "@angular/common": "^21.2.0",
+    "@angular/compiler": "^21.2.0",
+    "@angular/core": "^21.2.0",
+    "@angular/forms": "^21.2.0",
+    "@angular/material": "^21.2.14",
+    "@angular/platform-browser": "^21.2.0",
+    "@angular/router": "^21.2.0",
+    "chart.js": "^4.5.1",
+    "rxjs": "~7.8.0",
+    "tslib": "^2.3.0"
+  },
+  "devDependencies": {
+    "@angular/build": "^21.2.22",
+    "@angular/cli": "^21.2.22",
+    "@angular/compiler-cli": "^21.2.0",
+    "@vitest/coverage-v8": "^4.1.11",
+    "angular-eslint": "^21.4.0",
+    "concurrently": "^9.2.4",
+    "eslint": "^9.39.5",
+    "eslint-config-prettier": "^10.1.8",
+    "husky": "^9.1.7",
+    "jsdom": "^28.0.0",
+    "json-server": "^0.17.4",
+    "lint-staged": "^16.4.0",
+    "prettier": "^3.8.1",
+    "typescript": "~5.9.2",
+    "typescript-eslint": "^8.69.0",
+    "vitest": "^4.0.8"
+  },
+  "description": "Task Management Dashboard — Angular 21 technical assignment for Luftborn",
+  "engines": {
+    "node": ">=20.19.0",
+    "npm": ">=10"
+  }
+}

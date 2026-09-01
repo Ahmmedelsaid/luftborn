@@ -1,0 +1,24 @@
+# Normalise line endings so the repository is byte-identical regardless of the
+# contributor's OS. Without this, checking out on Windows and committing back
+# rewrites every file with CRLF and produces unreviewable diffs.
+* text=auto eol=lf
+
+# Windows-only tooling that genuinely needs CRLF.
+*.bat text eol=crlf
+*.cmd text eol=crlf
+
+# Binary assets: never diffed, never converted.
+*.ico binary
+*.png binary
+*.jpg binary
+*.jpeg binary
+*.gif binary
+*.webp binary
+*.woff binary
+*.woff2 binary
+*.pdf binary
+
+# Generated: collapsed in pull-request diffs to keep reviews readable.
+package-lock.json linguist-generated=true -diff
+data-fetching/tasks.json linguist-generated=true
+data-fetching/statistics.json linguist-generated=true
