@@ -90,3 +90,18 @@ button {
     scroll-behavior: auto !important;
   }
 }
+
+// Material's calendar repeats the month above the first partial week. The header
+// already names the month, so the label is redundant on screen — but it is the
+// table's accessible caption, so it is hidden visually rather than removed.
+.mat-calendar-body-label {
+  opacity: 0;
+}
+
+// A hairline keeps the calendar and the select panels reading as overlays on top
+// of the app's own flat white surfaces, which a shadow alone does not achieve.
+.mat-datepicker-content,
+.mat-mdc-select-panel,
+.mat-mdc-menu-panel {
+  border: 1px solid var(--app-border);
+}

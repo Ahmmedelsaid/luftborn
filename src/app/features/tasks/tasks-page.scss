@@ -1,7 +1,13 @@
+@use "mixins";
+
 .tasks__filters {
   margin-block-end: var(--app-space-4);
 }
 
 .tasks__error {
   margin-block-start: var(--app-space-4);
+}
+
+.tasks__row {
+  @include mixins.selectable-row;
 }

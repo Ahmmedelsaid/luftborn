@@ -43,6 +43,13 @@ $top-bar-height: 64px;
   --app-priority-low-bg: #eaecf0;
   --app-priority-low-fg: #475467;
 
+  // Separate from the badge colours above: those are label-on-tint and are
+  // deliberately dark, which makes high and medium indistinguishable as an 8px
+  // dot. These are picked for hue separation at a glance instead.
+  --app-priority-high-dot: #e5484d;
+  --app-priority-medium-dot: #f5a524;
+  --app-priority-low-dot: #9aa4b2;
+
   // Task states. Overdue cards get a tinted surface *and* a coloured border,
   // hence the separate tokens.
   --app-overdue-bg: #fef3f2;

@@ -10,7 +10,7 @@ export type ChangeType = 'positive' | 'negative' | 'neutral';
 export interface Statistic {
   readonly id: string;
   readonly title: string;
-  /** Emoji from the fixture; mapped to an icon by `STATISTIC_ICON_BY_EMOJI`. */
+  /** Emoji from the fixture, rendered as-is: it is what the design shows. */
   readonly icon: string;
   readonly value: number;
   readonly change: string;

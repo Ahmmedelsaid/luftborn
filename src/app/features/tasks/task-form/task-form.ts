@@ -24,7 +24,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
 import { TranslatePipe } from '@ngx-translate/core';
-import { map, startWith } from 'rxjs';
+import { startWith } from 'rxjs';
 import {
   TaskDraft,
   TaskPriority,
@@ -144,19 +144,41 @@ export class TaskForm {
 
   protected readonly isEdit = computed(() => this.task() !== undefined);
 
-  /** Name of the chosen assignee, for the select's custom trigger. */
+  /**
+   * Every select renders its own trigger from these rather than letting Material
+   * build one from the options: the options live in the overlay's lazy template,
+   * so until the panel has been opened once there is nothing to read a label
+   * from and a select holding a value renders blank.
+   */
+  protected readonly selectedStatus = computed<TaskStatus | null>(() => {
+    this.formRevision();
+    this.formEvents();
+
+    return this.form.controls.status.value;
+  });
+
+  protected readonly selectedPriority = computed<TaskPriority | null>(() => {
+    this.formRevision();
+    this.formEvents();
+
+    return this.form.controls.priority.value;
+  });
+
   protected readonly selectedAssigneeName = computed(() => {
-    const id = this.assigneeIdValue();
+    this.formRevision();
+    this.formEvents();
+
+    const id = this.form.controls.assigneeId.value;
+
     return this.assignees().find((user) => user.id === id)?.name ?? '';
   });
 
-  private readonly assigneeIdValue = toSignal(
-    this.form.controls.assigneeId.events.pipe(
-      startWith(null),
-      map(() => this.form.controls.assigneeId.value),
-    ),
-    { initialValue: '' },
-  );
+  /**
+   * Bumped by `reset()`, which repopulates with `emitEvent: false` and so never
+   * reaches `form.events`. Anything derived from a control's value has to depend
+   * on this as well, or it keeps showing the value from before the reset.
+   */
+  private readonly formRevision = signal(0);
 
   /** Character counts, so the limits are visible before they are hit. */
   protected readonly titleLength = signal(0);
@@ -303,6 +325,7 @@ export class TaskForm {
 
     this.titleLength.set(this.form.controls.title.value.length);
     this.descriptionLength.set(this.form.controls.description.value.length);
+    this.formRevision.update((revision) => revision + 1);
     this.form.markAsPristine();
   }
 

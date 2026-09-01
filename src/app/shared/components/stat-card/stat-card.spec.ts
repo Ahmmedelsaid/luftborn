@@ -68,18 +68,16 @@ describe('StatCard', () => {
     );
   });
 
-  it('maps a known emoji to a glyph', async () => {
+  it("renders the payload's own emoji, which is what the design shows", async () => {
     await render(createStatistic({ icon: '📊' }));
 
-    expect(exists(fixture, 'mat-icon.stat__icon')).toBe(true);
-    expect(exists(fixture, '.stat__icon--emoji')).toBe(false);
+    expect(text(fixture, '.stat__icon')).toBe('📊');
   });
 
-  it('falls back to the emoji itself when unmapped, so no tile renders blank', async () => {
+  it('renders an emoji it has never seen, so no tile can go blank', async () => {
     await render(createStatistic({ icon: '🚀' }));
 
-    expect(exists(fixture, 'mat-icon.stat__icon')).toBe(false);
-    expect(text(fixture, '.stat__icon--emoji')).toBe('🚀');
+    expect(text(fixture, '.stat__icon')).toBe('🚀');
   });
 
   describe('as a filter shortcut', () => {

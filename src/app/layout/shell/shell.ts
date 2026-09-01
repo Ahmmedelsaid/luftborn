@@ -46,12 +46,12 @@ export class Shell {
 
   /** Matches the Figma navigation exactly. */
   protected readonly navItems: readonly NavItem[] = [
-    { labelKey: 'nav.dashboard', icon: 'dashboard', route: '/dashboard' },
-    { labelKey: 'nav.tasks', icon: 'tasks', route: '/tasks' },
-    { labelKey: 'nav.calendar', icon: 'calendar', route: '/calendar' },
-    { labelKey: 'nav.analytics', icon: 'analytics', route: '/analytics' },
-    { labelKey: 'nav.team', icon: 'team', route: '/team' },
-    { labelKey: 'nav.settings', icon: 'settings', route: '/settings' },
+    { labelKey: 'nav.dashboard', icon: '\u{1F4CA}', route: '/dashboard' },
+    { labelKey: 'nav.tasks', icon: '✅', route: '/tasks' },
+    { labelKey: 'nav.calendar', icon: '\u{1F4C5}', route: '/calendar' },
+    { labelKey: 'nav.analytics', icon: '\u{1F4C8}', route: '/analytics' },
+    { labelKey: 'nav.team', icon: '\u{1F465}', route: '/team' },
+    { labelKey: 'nav.settings', icon: '⚙️', route: '/settings' },
   ];
 
   protected readonly notificationCount = computed(() => this.tasks.totals().overdue);

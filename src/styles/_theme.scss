@@ -70,12 +70,67 @@ html {
   @include mat.dialog-overrides(
     (
       container-shape: var(--app-radius-lg),
+      container-color: var(--app-surface),
+    )
+  );
+
+  @include mat.datepicker-overrides(
+    (
+      calendar-container-shape: var(--app-radius-md),
+      calendar-container-background-color: var(--app-surface),
+      calendar-container-elevation-shadow: var(--app-shadow-lg),
+      calendar-container-text-color: var(--app-text),
+      calendar-body-label-text-color: var(--app-text-muted),
+      calendar-period-button-text-color: var(--app-text),
+      calendar-navigation-button-icon-color: var(--app-text-secondary),
+      calendar-header-text-color: var(--app-text-secondary),
+      calendar-date-text-color: var(--app-text),
+      calendar-date-today-outline-color: var(--app-primary),
+      calendar-date-selected-state-background-color: var(--app-primary),
+      calendar-date-selected-state-text-color: var(--app-text-on-accent),
+      calendar-date-hover-state-background-color: var(--app-surface-hover),
     )
   );
 
   @include mat.menu-overrides(
     (
       container-shape: var(--app-radius-md),
+      container-color: var(--app-surface),
+      container-elevation-shadow: var(--app-shadow-lg),
+      item-label-text-color: var(--app-text),
+      item-label-text-size: 13.5px,
+      item-label-text-weight: 500,
+      item-icon-color: var(--app-text-secondary),
+      item-icon-size: 18px,
+      item-hover-state-layer-color: var(--app-surface-hover),
+      item-focus-state-layer-color: var(--app-surface-hover),
+      item-leading-spacing: 12px,
+      item-trailing-spacing: 12px,
+      divider-color: var(--app-border),
+    )
+  );
+
+  @include mat.select-overrides(
+    (
+      panel-background-color: var(--app-surface),
+      container-elevation-shadow: var(--app-shadow-lg),
+      enabled-trigger-text-color: var(--app-text),
+      placeholder-text-color: var(--app-text-muted),
+      enabled-arrow-color: var(--app-text-secondary),
+      focused-arrow-color: var(--app-primary),
+      trigger-text-size: 14px,
+    )
+  );
+
+  @include mat.option-overrides(
+    (
+      label-text-color: var(--app-text),
+      label-text-size: 14px,
+      label-text-weight: 500,
+      hover-state-layer-color: var(--app-surface-hover),
+      focus-state-layer-color: var(--app-surface-hover),
+      selected-state-layer-color: var(--app-primary-soft),
+      selected-state-label-text-color: var(--app-primary),
     )
   );
 

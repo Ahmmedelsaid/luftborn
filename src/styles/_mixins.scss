@@ -67,6 +67,62 @@
   box-shadow: var(--app-shadow-xs);
 }
 
+/// One row inside a `mat-menu-item` or `mat-option`: content leading, selection
+/// mark trailing. Material projects a direct-child `mat-icon` into its own
+/// leading slot, so anything that must sit after the label has to be wrapped in
+/// an element of ours — and the mark keeps its space when unselected, or every
+/// label shifts as the selection moves.
+@mixin selectable-row {
+  display: flex;
+  align-items: center;
+  gap: var(--app-space-2);
+  width: 100%;
+  min-width: 0;
+
+  .row__label {
+    flex: 1 1 auto;
+    min-width: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  .row__check {
+    flex: 0 0 auto;
+    width: 16px;
+    height: 16px;
+    font-size: 16px;
+    color: var(--app-primary);
+    visibility: hidden;
+  }
+
+  .row__check--on {
+    visibility: visible;
+  }
+}
+
+/// Small solid dot carrying a priority's colour, for menus and select options
+/// where a full badge would be too heavy.
+@mixin priority-dot {
+  flex: 0 0 auto;
+  width: 8px;
+  height: 8px;
+  border-radius: var(--app-radius-pill);
+  background: var(--app-text-muted);
+
+  &--high {
+    background: var(--app-priority-high-dot);
+  }
+
+  &--medium {
+    background: var(--app-priority-medium-dot);
+  }
+
+  &--low {
+    background: var(--app-priority-low-dot);
+  }
+}
+
 /// Thin scrollbars, for the kanban columns.
 @mixin custom-scrollbar {
   scrollbar-width: thin;

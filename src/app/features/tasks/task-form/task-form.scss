@@ -3,7 +3,7 @@
 .form {
   display: flex;
   flex-direction: column;
-  gap: var(--app-space-1);
+  gap: var(--app-space-3);
 }
 
 .form__field {
@@ -12,7 +12,7 @@
 
 .form__row {
   display: grid;
-  gap: var(--app-space-1) var(--app-space-3);
+  gap: var(--app-space-3);
   grid-template-columns: 1fr;
 
   @include mixins.from("tablet") {
@@ -24,10 +24,12 @@
   min-width: 0;
 }
 
-.form__assignee {
-  display: inline-flex;
-  align-items: center;
-  gap: var(--app-space-2);
+.form__option {
+  @include mixins.selectable-row;
+}
+
+.form__dot {
+  @include mixins.priority-dot;
 }
 
 .form__tags {
@@ -61,8 +63,9 @@
 
 .form__tag-row {
   display: flex;
-  align-items: flex-start;
+  align-items: center;
   gap: var(--app-space-2);
+  margin-block-end: var(--app-space-2);
 }
 
 .form__field--tag {
@@ -74,10 +77,8 @@
   align-items: center;
   justify-content: center;
   flex: 0 0 auto;
-  width: 32px;
-  height: 32px;
-  // Aligns with the input rather than the field wrapper, which includes the hint.
-  margin-block-start: 8px;
+  width: 40px;
+  height: 40px;
   padding: 0;
   border: 1px solid var(--app-border);
   border-radius: var(--app-radius-md);
@@ -115,12 +116,7 @@
   display: flex;
   justify-content: flex-end;
   gap: var(--app-space-2);
-  // Sticky rather than at the end of the scroll area: the form is long enough
-  // that the save action would otherwise sit below the fold.
-  position: sticky;
-  inset-block-end: 0;
-  margin-block-start: var(--app-space-4);
-  padding-block: var(--app-space-3);
-  background: var(--app-surface);
+  margin-block-start: var(--app-space-5);
+  padding-block-start: var(--app-space-4);
   border-block-start: 1px solid var(--app-border);
 }

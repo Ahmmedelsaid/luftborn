@@ -52,7 +52,14 @@
     color: var(--app-text-on-accent);
 
     .nav__icon {
-      color: var(--app-text-on-accent);
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      flex: 0 0 auto;
+      width: 22px;
+      height: 22px;
+      font-size: 17px;
+      line-height: 1;
     }
 
     &:hover {
