@@ -32,14 +32,29 @@
       <mat-icon svgIcon="chevron-down" aria-hidden="true" />
     </button>
 
-    <mat-menu #assigneeMenu="matMenu">
+    <mat-menu #assigneeMenu="matMenu" class="app-menu app-menu--wide">
       @for (user of assignees(); track user.id) {
-        <button mat-menu-item type="button" (click)="assigneeToggle.emit(user.id)">
-          <app-avatar [name]="user.name" [avatar]="user.avatar" [color]="user.color" [size]="20" />
-          <span class="bar__menu-label">{{ user.name }}</span>
-          @if (isAssigneeActive(user.id)) {
-            <mat-icon svgIcon="tasks" aria-hidden="true" />
-          }
+        <button
+          mat-menu-item
+          type="button"
+          [attr.aria-pressed]="isAssigneeActive(user.id)"
+          (click)="assigneeToggle.emit(user.id)"
+        >
+          <span class="bar__row">
+            <app-avatar
+              [name]="user.name"
+              [avatar]="user.avatar"
+              [color]="user.color"
+              [size]="24"
+            />
+            <span class="row__label">{{ user.name }}</span>
+            <mat-icon
+              class="row__check"
+              [class.row__check--on]="isAssigneeActive(user.id)"
+              svgIcon="check"
+              aria-hidden="true"
+            />
+          </span>
         </button>
       }
     </mat-menu>
@@ -55,13 +70,24 @@
     <mat-icon svgIcon="chevron-down" aria-hidden="true" />
   </button>
 
-  <mat-menu #priorityMenu="matMenu">
+  <mat-menu #priorityMenu="matMenu" class="app-menu">
     @for (priority of priorities; track priority) {
-      <button mat-menu-item type="button" (click)="priorityToggle.emit(priority)">
-        <span class="bar__menu-label">{{ priorityLabelKeys[priority] | translate }}</span>
-        @if (isPriorityActive(priority)) {
-          <mat-icon svgIcon="tasks" aria-hidden="true" />
-        }
+      <button
+        mat-menu-item
+        type="button"
+        [attr.aria-pressed]="isPriorityActive(priority)"
+        (click)="priorityToggle.emit(priority)"
+      >
+        <span class="bar__row">
+          <span class="bar__dot" [class]="'bar__dot--' + priority" aria-hidden="true"></span>
+          <span class="row__label">{{ priorityLabelKeys[priority] | translate }}</span>
+          <mat-icon
+            class="row__check"
+            [class.row__check--on]="isPriorityActive(priority)"
+            svgIcon="check"
+            aria-hidden="true"
+          />
+        </span>
       </button>
     }
   </mat-menu>

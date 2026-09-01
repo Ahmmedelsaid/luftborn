@@ -21,7 +21,7 @@ import { AppLanguage } from '../../../core/interfaces';
       <mat-icon svgIcon="chevron-down" aria-hidden="true" />
     </button>
 
-    <mat-menu #menu="matMenu">
+    <mat-menu #menu="matMenu" class="app-menu">
       @for (option of language.languages; track option.code) {
         <button
           mat-menu-item
@@ -30,15 +30,22 @@ import { AppLanguage } from '../../../core/interfaces';
           [attr.aria-current]="option.code === language.current() ? 'true' : null"
           (click)="choose(option.code)"
         >
-          <span class="switcher__label">{{ option.nativeLabel }}</span>
-          @if (option.code === language.current()) {
-            <mat-icon svgIcon="tasks" aria-hidden="true" />
-          }
+          <span class="switcher__row">
+            <span class="row__label">{{ option.nativeLabel }}</span>
+            <mat-icon
+              class="row__check"
+              [class.row__check--on]="option.code === language.current()"
+              svgIcon="check"
+              aria-hidden="true"
+            />
+          </span>
         </button>
       }
     </mat-menu>
   `,
   styles: `
+    @use 'mixins';
+
     .switcher__trigger {
       display: inline-flex;
       align-items: center;
@@ -69,8 +76,8 @@ import { AppLanguage } from '../../../core/interfaces';
       letter-spacing: 0.03em;
     }
 
-    .switcher__label {
-      flex: 1 1 auto;
+    .switcher__row {
+      @include mixins.selectable-row;
     }
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,

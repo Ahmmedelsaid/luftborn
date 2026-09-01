@@ -293,7 +293,7 @@ Every media query goes through `from($breakpoint)`, so breakpoints are declared
 once. `Shell` reads the same 1024px value through `BreakpointObserver`, so the
 TypeScript and the CSS can't disagree about what "desktop" means.
 
-Icons are a custom SVG set registered with `MatIconRegistry` — see
+Icons are the emoji the design uses, rendered as text — see
 [deliberate departures](#deliberate-departures-from-the-design).
 
 ---
@@ -533,15 +533,15 @@ ordering, the `httpResource` error-state workaround, the dialog injector fix.
 
 ## Deliberate departures from the design
 
-Two places where the implementation doesn't match the Figma file, on purpose:
+One place where the implementation doesn't match the Figma file, on purpose —
+and one place it deliberately follows it against my own instinct:
 
-**Emoji replaced with an SVG icon set.** The mock uses emoji for status and
-navigation icons. Emoji render differently on every platform (and some render as
-a colour glyph that ignores the surrounding text colour), can't inherit
-`currentColor`, and aren't reliably announced by screen readers. The set in
-`shared/icons/icon-set.ts` is registered with `MatIconRegistry`, inherits colour
-and size from CSS, and carries proper accessible labels. The design intent is
-preserved; the delivery mechanism isn't.
+**The mock's emoji are used as the icons.** Navigation and statistic tiles
+render the emoji the frames show, and the statistic tiles take theirs straight
+from the API payload rather than mapping it to anything. The trade-off is
+accepted knowingly: emoji render differently per platform and cannot inherit
+`currentColor`. Matching the supplied design won over normalising it, and the
+labels beside them carry the accessible name either way.
 
 **Live column counts instead of the mock's numbers.** The Figma frames show
 counts of 42 / 25 / 89 which don't add up across frames — they're placeholder

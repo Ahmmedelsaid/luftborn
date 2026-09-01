@@ -35,6 +35,7 @@ export const APP_ICONS: Readonly<Record<string, string>> = {
   ),
   menu: strokeIcon('<path d="M4 6h16"/><path d="M4 12h16"/><path d="M4 18h16"/>'),
   close: strokeIcon('<path d="M18 6 6 18"/><path d="m6 6 12 12"/>'),
+  check: strokeIcon('<path d="m5 12 4.5 4.5L19 7"/>'),
 
   plus: strokeIcon('<path d="M5 12h14"/><path d="M12 5v14"/>'),
   edit: strokeIcon('<path d="M12 20h9"/><path d="M16.5 3.5a2.12 2.12 0 0 1 3 3L7 19l-4 1 1-4z"/>'),
@@ -83,16 +84,4 @@ export const APP_ICONS: Readonly<Record<string, string>> = {
   search_off: strokeIcon(
     '<circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/><path d="m8.5 8.5 5 5"/><path d="m13.5 8.5-5 5"/>',
   ),
-};
-
-/**
- * Maps the emoji the statistics API returns onto an icon name, since the design
- * renders glyphs. Unmapped emoji fall back to the character itself.
- */
-export const STATISTIC_ICON_BY_EMOJI: Readonly<Record<string, string>> = {
-  '📊': 'stat-total',
-  '✅': 'completed',
-  '🔄': 'stat-progress',
-  '⚠️': 'overdue',
-  '⚠': 'overdue',
 };

@@ -1,9 +1,4 @@
-<app-page-header [title]="'dashboard.title' | translate" [subtitle]="summary()">
-  <button matButton="outlined" type="button" (click)="onReload()">
-    <mat-icon svgIcon="refresh" aria-hidden="true" />
-    {{ 'actions.refresh' | translate }}
-  </button>
-</app-page-header>
+<app-page-header [title]="'dashboard.title' | translate" [subtitle]="summary()"> </app-page-header>
 
 <section class="dash__stats" [attr.aria-label]="'dashboard.statistics' | translate">
   @if (statisticsLoading()) {

@@ -179,6 +179,7 @@
     "tags": "الوسوم",
     "tagsEmpty": "لا توجد وسوم بعد.",
     "tagLabel": "وسم {{index}}",
+    "tagPlaceholder": "مثال: واجهة",
     "removeTag": "إزالة الوسم {{index}}",
     "discardTitle": "تجاهل التغييرات؟",
     "discardMessage": "لم يتم حفظ تعديلاتك على هذه المهمة."

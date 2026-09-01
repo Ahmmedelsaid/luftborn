@@ -32,9 +32,13 @@
 
   <div class="form__row">
     <div class="form__cell">
-      <mat-form-field appearance="outline" class="form__field">
+      <mat-form-field appearance="outline" class="form__field" subscriptSizing="dynamic">
         <mat-label>{{ 'form.status' | translate }}</mat-label>
         <mat-select formControlName="status">
+          @if (selectedStatus(); as selected) {
+            <mat-select-trigger>{{ statusLabelKeys[selected] | translate }}</mat-select-trigger>
+          }
+
           @for (status of statuses; track status) {
             <mat-option [value]="status">{{ statusLabelKeys[status] | translate }}</mat-option>
           }
@@ -44,13 +48,27 @@
     </div>
 
     <div class="form__cell">
-      <mat-form-field appearance="outline" class="form__field">
+      <mat-form-field appearance="outline" class="form__field" subscriptSizing="dynamic">
         <mat-label>{{ 'form.priority' | translate }}</mat-label>
         <mat-select formControlName="priority">
+          @if (selectedPriority(); as selected) {
+            <mat-select-trigger>
+              <span class="form__option">
+                <span class="form__dot" [class]="'form__dot--' + selected" aria-hidden="true">
+                </span>
+                <span class="row__label">{{ priorityLabelKeys[selected] | translate }}</span>
+              </span>
+            </mat-select-trigger>
+          }
+
           @for (priority of priorities; track priority) {
-            <mat-option [value]="priority">{{
-              priorityLabelKeys[priority] | translate
-            }}</mat-option>
+            <mat-option [value]="priority">
+              <span class="form__option">
+                <span class="form__dot" [class]="'form__dot--' + priority" aria-hidden="true">
+                </span>
+                <span class="row__label">{{ priorityLabelKeys[priority] | translate }}</span>
+              </span>
+            </mat-option>
           }
         </mat-select>
       </mat-form-field>
@@ -60,7 +78,7 @@
 
   <div class="form__row">
     <div class="form__cell">
-      <mat-form-field appearance="outline" class="form__field">
+      <mat-form-field appearance="outline" class="form__field" subscriptSizing="dynamic">
         <mat-label>{{ 'form.dueDate' | translate }}</mat-label>
         <input matInput formControlName="dueDate" [matDatepicker]="picker" />
         <mat-datepicker-toggle matIconSuffix [for]="picker" />
@@ -70,7 +88,7 @@
     </div>
 
     <div class="form__cell">
-      <mat-form-field appearance="outline" class="form__field">
+      <mat-form-field appearance="outline" class="form__field" subscriptSizing="dynamic">
         <mat-label>{{ 'form.assignee' | translate }}</mat-label>
         <mat-select formControlName="assigneeId">
           <!-- The default trigger concatenates the avatar initials with the
@@ -79,14 +97,14 @@
 
           @for (user of assignees(); track user.id) {
             <mat-option [value]="user.id">
-              <span class="form__assignee">
+              <span class="form__option">
                 <app-avatar
                   [name]="user.name"
                   [avatar]="user.avatar"
                   [color]="user.color"
-                  [size]="20"
+                  [size]="24"
                 />
-                <span>{{ user.name }}</span>
+                <span class="row__label">{{ user.name }}</span>
               </span>
             </mat-option>
           }
@@ -104,9 +122,18 @@
 
     @for (tag of tags.controls; track $index) {
       <div class="form__tag-row">
-        <mat-form-field appearance="outline" class="form__field form__field--tag">
-          <mat-label>{{ 'form.tagLabel' | translate: { index: $index + 1 } }}</mat-label>
-          <input matInput [formControl]="tag" autocomplete="off" />
+        <mat-form-field
+          appearance="outline"
+          class="form__field form__field--tag"
+          subscriptSizing="dynamic"
+        >
+          <input
+            matInput
+            [formControl]="tag"
+            [attr.aria-label]="'form.tagLabel' | translate: { index: $index + 1 }"
+            [placeholder]="'form.tagPlaceholder' | translate"
+            autocomplete="off"
+          />
         </mat-form-field>
 
         <button

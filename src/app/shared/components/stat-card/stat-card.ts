@@ -2,9 +2,7 @@ import { ChangeDetectionStrategy, Component, computed, inject, input, output } f
 import { NgTemplateOutlet } from '@angular/common';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { TranslateService } from '@ngx-translate/core';
-import { MatIconModule } from '@angular/material/icon';
 import { Statistic } from '../../../core/interfaces';
-import { STATISTIC_ICON_BY_EMOJI } from '../../icons/icon-set';
 
 /**
  * Statistic tile. Renders the API payload as-is, including its accent colour.
@@ -15,7 +13,7 @@ import { STATISTIC_ICON_BY_EMOJI } from '../../icons/icon-set';
  */
 @Component({
   selector: 'app-stat-card',
-  imports: [MatIconModule, NgTemplateOutlet],
+  imports: [NgTemplateOutlet],
   templateUrl: './stat-card.html',
   styleUrl: './stat-card.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -38,11 +36,6 @@ export class StatCard {
   readonly active = input<boolean>(false);
 
   readonly filter = output<Statistic>();
-
-  /** `null` when the emoji has no mapped glyph, so the template can fall back. */
-  protected readonly icon = computed<string | null>(
-    () => STATISTIC_ICON_BY_EMOJI[this.statistic().icon] ?? null,
-  );
 
   /** The design omits a zero delta and shows only its label. */
   protected readonly delta = computed(() => {

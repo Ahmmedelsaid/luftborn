@@ -5,21 +5,26 @@
     <mat-icon svgIcon="chevron-down" aria-hidden="true" />
   </button>
 
-  <mat-menu #sortMenu="matMenu">
+  <mat-menu #sortMenu="matMenu" class="app-menu">
     @for (option of sortOptions; track option.key) {
-      <button mat-menu-item type="button" (click)="onSort(option.key)">
-        <span>{{ option.labelKey | translate }}</span>
-        @if (sortKey() === option.key) {
-          <mat-icon svgIcon="tasks" aria-hidden="true" />
-        }
+      <button
+        mat-menu-item
+        type="button"
+        [attr.aria-current]="sortKey() === option.key ? 'true' : null"
+        (click)="onSort(option.key)"
+      >
+        <span class="tasks__row">
+          <span class="row__label">{{ option.labelKey | translate }}</span>
+          <mat-icon
+            class="row__check"
+            [class.row__check--on]="sortKey() === option.key"
+            svgIcon="check"
+            aria-hidden="true"
+          />
+        </span>
       </button>
     }
   </mat-menu>
-
-  <button matButton="outlined" type="button" (click)="onReload()">
-    <mat-icon svgIcon="refresh" aria-hidden="true" />
-    {{ 'actions.refresh' | translate }}
-  </button>
 </app-page-header>
 
 <app-filter-bar

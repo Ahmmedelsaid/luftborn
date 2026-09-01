@@ -51,15 +51,14 @@
 }
 
 .stat__icon {
-  width: 15px;
-  height: 15px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex: 0 0 auto;
+  width: 18px;
+  height: 18px;
   font-size: 15px;
-  // The accent colour comes from the API payload, per card.
-  color: var(--app-stat-color);
-
-  &--emoji {
-    line-height: 15px;
-  }
+  line-height: 1;
 }
 
 .stat__value {

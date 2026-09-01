@@ -11,7 +11,7 @@
           [attr.aria-current]="link.isActive ? 'page' : null"
           (click)="navigated.emit()"
         >
-          <mat-icon class="nav__icon" [svgIcon]="item.icon" aria-hidden="true" />
+          <span class="nav__icon" aria-hidden="true">{{ item.icon }}</span>
           <span class="nav__label">{{ item.labelKey | translate }}</span>
         </a>
       </li>

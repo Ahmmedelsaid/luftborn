@@ -161,6 +161,7 @@
     "tags": "Tags",
     "tagsEmpty": "No tags yet.",
     "tagLabel": "Tag {{index}}",
+    "tagPlaceholder": "e.g. Frontend",
     "removeTag": "Remove tag {{index}}",
     "discardTitle": "Discard changes?",
     "discardMessage": "Your edits to this task have not been saved."
