@@ -11,7 +11,18 @@ import { computed, inject, Injectable, signal } from '@angular/core';
 import { firstValueFrom } from 'rxjs';
 import { TaskApi } from '../api/task-api';
 import { buildActivity } from '../api/activity-api';
-import { ApiError, isApiError, Task, TaskDraft, TaskPatch, TaskStatus, TaskView } from '../models';
+import {
+  ApiError,
+  BoardColumn,
+  isApiError,
+  Task,
+  TaskDraft,
+  TaskPatch,
+  TaskFilters,
+  TaskSortKey,
+  TaskStatus,
+  TaskView,
+} from '../interfaces';
 import { ClockService } from '../services/clock';
 import {
   computeTaskTotals,
@@ -20,19 +31,10 @@ import {
   groupTasksByStatus,
   hasActiveFilters,
   sortTasks,
-  TaskFilters,
-  TaskSortKey,
   toTaskView,
 } from '../utils/task.utils';
 import { ActivityStore } from './activity-store';
 import { patchResource, resourceError, resourceValue } from './resource.utils';
-
-/** One kanban column. */
-export interface BoardColumn {
-  readonly status: TaskStatus;
-  readonly tasks: readonly TaskView[];
-  readonly count: number;
-}
 
 @Injectable({ providedIn: 'root' })
 export class TaskStore {

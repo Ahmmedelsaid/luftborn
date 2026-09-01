@@ -1,5 +1,5 @@
 import { ChangeDetectionStrategy, Component, input } from '@angular/core';
-import { TaskPriority, TASK_PRIORITY_LABELS } from '../../../core/models';
+import { TaskPriority, TASK_PRIORITY_LABELS } from '../../../core/interfaces';
 
 /** Uppercase priority pill, as rendered on every task card in the design. */
 @Component({

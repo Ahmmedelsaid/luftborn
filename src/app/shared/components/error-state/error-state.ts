@@ -1,7 +1,7 @@
 import { ChangeDetectionStrategy, Component, input, output } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
-import { ApiError } from '../../../core/models';
+import { ApiError } from '../../../core/interfaces';
 
 /**
  * Takes the normalised {@link ApiError}, so the message is always user-facing and

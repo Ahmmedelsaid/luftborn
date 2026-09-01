@@ -1,6 +1,6 @@
 import { computed, inject, Injectable } from '@angular/core';
 import { UserApi } from '../api/user-api';
-import { UserWorkload } from '../models';
+import { UserWorkload } from '../interfaces';
 import { computeUserWorkloads } from '../utils/task.utils';
 import { resourceError, resourceValue } from './resource.utils';
 import { TaskStore } from './task-store';

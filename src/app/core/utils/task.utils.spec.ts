@@ -7,7 +7,7 @@ import {
   dateOffsetFromNow,
   TEST_NOW,
 } from '../../../testing/task.factory';
-import { TaskView } from '../models';
+import { TaskView } from '../interfaces';
 import {
   computeTaskTotals,
   computeUserWorkloads,

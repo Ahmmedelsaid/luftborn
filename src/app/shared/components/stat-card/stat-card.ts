@@ -1,7 +1,7 @@
 import { ChangeDetectionStrategy, Component, computed, input, output } from '@angular/core';
 import { NgTemplateOutlet } from '@angular/common';
 import { MatIconModule } from '@angular/material/icon';
-import { Statistic } from '../../../core/models';
+import { Statistic } from '../../../core/interfaces';
 import { STATISTIC_ICON_BY_EMOJI } from '../../icons/icon-set';
 
 /**

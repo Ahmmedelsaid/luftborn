@@ -2,7 +2,7 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { click, exists, texts } from '../../../../testing/component-helpers';
 import { createUser } from '../../../../testing/task.factory';
-import { TaskPriority, TaskStatus, User } from '../../../core/models';
+import { TaskPriority, TaskStatus, User } from '../../../core/interfaces';
 import { provideAppIcons } from '../../icons/provide-icons';
 import { FilterBar } from './filter-bar';
 

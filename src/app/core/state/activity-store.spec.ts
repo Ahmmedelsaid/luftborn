@@ -8,7 +8,7 @@ import {
   provideTestHttpWithErrorNormalisation,
   settle,
 } from '../../../testing/test-helpers';
-import { Activity } from '../models';
+import { Activity } from '../interfaces';
 import { ActivityStore } from './activity-store';
 
 async function setupStore(activities: Activity[]): Promise<ActivityStore> {

@@ -2,18 +2,17 @@ import { CdkDragDrop, DragDropModule } from '@angular/cdk/drag-drop';
 import { ChangeDetectionStrategy, Component, computed, input, output } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
-import { TaskStatus, TaskView, TASK_STATUSES, TASK_STATUS_LABELS } from '../../../core/models';
-import { BoardColumn } from '../../../core/state/task-store';
+import {
+  BoardColumn,
+  TaskStatus,
+  TaskView,
+  TASK_STATUSES,
+  TASK_STATUS_LABELS,
+} from '../../../core/interfaces';
+import { TaskMove } from '../../interfaces';
 import { EmptyState } from '../empty-state/empty-state';
 import { Skeleton } from '../skeleton/skeleton';
 import { TaskCard } from '../task-card/task-card';
-
-/** A drop, resolved to the values the store needs. */
-export interface TaskMove {
-  readonly taskId: string;
-  readonly toStatus: TaskStatus;
-  readonly toIndex: number;
-}
 
 /**
  * Kanban board with drag-and-drop between and within columns.

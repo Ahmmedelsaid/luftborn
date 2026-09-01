@@ -2,14 +2,15 @@ import {
   DueDateState,
   LiveTaskTotals,
   Task,
-  TaskPriority,
   TaskStatus,
   TaskView,
   TASK_PRIORITY_WEIGHT,
   TASK_STATUSES,
+  TaskFilters,
+  TaskSortKey,
   User,
   UserWorkload,
-} from '../models';
+} from '../interfaces';
 import {
   differenceInCalendarDays,
   formatCompletedLabel,
@@ -59,15 +60,6 @@ export function toTaskView(task: Task, now: Date, index = 0): TaskView {
     daysUntilDue,
     order: task.order ?? index,
   };
-}
-
-/** Empty arrays mean "all". */
-export interface TaskFilters {
-  readonly search: string;
-  readonly statuses: readonly TaskStatus[];
-  readonly priorities: readonly TaskPriority[];
-  readonly assigneeIds: readonly string[];
-  readonly overdueOnly: boolean;
 }
 
 /** Neutral filter state; nothing filtered out. */
@@ -125,8 +117,6 @@ export function filterTasks(tasks: readonly TaskView[], filters: TaskFilters): T
     return matchesSearch(task, needle);
   });
 }
-
-export type TaskSortKey = 'manual' | 'dueDate' | 'priority' | 'title' | 'updatedAt';
 
 /**
  * `manual` honours the drag-and-drop `order`; every other key falls back to it

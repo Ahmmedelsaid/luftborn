@@ -3,13 +3,14 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Router } from '@angular/router';
-import { Statistic, TaskPriority, TaskStatus, TaskView } from '../../core/models';
+import { Statistic, TaskPriority, TaskStatus, TaskView } from '../../core/interfaces';
 import { ActivityStore } from '../../core/state/activity-store';
 import { StatisticStore } from '../../core/state/statistic-store';
 import { TaskStore } from '../../core/state/task-store';
 import { UserStore } from '../../core/state/user-store';
 import { ActivityFeed } from '../../shared/components/activity-feed/activity-feed';
-import { TaskBoard, TaskMove } from '../../shared/components/board/task-board';
+import { TaskBoard } from '../../shared/components/board/task-board';
+import { TaskMove } from '../../shared/interfaces';
 import { ConfirmDialogService } from '../../shared/components/confirm-dialog/confirm-dialog.service';
 import { ErrorState } from '../../shared/components/error-state/error-state';
 import { FilterBar } from '../../shared/components/filter-bar/filter-bar';
@@ -178,8 +179,9 @@ export class DashboardPage {
     await this.router.navigate(['/tasks', task.id, 'edit']);
   }
 
+  /** Opening a card is editing it, which is what the brief's modal edit means. */
   protected async onOpenTask(task: TaskView): Promise<void> {
-    await this.router.navigate(['/tasks', task.id]);
+    await this.router.navigate(['/tasks', task.id, 'edit']);
   }
 
   protected onTaskMoved(move: TaskMove): void {

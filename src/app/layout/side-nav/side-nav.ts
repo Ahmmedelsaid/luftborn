@@ -1,12 +1,7 @@
 import { ChangeDetectionStrategy, Component, input, output } from '@angular/core';
 import { MatIconModule } from '@angular/material/icon';
 import { RouterLink, RouterLinkActive } from '@angular/router';
-
-export interface NavItem {
-  readonly label: string;
-  readonly icon: string;
-  readonly route: string;
-}
+import { NavItem } from '../interfaces/nav-item.interface';
 
 /** Presentational navigation rail; the shell owns routing and layout. */
 @Component({

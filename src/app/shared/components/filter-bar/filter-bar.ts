@@ -10,7 +10,7 @@ import {
   TASK_STATUSES,
   TASK_STATUS_LABELS,
   User,
-} from '../../../core/models';
+} from '../../../core/interfaces';
 import { Avatar } from '../avatar/avatar';
 
 /** One entry in the status segmented control. `null` is the "All" segment. */
