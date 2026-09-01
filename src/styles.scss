@@ -1,0 +1,94 @@
+// Global stylesheet: theme wiring, document defaults and the two utilities that
+// genuinely have to be global. Everything else lives in the component that owns
+// it.
+
+@use "tokens";
+@use "mixins";
+@use "theme";
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  height: 100%;
+  margin: 0;
+}
+
+body {
+  background: var(--app-bg);
+  color: var(--app-text);
+  font-family: var(--mat-sys-body-medium-font);
+  font-size: 14px;
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  margin: 0;
+  font-weight: 600;
+  color: var(--app-text);
+}
+
+p {
+  margin: 0;
+}
+
+a {
+  color: var(--app-primary);
+  text-decoration: none;
+
+  &:hover {
+    text-decoration: underline;
+  }
+}
+
+button {
+  font-family: inherit;
+}
+
+:focus-visible {
+  @include mixins.focus-ring;
+}
+
+.app-visually-hidden {
+  @include mixins.visually-hidden;
+}
+
+/// Skip link: first focusable element in the shell, hidden until focused.
+.app-skip-link {
+  position: absolute;
+  top: var(--app-space-2);
+  left: var(--app-space-2);
+  z-index: 1000;
+  padding: var(--app-space-2) var(--app-space-4);
+  background: var(--app-surface);
+  border-radius: var(--app-radius-md);
+  box-shadow: var(--app-shadow-md);
+  color: var(--app-primary);
+  font-weight: 600;
+  transform: translateY(-200%);
+  transition: transform var(--app-duration-fast) var(--app-easing-standard);
+
+  &:focus {
+    transform: translateY(0);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}

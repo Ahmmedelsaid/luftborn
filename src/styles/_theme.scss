@@ -1,0 +1,98 @@
+// Angular Material M3 theme.
+//
+// Palettes come from `_theme-colors.scss`, generated with
+// `ng generate @angular/material:theme-color` from the design's brand colours:
+// primary #2563EB, tertiary #388E3C (success), error #D32F2F (danger).
+
+@use "@angular/material" as mat;
+@use "theme-colors";
+
+html {
+  @include mat.theme(
+    (
+      color: (
+        primary: theme-colors.$primary-palette,
+        tertiary: theme-colors.$tertiary-palette,
+      ),
+      typography: (
+        plain-family: (
+          Inter,
+          "Segoe UI",
+          Roboto,
+          system-ui,
+          sans-serif,
+        ),
+        brand-family: (
+          Inter,
+          "Segoe UI",
+          Roboto,
+          system-ui,
+          sans-serif,
+        ),
+      ),
+      density: 0,
+    )
+  );
+
+  // The supplied design is light-only; pinning the scheme keeps rendering
+  // deterministic rather than flipping with the OS preference.
+  color-scheme: light;
+}
+
+@media (prefers-contrast: more) {
+  html {
+    @include theme-colors.high-contrast-overrides(light);
+  }
+}
+
+// Design deviations from Material's defaults, applied through the supported
+// token mixins in one place instead of `::ng-deep` scattered across components.
+:root {
+  @include mat.card-overrides(
+    (
+      elevated-container-elevation: none,
+      elevated-container-color: var(--app-surface),
+      elevated-container-shape: var(--app-radius-md),
+    )
+  );
+
+  @include mat.button-overrides(
+    (
+      filled-container-shape: var(--app-radius-md),
+      outlined-container-shape: var(--app-radius-md),
+      protected-container-shape: var(--app-radius-md),
+      text-container-shape: var(--app-radius-md),
+    )
+  );
+
+  @include mat.form-field-overrides(
+    (
+      outlined-container-shape: var(--app-radius-md),
+      container-height: 44px,
+    )
+  );
+
+  @include mat.dialog-overrides(
+    (
+      container-shape: var(--app-radius-lg),
+    )
+  );
+
+  @include mat.menu-overrides(
+    (
+      container-shape: var(--app-radius-md),
+    )
+  );
+
+  @include mat.chip-overrides(
+    (
+      container-shape-radius: var(--app-radius-sm),
+    )
+  );
+
+  @include mat.snack-bar-overrides(
+    (
+      container-shape: var(--app-radius-md),
+    )
+  );
+}

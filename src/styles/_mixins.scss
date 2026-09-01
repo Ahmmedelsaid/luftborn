@@ -1,0 +1,91 @@
+// Shared Sass helpers.
+
+@use "sass:map";
+@use "tokens";
+
+/// Mobile-first media query: `@include mixins.from("desktop") { … }`
+@mixin from($name) {
+  $value: map.get(tokens.$breakpoints, $name);
+
+  @if $value == null {
+    @error "Unknown breakpoint `#{$name}`. Expected one of #{map.keys(tokens.$breakpoints)}.";
+  }
+
+  @if $value == 0 {
+    @content;
+  } @else {
+    @media (min-width: $value) {
+      @content;
+    }
+  }
+}
+
+/// Desktop-first counterpart, for the few rules that read better inverted.
+@mixin below($name) {
+  $value: map.get(tokens.$breakpoints, $name);
+
+  @if $value == null {
+    @error "Unknown breakpoint `#{$name}`. Expected one of #{map.keys(tokens.$breakpoints)}.";
+  }
+
+  @media (max-width: $value - 0.02px) {
+    @content;
+  }
+}
+
+/// Clamps text to a fixed number of lines.
+@mixin line-clamp($lines: 2) {
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: $lines;
+  line-clamp: $lines;
+  overflow: hidden;
+}
+
+/// Hides content visually while keeping it available to screen readers.
+@mixin visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+/// Consistent keyboard focus ring. Paired with `:focus-visible` so pointer
+/// users never see it.
+@mixin focus-ring($offset: 2px) {
+  outline: 2px solid var(--app-primary);
+  outline-offset: $offset;
+}
+
+/// The card surface shared by statistic cards, task cards and panels.
+@mixin surface-card {
+  background: var(--app-surface);
+  border: 1px solid var(--app-border);
+  border-radius: var(--app-radius-md);
+  box-shadow: var(--app-shadow-xs);
+}
+
+/// Thin scrollbars for the kanban columns.
+@mixin custom-scrollbar {
+  scrollbar-width: thin;
+  scrollbar-color: var(--app-border-strong) transparent;
+
+  &::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background: var(--app-border-strong);
+    border-radius: var(--app-radius-pill);
+  }
+
+  &::-webkit-scrollbar-track {
+    background: transparent;
+  }
+}

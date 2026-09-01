@@ -1,0 +1,97 @@
+// Design tokens read off the Figma frames supplied with the assignment.
+//
+// Angular Material's `--mat-sys-*` variables cover component internals; these
+// cover the application chrome the design specifies directly and Material has
+// no opinion about. Exposed as CSS custom properties so they stay inspectable
+// by name in DevTools and themable at runtime.
+
+@use "sass:map";
+
+/// Mobile-first breakpoints. The brief supplies a desktop design only, so
+/// `desktop` is the specified baseline and the smaller tiers are our own
+/// responsive interpretation of it.
+$breakpoints: (
+  "mobile": 0,
+  "tablet": 600px,
+  "desktop": 1024px,
+  "wide": 1440px,
+);
+
+$side-nav-width: 248px;
+$side-nav-width-compact: 72px;
+$top-bar-height: 64px;
+
+:root {
+  // Surfaces
+  --app-bg: #f4f5f7;
+  --app-surface: #ffffff;
+  --app-surface-muted: #f9fafb;
+  --app-surface-hover: #f2f4f7;
+  --app-border: #e4e7ec;
+  --app-border-strong: #d0d5dd;
+
+  // Text
+  --app-text: #101828;
+  --app-text-secondary: #667085;
+  --app-text-muted: #98a2b3;
+  --app-text-on-accent: #ffffff;
+
+  // Brand — kept in sync with the primary fed to the Material theme generator.
+  --app-primary: #2563eb;
+  --app-primary-hover: #1d4ed8;
+  --app-primary-soft: #eff4ff;
+
+  // Priority badges: tinted pill, darker label.
+  --app-priority-high-bg: #fee4e2;
+  --app-priority-high-fg: #b42318;
+  --app-priority-medium-bg: #fef0c7;
+  --app-priority-medium-fg: #b54708;
+  --app-priority-low-bg: #eaecf0;
+  --app-priority-low-fg: #475467;
+
+  // Task states. Overdue cards get a tinted surface *and* a coloured border,
+  // hence the separate tokens.
+  --app-overdue-bg: #fef3f2;
+  --app-overdue-border: #fda29b;
+  --app-overdue-fg: #b42318;
+  --app-due-soon-fg: #b54708;
+  --app-completed-fg: #067647;
+
+  // Statistic deltas, driven by the API's `changeType` field.
+  --app-delta-positive: #067647;
+  --app-delta-negative: #b42318;
+  --app-delta-neutral: #667085;
+
+  // Radii
+  --app-radius-sm: 4px;
+  --app-radius-md: 8px;
+  --app-radius-lg: 12px;
+  --app-radius-pill: 999px;
+
+  // Elevation. The design is flat: hairline borders do the work and shadows
+  // appear only on hover or while dragging.
+  --app-shadow-xs: 0 1px 2px rgba(16, 24, 40, 0.05);
+  --app-shadow-sm: 0 1px 3px rgba(16, 24, 40, 0.1), 0 1px 2px rgba(16, 24, 40, 0.06);
+  --app-shadow-md: 0 4px 8px -2px rgba(16, 24, 40, 0.1), 0 2px 4px -2px rgba(16, 24, 40, 0.06);
+  --app-shadow-lg: 0 12px 16px -4px rgba(16, 24, 40, 0.08), 0 4px 6px -2px rgba(16, 24, 40, 0.03);
+
+  // Spacing
+  --app-space-1: 4px;
+  --app-space-2: 8px;
+  --app-space-3: 12px;
+  --app-space-4: 16px;
+  --app-space-5: 20px;
+  --app-space-6: 24px;
+  --app-space-8: 32px;
+
+  // Motion
+  --app-duration-fast: 120ms;
+  --app-duration-base: 200ms;
+  --app-duration-slow: 320ms;
+  --app-easing-standard: cubic-bezier(0.2, 0, 0, 1);
+  --app-easing-emphasised: cubic-bezier(0.3, 0, 0, 1);
+
+  // Layout
+  --app-side-nav-width: #{$side-nav-width};
+  --app-top-bar-height: #{$top-bar-height};
+}
