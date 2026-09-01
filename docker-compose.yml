@@ -1,0 +1,44 @@
+# Two services, because the app and its mock API are genuinely separate
+# processes: nginx serving the built bundle, and json-server behind /api.
+#
+#   docker compose up --build      then open http://localhost:8080
+
+services:
+  api:
+    image: node:24-alpine
+    working_dir: /app
+    # json-server is a devDependency, so the container installs just that rather
+    # than the whole toolchain.
+    command: >
+      sh -c "npm install --no-save --no-audit --no-fund json-server@0.17.4 &&
+             npx json-server --watch server/db.js
+                             --host 0.0.0.0
+                             --port 3000
+                             --routes server/routes.json
+                             --middlewares server/middlewares.js"
+    volumes:
+      - ./server:/app/server:ro
+      - ./data-fetching:/app/data-fetching:ro
+    environment:
+      # No artificial latency in a container someone is demoing.
+      MOCK_API_DELAY_MS: '0'
+    expose:
+      - '3000'
+    healthcheck:
+      test: ['CMD', 'wget', '--quiet', '--spider', 'http://localhost:3000/api/tasks']
+      interval: 10s
+      timeout: 3s
+      retries: 10
+      start_period: 40s
+
+  web:
+    build:
+      context: .
+    ports:
+      - '8080:80'
+    depends_on:
+      api:
+        # Waiting for healthy, not just started, so the first page load has a
+        # working API instead of an error state that resolves on refresh.
+        condition: service_healthy
+    restart: unless-stopped
