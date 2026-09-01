@@ -1,0 +1,376 @@
+/**
+ * Task state: the single source of truth for the board, the task list, the
+ * analytics charts and the team view.
+ *
+ * Reads come from an `httpResource`, which supplies loading and error signals
+ * and — being a `WritableResource` — lets a mutation patch the collection
+ * locally for an optimistic update and roll it back on failure.
+ *
+ * Everything else is a `computed()` over that one collection, so filtering,
+ * grouping and aggregation cannot drift out of sync with each other.
+ *
+ * The store never touches the UI: it reports failures through
+ * {@link mutationError} and returns a boolean from each mutation, leaving
+ * snackbars and dialogs to the feature components.
+ */
+
+import { computed, inject, Injectable, signal } from '@angular/core';
+import { firstValueFrom } from 'rxjs';
+import { TaskApi } from '../api/task-api';
+import { buildActivity } from '../api/activity-api';
+import { ApiError, isApiError, Task, TaskDraft, TaskPatch, TaskStatus, TaskView } from '../models';
+import { ClockService } from '../services/clock';
+import {
+  computeTaskTotals,
+  EMPTY_TASK_FILTERS,
+  filterTasks,
+  groupTasksByStatus,
+  hasActiveFilters,
+  sortTasks,
+  TaskFilters,
+  TaskSortKey,
+  toTaskView,
+} from '../utils/task.utils';
+import { ActivityStore } from './activity-store';
+import { patchResource, resourceError, resourceValue } from './resource.utils';
+
+/** A board column: its status, its tasks and its header count. */
+export interface BoardColumn {
+  readonly status: TaskStatus;
+  readonly tasks: readonly TaskView[];
+  readonly count: number;
+}
+
+@Injectable({ providedIn: 'root' })
+export class TaskStore {
+  private readonly api = inject(TaskApi);
+  private readonly activities = inject(ActivityStore);
+  private readonly clock = inject(ClockService);
+
+  private readonly resource = this.api.tasksResource();
+  private readonly loaded = resourceValue(this.resource, []);
+
+  private readonly filtersState = signal<TaskFilters>(EMPTY_TASK_FILTERS);
+  private readonly sortState = signal<TaskSortKey>('manual');
+  private readonly pendingState = signal<ReadonlySet<string>>(new Set());
+  private readonly mutationErrorState = signal<ApiError | null>(null);
+
+  /** Current filter state. */
+  readonly filters = this.filtersState.asReadonly();
+
+  /** Current sort key applied within each column. */
+  readonly sortKey = this.sortState.asReadonly();
+
+  /** Ids of tasks with an in-flight mutation, for per-card busy states. */
+  readonly pendingIds = this.pendingState.asReadonly();
+
+  /** Last failed mutation, or `null`. Cleared by {@link dismissError}. */
+  readonly mutationError = this.mutationErrorState.asReadonly();
+
+  readonly isLoading = this.resource.isLoading;
+
+  /** Failure of the initial load, normalised by the error interceptor. */
+  readonly loadError = resourceError(this.resource);
+
+  /**
+   * Every task, projected for display. `index` seeds `order` for fixtures that
+   * ship without one, so drag-and-drop has a stable starting position.
+   */
+  readonly tasks = computed<TaskView[]>(() => {
+    const now = this.clock.now();
+    return this.loaded().map((task, index) => toTaskView(task, now, index));
+  });
+
+  readonly filteredTasks = computed(() => filterTasks(this.tasks(), this.filtersState()));
+
+  readonly hasActiveFilters = computed(() => hasActiveFilters(this.filtersState()));
+
+  /**
+   * The kanban board. Column counts reflect the *filtered* set, which is what
+   * the user is looking at — a header claiming 42 above three visible cards
+   * reads as a bug.
+   */
+  readonly board = computed<readonly BoardColumn[]>(() => {
+    const grouped = groupTasksByStatus(this.filteredTasks());
+    const sortKey = this.sortState();
+
+    return (Object.keys(grouped) as TaskStatus[]).map((status) => {
+      const tasks = sortTasks(grouped[status], sortKey);
+      return { status, tasks, count: tasks.length };
+    });
+  });
+
+  /** Counts over the unfiltered collection, for charts and the team view. */
+  readonly totals = computed(() => computeTaskTotals(this.tasks()));
+
+  /** Counts over the filtered collection, for the board summary. */
+  readonly filteredTotals = computed(() => computeTaskTotals(this.filteredTasks()));
+
+  /** Distinct tags across all tasks, for the tag filter and the task form. */
+  readonly allTags = computed(() =>
+    [...new Set(this.tasks().flatMap((task) => task.tags))].sort((a, b) => a.localeCompare(b)),
+  );
+
+  private readonly tasksById = computed(() => new Map(this.tasks().map((task) => [task.id, task])));
+
+  /** Looks up a task by id from the loaded collection. */
+  taskById(id: string): TaskView | undefined {
+    return this.tasksById().get(id);
+  }
+
+  /** Whether a specific task has a mutation in flight. */
+  isPending(id: string): boolean {
+    return this.pendingState().has(id);
+  }
+
+  // ---------------------------------------------------------------------------
+  // Filter and sort
+  // ---------------------------------------------------------------------------
+
+  /** Merges a partial change into the filter state. */
+  patchFilters(patch: Partial<TaskFilters>): void {
+    this.filtersState.update((filters) => ({ ...filters, ...patch }));
+  }
+
+  setSearch(search: string): void {
+    this.patchFilters({ search });
+  }
+
+  /** Restricts to one status, or clears the status filter when passed `null`. */
+  setStatusFilter(status: TaskStatus | null): void {
+    this.patchFilters({ statuses: status ? [status] : [] });
+  }
+
+  setSortKey(key: TaskSortKey): void {
+    this.sortState.set(key);
+  }
+
+  resetFilters(): void {
+    this.filtersState.set(EMPTY_TASK_FILTERS);
+  }
+
+  // ---------------------------------------------------------------------------
+  // Loading
+  // ---------------------------------------------------------------------------
+
+  /** Refetches the collection, bypassing the HTTP cache. */
+  reload(): void {
+    this.resource.reload();
+  }
+
+  dismissError(): void {
+    this.mutationErrorState.set(null);
+  }
+
+  // ---------------------------------------------------------------------------
+  // Mutations
+  // ---------------------------------------------------------------------------
+
+  /**
+   * Creates a task. Returns the persisted task, or `null` when the write failed
+   * and the optimistic insert was rolled back.
+   */
+  async create(draft: TaskDraft): Promise<Task | null> {
+    const now = this.clock.snapshot();
+    const optimistic = this.api.buildTask(draft, this.nextOrderFor(draft.status), now);
+
+    patchResource(this.resource, (tasks) => [...tasks, optimistic]);
+    this.markPending(optimistic.id);
+
+    try {
+      const saved = await firstValueFrom(this.api.create(optimistic));
+      this.replaceTask(optimistic.id, saved);
+      void this.activities.record(buildActivity('created', saved, now, saved.assignee));
+      return saved;
+    } catch (error) {
+      patchResource(this.resource, (tasks) => tasks.filter((task) => task.id !== optimistic.id));
+      this.reportFailure(error);
+      return null;
+    } finally {
+      this.clearPending(optimistic.id);
+    }
+  }
+
+  /** Applies a partial update. Returns `false` when the write failed. */
+  async update(id: string, patch: TaskPatch): Promise<boolean> {
+    const previous = this.loaded().find((task) => task.id === id);
+
+    if (!previous) {
+      return false;
+    }
+
+    const now = this.clock.snapshot();
+    const fullPatch = this.withCompletionTimestamp(previous, patch, now);
+
+    patchResource(this.resource, (tasks) =>
+      tasks.map((task) => (task.id === id ? { ...task, ...fullPatch } : task)),
+    );
+    this.markPending(id);
+
+    try {
+      const saved = await firstValueFrom(this.api.update(id, fullPatch));
+      this.replaceTask(id, saved);
+      void this.activities.record(
+        buildActivity(this.activityTypeFor(previous, fullPatch), saved, now, saved.assignee),
+      );
+      return true;
+    } catch (error) {
+      this.replaceTask(id, previous);
+      this.reportFailure(error);
+      return false;
+    } finally {
+      this.clearPending(id);
+    }
+  }
+
+  /** Deletes a task. Returns `false` when the write failed and it was restored. */
+  async remove(id: string): Promise<boolean> {
+    const previous = this.loaded().find((task) => task.id === id);
+
+    if (!previous) {
+      return false;
+    }
+
+    const now = this.clock.snapshot();
+
+    patchResource(this.resource, (tasks) => tasks.filter((task) => task.id !== id));
+    this.markPending(id);
+
+    try {
+      await firstValueFrom(this.api.remove(id));
+      void this.activities.record(buildActivity('deleted', previous, now, previous.assignee));
+      return true;
+    } catch (error) {
+      patchResource(this.resource, (tasks) => [...tasks, previous]);
+      this.reportFailure(error);
+      return false;
+    } finally {
+      this.clearPending(id);
+    }
+  }
+
+  /**
+   * Moves a task to a position in a column, as produced by a drag-and-drop drop
+   * event.
+   *
+   * Only the moved task is written back. Sibling positions are recomputed
+   * locally with gaps of {@link ORDER_STEP}, so a single drop is one request
+   * rather than one per card in the column.
+   */
+  async move(id: string, toStatus: TaskStatus, toIndex: number): Promise<boolean> {
+    const previous = this.loaded().find((task) => task.id === id);
+
+    if (!previous) {
+      return false;
+    }
+
+    const order = this.orderForPosition(id, toStatus, toIndex);
+    const statusChanged = previous.status !== toStatus;
+
+    return this.update(id, statusChanged ? { status: toStatus, order } : { order });
+  }
+
+  // ---------------------------------------------------------------------------
+  // Internals
+  // ---------------------------------------------------------------------------
+
+  /** Places a new task at the end of its column. */
+  private nextOrderFor(status: TaskStatus): number {
+    const orders = this.loaded()
+      .filter((task) => task.status === status)
+      .map((task, index) => task.order ?? index);
+
+    return orders.length === 0 ? 0 : Math.max(...orders) + ORDER_STEP;
+  }
+
+  /**
+   * Computes an `order` that lands the task between its new neighbours.
+   * Fractional midpoints keep sibling rows untouched.
+   */
+  private orderForPosition(id: string, status: TaskStatus, index: number): number {
+    const column = this.tasks()
+      .filter((task) => task.status === status && task.id !== id)
+      .sort((a, b) => a.order - b.order);
+
+    const before = column[index - 1];
+    const after = column[index];
+
+    if (!before && !after) {
+      return 0;
+    }
+
+    if (!before) {
+      return after.order - ORDER_STEP;
+    }
+
+    if (!after) {
+      return before.order + ORDER_STEP;
+    }
+
+    return (before.order + after.order) / 2;
+  }
+
+  /**
+   * Keeps `completedAt` consistent with `status`, which the API will not do for
+   * us: moving a task to Done stamps it, moving it back clears it.
+   */
+  private withCompletionTimestamp(previous: Task, patch: TaskPatch, now: Date): TaskPatch {
+    const nextStatus = patch.status ?? previous.status;
+
+    if (patch.status === undefined || nextStatus === previous.status) {
+      return { ...patch, updatedAt: now.toISOString() };
+    }
+
+    return {
+      ...patch,
+      updatedAt: now.toISOString(),
+      completedAt: nextStatus === 'done' ? now.toISOString() : undefined,
+    };
+  }
+
+  private activityTypeFor(
+    previous: Task,
+    patch: TaskPatch,
+  ): 'completed' | 'status_changed' | 'updated' {
+    if (patch.status === undefined || patch.status === previous.status) {
+      return 'updated';
+    }
+
+    return patch.status === 'done' ? 'completed' : 'status_changed';
+  }
+
+  private replaceTask(id: string, replacement: Task): void {
+    patchResource(this.resource, (tasks) =>
+      tasks.map((task) => (task.id === id ? replacement : task)),
+    );
+  }
+
+  private markPending(id: string): void {
+    this.pendingState.update((ids) => new Set(ids).add(id));
+  }
+
+  private clearPending(id: string): void {
+    this.pendingState.update((ids) => {
+      const next = new Set(ids);
+      next.delete(id);
+      return next;
+    });
+  }
+
+  private reportFailure(error: unknown): void {
+    this.mutationErrorState.set(
+      isApiError(error)
+        ? error
+        : {
+            status: 0,
+            kind: 'unknown',
+            url: '',
+            message: 'An unexpected error occurred. Please try again.',
+            retryable: false,
+          },
+    );
+  }
+}
+
+/** Gap left between consecutive `order` values, so an insert never needs a rewrite. */
+const ORDER_STEP = 1000;
