@@ -51,17 +51,6 @@
     background: var(--app-primary);
     color: var(--app-text-on-accent);
 
-    .nav__icon {
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      flex: 0 0 auto;
-      width: 22px;
-      height: 22px;
-      font-size: 17px;
-      line-height: 1;
-    }
-
     &:hover {
       background: var(--app-primary-hover);
       color: var(--app-text-on-accent);
@@ -69,12 +58,19 @@
   }
 }
 
+// One fixed box for every row, active or not, so all six labels start on the
+// same vertical line. Emoji are text with more descent than the label, so the
+// glyph is centred inside the box rather than relying on the flex line — and it
+// takes no colour, since an emoji ignores `currentColor`.
 .nav__icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
   flex: 0 0 auto;
-  width: 19px;
-  height: 19px;
-  font-size: 19px;
-  color: var(--app-text-secondary);
+  width: 22px;
+  height: 22px;
+  font-size: 17px;
+  line-height: 1;
 }
 
 .nav__label {
