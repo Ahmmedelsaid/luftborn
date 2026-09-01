@@ -1,0 +1,55 @@
+@use "mixins";
+@use "tokens";
+
+:host {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  // `dvh` keeps the layout correct when a mobile browser's URL bar collapses.
+  height: 100dvh;
+  overflow: hidden;
+}
+
+app-top-bar {
+  flex: 0 0 auto;
+  z-index: 2;
+}
+
+.shell__body {
+  flex: 1 1 auto;
+  min-height: 0;
+  background: var(--app-bg);
+}
+
+.shell__nav {
+  width: 210px;
+  border-right: 1px solid var(--app-border);
+  // The rail is chrome, not content, so it must never scroll the page with it.
+  overflow: hidden;
+
+  @include mixins.from("desktop") {
+    width: tokens.$side-nav-width;
+  }
+}
+
+.shell__content {
+  background: var(--app-bg);
+}
+
+.shell__main {
+  min-height: 100%;
+  padding: var(--app-space-4);
+
+  &:focus {
+    // Focused programmatically by the skip link; the target does not need a ring.
+    outline: none;
+  }
+
+  @include mixins.from("tablet") {
+    padding: var(--app-space-5);
+  }
+
+  @include mixins.from("desktop") {
+    padding: var(--app-space-6);
+  }
+}

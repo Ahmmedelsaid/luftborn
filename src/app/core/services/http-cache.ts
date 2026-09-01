@@ -1,10 +1,3 @@
-/**
- * In-memory HTTP response cache backing `cacheInterceptor`.
- *
- * Does two jobs: TTL caching of `GET` responses, and de-duplication of
- * identical requests that are already in flight.
- */
-
 import { HttpEvent, HttpRequest, HttpResponse } from '@angular/common/http';
 import { Injectable, signal } from '@angular/core';
 import { Observable } from 'rxjs';
@@ -21,6 +14,7 @@ export interface HttpCacheStats {
   readonly deduplicated: number;
 }
 
+/** TTL cache plus in-flight de-duplication, backing `cacheInterceptor`. */
 @Injectable({ providedIn: 'root' })
 export class HttpCache {
   private readonly entries = new Map<string, CacheEntry>();
@@ -33,13 +27,10 @@ export class HttpCache {
     deduplicated: 0,
   });
 
-  /** Live cache statistics, surfaced on the Settings page. */
+  /** Live statistics, surfaced on the Settings page. */
   readonly stats = this.statsState.asReadonly();
 
-  /**
-   * Cache key including serialised params, since `/tasks?status=todo` and
-   * `/tasks?status=done` are different resources.
-   */
+  /** Includes params, since `/tasks?status=todo` is a different resource. */
   keyFor(request: HttpRequest<unknown>): string {
     const params = request.params.toString();
     return params
@@ -47,7 +38,6 @@ export class HttpCache {
       : `${request.method} ${request.url}`;
   }
 
-  /** Returns a fresh cached response, or `null` on a miss or expiry. */
   get(key: string): HttpResponse<unknown> | null {
     const entry = this.entries.get(key);
 
@@ -76,7 +66,6 @@ export class HttpCache {
     this.syncEntryCount();
   }
 
-  /** The shared observable for a request already in flight, if any. */
   getInFlight(key: string): Observable<HttpEvent<unknown>> | null {
     const pending = this.inFlight.get(key) ?? null;
 
@@ -96,9 +85,8 @@ export class HttpCache {
   }
 
   /**
-   * Invalidates every cached view of the collection a mutation touched, so
-   * `PATCH /api/tasks/task-001` also clears `GET /api/tasks` and its filtered
-   * variants.
+   * Clears every cached view of a collection, so `PATCH /api/tasks/task-001`
+   * also drops `GET /api/tasks` and its filtered variants.
    */
   invalidateCollection(url: string): void {
     const collection = collectionPathOf(url);
@@ -116,7 +104,6 @@ export class HttpCache {
     this.syncEntryCount();
   }
 
-  /** Drops every entry. Backs the manual refresh action. */
   clear(): void {
     this.entries.clear();
     this.syncEntryCount();
@@ -135,10 +122,7 @@ export class HttpCache {
   }
 }
 
-/**
- * Collection segment of an API URL: both `/api/tasks` and `/api/tasks/task-001`
- * yield `/api/tasks`. Assumes a flat collection layout, which the mock API has.
- */
+/** Both `/api/tasks` and `/api/tasks/task-001` yield `/api/tasks`. */
 function collectionPathOf(url: string): string | null {
   const path = url.split('?')[0];
   const segments = path.split('/').filter(Boolean);

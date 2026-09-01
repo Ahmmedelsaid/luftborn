@@ -1,8 +1,3 @@
-/**
- * User state. Workloads are derived from the task collection rather than stored,
- * so the numbers on the Team page always agree with the board.
- */
-
 import { computed, inject, Injectable } from '@angular/core';
 import { UserApi } from '../api/user-api';
 import { UserWorkload } from '../models';
@@ -21,7 +16,7 @@ export class UserStore {
   readonly isLoading = this.resource.isLoading;
   readonly error = resourceError(this.resource);
 
-  /** Users joined with their current task counts, busiest first. */
+  /** Derived from the task collection, so it always agrees with the board. */
   readonly workloads = computed<UserWorkload[]>(() =>
     computeUserWorkloads(this.users(), this.tasks.tasks()),
   );

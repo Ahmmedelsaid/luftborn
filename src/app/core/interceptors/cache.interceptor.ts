@@ -1,17 +1,13 @@
-/**
- * Caches `GET` responses and de-duplicates in-flight requests.
- *
- * Registered first, so a cache hit short-circuits the rest of the chain and
- * never reaches the network. Mutations pass straight through and invalidate
- * every cached view of the collection they touched.
- */
-
 import { HttpInterceptorFn, HttpResponse } from '@angular/common/http';
 import { inject } from '@angular/core';
 import { finalize, of, shareReplay, tap } from 'rxjs';
 import { CACHE_TTL_MS } from '../api/api.config';
 import { HttpCache } from '../services/http-cache';
 
+/**
+ * Caches `GET` responses and de-duplicates identical in-flight requests.
+ * Mutations pass through and invalidate every cached view of their collection.
+ */
 export const cacheInterceptor: HttpInterceptorFn = (request, next) => {
   const cache = inject(HttpCache);
 
@@ -50,8 +46,7 @@ export const cacheInterceptor: HttpInterceptorFn = (request, next) => {
       }
     }),
     finalize(() => cache.clearInFlight(key)),
-    // `refCount: false` keeps the buffered response available to late
-    // subscribers within the same tick, which is the point of de-duplication.
+    // `refCount: false` keeps the buffered response available to late subscribers.
     shareReplay({ bufferSize: 1, refCount: false }),
   );
 

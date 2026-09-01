@@ -1,19 +1,10 @@
-/**
- * Test data factories.
- *
- * Every factory takes an override object so a spec states only the fields it
- * actually cares about. That keeps the assertion visible instead of buried in
- * twenty lines of scaffolding, and adding a field to a model does not break
- * every existing spec.
- */
-
 import { Activity, Statistic, Task, TaskAssignee, TaskStatus, User } from '../app/core/models';
 import { toApiDateString } from '../app/core/utils/date.utils';
 
-/** Fixed reference date used by the specs, so nothing depends on the real clock. */
+/** Frozen reference date, so nothing depends on the real clock. */
 export const TEST_NOW = new Date(2026, 8, 1, 12, 0, 0);
 
-/** Returns a `YYYY-MM-DD` string offset from {@link TEST_NOW} by whole days. */
+/** A `YYYY-MM-DD` string offset from {@link TEST_NOW} by whole days. */
 export function dateOffsetFromNow(days: number): string {
   const date = new Date(TEST_NOW);
   date.setDate(date.getDate() + days);
@@ -58,7 +49,7 @@ export function createTask(overrides: Partial<Task> = {}): Task {
   };
 }
 
-/** Builds `count` tasks with unique ids and increasing `order`. */
+/** `count` tasks with unique ids and increasing `order`. */
 export function createTasks(count: number, overrides: Partial<Task> = {}): Task[] {
   return Array.from({ length: count }, (_, index) =>
     createTask({
@@ -69,7 +60,7 @@ export function createTasks(count: number, overrides: Partial<Task> = {}): Task[
   );
 }
 
-/** One task per status, useful for grouping and totals assertions. */
+/** One task per status. */
 export function createTaskPerStatus(): Task[] {
   const statuses: TaskStatus[] = ['todo', 'in_progress', 'done'];
 

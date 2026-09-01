@@ -1,14 +1,8 @@
-/**
- * Normalised transport error. A real `Error` subclass so stack traces survive
- * and `instanceof` works.
- */
-
 import { HttpErrorResponse } from '@angular/common/http';
 import { ApiError, ApiErrorKind } from '../models';
 
 const RETRYABLE_STATUSES = new Set([0, 408, 429, 500, 502, 503, 504]);
 
-/** User-facing copy per failure kind; never exposes transport details. */
 const MESSAGES: Readonly<Record<ApiErrorKind, string>> = {
   offline: 'You appear to be offline. Check your connection and try again.',
   timeout: 'The request took too long to complete. Please try again.',
@@ -19,8 +13,7 @@ const MESSAGES: Readonly<Record<ApiErrorKind, string>> = {
 };
 
 function classify(status: number): ApiErrorKind {
-  // Angular reports 0 when the request never left the browser: offline, DNS
-  // failure, CORS rejection or an aborted connection.
+  // Angular reports 0 when the request never left the browser.
   if (status === 0) {
     return 'offline';
   }
@@ -44,7 +37,6 @@ function classify(status: number): ApiErrorKind {
   return 'unknown';
 }
 
-/** Extracts a usable message from an error body without surfacing raw payloads. */
 function extractServerMessage(body: unknown): string | null {
   if (typeof body === 'string' && body.trim().length > 0 && body.length <= 200) {
     return body;
@@ -62,6 +54,7 @@ function extractServerMessage(body: unknown): string | null {
   return null;
 }
 
+/** A real `Error` subclass, so stacks survive and `instanceof` works. */
 export class ApiRequestError extends Error implements ApiError {
   readonly status: number;
   readonly kind: ApiErrorKind;
@@ -77,10 +70,7 @@ export class ApiRequestError extends Error implements ApiError {
     this.retryable = init.retryable;
   }
 
-  /**
-   * A 4xx keeps the server's own message when there is one, since those are
-   * actionable. A 5xx never does — it would leak internals.
-   */
+  /** A 4xx keeps the server's message; a 5xx never does, to avoid leaking internals. */
   static fromHttpError(response: HttpErrorResponse): ApiRequestError {
     const kind = classify(response.status);
     const serverMessage = kind === 'validation' ? extractServerMessage(response.error) : null;

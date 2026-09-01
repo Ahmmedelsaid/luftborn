@@ -1,11 +1,8 @@
 /**
- * json-server middlewares: artificial latency so loading states are observable,
- * and opt-in failure injection so retry logic can be exercised on demand
- * without making the app flaky.
+ * Latency so loading states are observable, plus opt-in failure injection.
  *
- * `MOCK_API_DELAY_MS` (default 300) tunes latency.
- * `MOCK_API_ERROR_RATE` (default 0) fails that fraction of requests.
- * `?__fail=<status>` forces a single failure response.
+ * `MOCK_API_DELAY_MS` (default 300), `MOCK_API_ERROR_RATE` (default 0), and
+ * `?__fail=<status>` to force a single failure.
  */
 
 const DEFAULT_DELAY_MS = 300;
@@ -38,7 +35,7 @@ function failureInjection(req, res, next) {
   next();
 }
 
-/** Keeps control-only params out of json-server's own filtering. */
+/** Keeps control params out of json-server's filtering. */
 function stripControlParams(req, _res, next) {
   delete req.query['__fail'];
   next();

@@ -1,11 +1,3 @@
-/**
- * Typed HTTP client for `/api/tasks`.
- *
- * Owns transport only — no application state. Reads are exposed as
- * `httpResource`s so the caller gets loading/error signals for free; writes
- * return observables so the store can sequence them and roll back on failure.
- */
-
 import { HttpClient, httpResource, HttpResourceRef } from '@angular/common/http';
 import { inject, Injectable, Signal } from '@angular/core';
 import { Observable } from 'rxjs';
@@ -13,13 +5,7 @@ import { Task, TaskDraft, TaskPatch } from '../models';
 import { API_BASE_URL, httpOptions, noCache, ResourceFactoryOptions } from './api.config';
 import { createId } from './id.util';
 
-/**
- * Minimal runtime shape check.
- *
- * Cheap insurance rather than full schema validation: a mock API that starts
- * returning `{ tasks: [...] }` instead of a bare array would otherwise surface
- * as a template error far from the cause.
- */
+/** Guards against a response shape change surfacing far from its cause. */
 function parseTaskCollection(value: unknown): Task[] {
   if (!Array.isArray(value)) {
     throw new Error('Expected GET /tasks to return an array.');
@@ -40,7 +26,6 @@ export class TaskApi {
     return `${this.baseUrl}/tasks`;
   }
 
-  /** Reactive resource over the whole collection. */
   tasksResource(options?: ResourceFactoryOptions): HttpResourceRef<Task[]> {
     return httpResource<Task[]>(() => this.collectionUrl, {
       defaultValue: [],
@@ -50,10 +35,7 @@ export class TaskApi {
     });
   }
 
-  /**
-   * Reactive single-task resource. Stays idle while `id()` is undefined, which
-   * is what makes it safe to bind straight to a route parameter.
-   */
+  /** Stays idle while `id()` is undefined, so it can bind straight to a route param. */
   taskResource(
     id: Signal<string | undefined>,
     options?: ResourceFactoryOptions,
@@ -63,14 +45,11 @@ export class TaskApi {
         const taskId = id();
         return taskId ? `${this.collectionUrl}/${taskId}` : undefined;
       },
-      {
-        debugName: 'task',
-        injector: options?.injector,
-      },
+      { debugName: 'task', injector: options?.injector },
     );
   }
 
-  /** Builds the full task an optimistic insert can render before the POST lands. */
+  /** Builds the full task an optimistic insert renders before the POST lands. */
   buildTask(draft: TaskDraft, order: number, now: Date): Task {
     const timestamp = now.toISOString();
 
@@ -96,11 +75,7 @@ export class TaskApi {
     return this.http.delete<void>(`${this.collectionUrl}/${id}`, { context: noCache() });
   }
 
-  /**
-   * Persists a new manual position. Retries are enabled even though `PATCH` is
-   * unsafe: writing the same `order` twice is idempotent, and a dropped reorder
-   * is more annoying than a repeated one.
-   */
+  /** Retries are safe here: writing the same `order` twice is idempotent. */
   updateOrder(id: string, order: number): Observable<Task> {
     return this.http.patch<Task>(
       `${this.collectionUrl}/${id}`,

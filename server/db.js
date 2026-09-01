@@ -1,10 +1,7 @@
 /**
- * json-server database factory.
- *
  * Derives the `users` and `activities` collections from the committed task
- * fixtures so `generate-data.js` stays the single source of truth. Because the
- * source is a JS module, json-server keeps the database in memory: writes
- * behave like a real API but the fixtures on disk are never mutated.
+ * fixtures. Being a JS module, json-server keeps the database in memory, so the
+ * fixtures on disk are never mutated.
  */
 
 const tasksFixture = require('../data-fetching/tasks.json');
@@ -12,7 +9,7 @@ const statisticsFixture = require('../data-fetching/statistics.json');
 
 const AVATAR_COLORS = ['#1976D2', '#7B1FA2', '#00897B', '#EF6C00', '#C2185B', '#455A64'];
 
-/** Distinct assignees found on the tasks, in first-seen order. */
+/** Distinct assignees, in first-seen order. */
 function deriveUsers(tasks) {
   const byId = new Map();
 
@@ -51,7 +48,7 @@ function seedType(task) {
   return task.status === 'in_progress' ? 'status_changed' : 'updated';
 }
 
-/** Seeds the activity feed from the eight most recently updated tasks. */
+/** Seeded from the eight most recently updated tasks. */
 function deriveActivities(tasks) {
   return [...tasks]
     .sort((a, b) => new Date(b.updatedAt) - new Date(a.updatedAt))

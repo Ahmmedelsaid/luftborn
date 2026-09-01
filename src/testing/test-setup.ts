@@ -1,7 +1,4 @@
-/**
- * Global test setup, wired in via `angular.json -> test.setupFiles`.
- * Stubs the browser APIs jsdom lacks but Angular Material touches.
- */
+/** Stubs the browser APIs jsdom lacks but Angular Material touches. */
 
 import { beforeEach, vi } from 'vitest';
 

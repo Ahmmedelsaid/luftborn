@@ -1,0 +1,206 @@
+@use "mixins";
+
+:host {
+  display: flex;
+  align-items: center;
+  gap: var(--app-space-3);
+  height: var(--app-top-bar-height);
+  padding: 0 var(--app-space-4);
+  background: var(--app-surface);
+  border-bottom: 1px solid var(--app-border);
+
+  @include mixins.from("desktop") {
+    gap: var(--app-space-6);
+    padding: 0 var(--app-space-6);
+  }
+}
+
+.bar__menu,
+.bar__icon-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  width: 40px;
+  height: 40px;
+  padding: 0;
+  border: none;
+  border-radius: var(--app-radius-md);
+  background: transparent;
+  color: var(--app-text-secondary);
+  cursor: pointer;
+  transition:
+    background-color var(--app-duration-fast) var(--app-easing-standard),
+    color var(--app-duration-fast) var(--app-easing-standard);
+
+  &:hover {
+    background: var(--app-surface-hover);
+    color: var(--app-text);
+  }
+
+  mat-icon {
+    width: 20px;
+    height: 20px;
+    font-size: 20px;
+  }
+}
+
+.bar__brand {
+  display: flex;
+  align-items: center;
+  gap: var(--app-space-2);
+  flex: 0 0 auto;
+}
+
+.bar__logo {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  border-radius: var(--app-radius-sm);
+  background: var(--app-primary);
+  color: var(--app-text-on-accent);
+
+  mat-icon {
+    width: 18px;
+    height: 18px;
+    font-size: 18px;
+  }
+}
+
+.bar__title {
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--app-text);
+  white-space: nowrap;
+
+  // The wordmark is the first thing to go on a narrow viewport; the logo mark
+  // alone still identifies the app.
+  @include mixins.below("tablet") {
+    display: none;
+  }
+}
+
+.bar__search {
+  display: flex;
+  align-items: center;
+  gap: var(--app-space-2);
+  flex: 1 1 auto;
+  max-width: 420px;
+  height: 38px;
+  margin: 0 auto;
+  padding: 0 var(--app-space-3);
+  border: 1px solid var(--app-border);
+  border-radius: var(--app-radius-md);
+  background: var(--app-surface-muted);
+  transition:
+    border-color var(--app-duration-fast) var(--app-easing-standard),
+    box-shadow var(--app-duration-fast) var(--app-easing-standard),
+    background-color var(--app-duration-fast) var(--app-easing-standard);
+
+  &--focused {
+    border-color: var(--app-primary);
+    background: var(--app-surface);
+    box-shadow: 0 0 0 3px var(--app-primary-soft);
+  }
+}
+
+.bar__search-icon {
+  flex: 0 0 auto;
+  width: 16px;
+  height: 16px;
+  font-size: 16px;
+  color: var(--app-text-muted);
+}
+
+.bar__search-input {
+  flex: 1 1 auto;
+  min-width: 0;
+  border: none;
+  background: transparent;
+  color: var(--app-text);
+  font: inherit;
+  font-size: 13px;
+
+  &::placeholder {
+    color: var(--app-text-muted);
+  }
+
+  &:focus {
+    // The wrapper renders the focus treatment, so the input itself stays clean.
+    outline: none;
+  }
+
+  // Chrome renders its own clear button on `type="search"`, which would sit
+  // beside ours.
+  &::-webkit-search-cancel-button {
+    appearance: none;
+  }
+}
+
+.bar__search-clear {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex: 0 0 auto;
+  width: 20px;
+  height: 20px;
+  padding: 0;
+  border: none;
+  border-radius: var(--app-radius-pill);
+  background: transparent;
+  color: var(--app-text-muted);
+  cursor: pointer;
+
+  &:hover {
+    background: var(--app-border);
+    color: var(--app-text);
+  }
+
+  mat-icon {
+    width: 14px;
+    height: 14px;
+    font-size: 14px;
+  }
+}
+
+.bar__actions {
+  display: flex;
+  align-items: center;
+  gap: var(--app-space-2);
+  flex: 0 0 auto;
+}
+
+.bar__dot {
+  position: absolute;
+  top: 8px;
+  right: 9px;
+  width: 7px;
+  height: 7px;
+  border: 1.5px solid var(--app-surface);
+  border-radius: 50%;
+  background: var(--app-overdue-fg);
+}
+
+.bar__avatar {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 34px;
+  height: 34px;
+  padding: 0;
+  border: none;
+  border-radius: 50%;
+  background: var(--app-primary);
+  color: var(--app-text-on-accent);
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  cursor: pointer;
+  transition: box-shadow var(--app-duration-fast) var(--app-easing-standard);
+
+  &:hover {
+    box-shadow: 0 0 0 3px var(--app-primary-soft);
+  }
+}
