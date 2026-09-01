@@ -1,0 +1,156 @@
+@use "mixins";
+
+.cal__step {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  padding: 0;
+  border: 1px solid var(--app-border);
+  border-radius: var(--app-radius-md);
+  background: var(--app-surface);
+  color: var(--app-text-secondary);
+  cursor: pointer;
+
+  &:hover {
+    border-color: var(--app-border-strong);
+    color: var(--app-text);
+  }
+}
+
+.cal__step-icon {
+  width: 15px;
+  height: 15px;
+  font-size: 15px;
+
+  // One glyph, rotated for the previous direction, so the icon set stays small
+  // and both arrows still mirror correctly under RTL.
+  &--prev {
+    transform: rotate(180deg);
+  }
+}
+
+.cal__month {
+  min-width: 10ch;
+  font-size: 13.5px;
+  font-weight: 600;
+  text-align: center;
+}
+
+.cal__panel {
+  padding: var(--app-space-4);
+  background: var(--app-surface);
+  border: 1px solid var(--app-border);
+  border-radius: 10px;
+}
+
+.cal__weekdays,
+.cal__grid {
+  display: grid;
+  grid-template-columns: repeat(7, minmax(0, 1fr));
+  gap: 4px;
+}
+
+.cal__weekday {
+  padding-block: var(--app-space-2);
+  color: var(--app-text-muted);
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  text-align: center;
+  text-transform: uppercase;
+}
+
+.cal__day {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  min-height: 72px;
+  padding: 5px;
+  border: 1px solid var(--app-border);
+  border-radius: var(--app-radius-md);
+  background: var(--app-surface);
+
+  @include mixins.from("desktop") {
+    min-height: 96px;
+  }
+
+  &--outside {
+    background: var(--app-surface-muted);
+
+    .cal__day-number {
+      color: var(--app-text-muted);
+    }
+  }
+
+  &--today {
+    border-color: var(--app-primary);
+
+    .cal__day-number {
+      color: var(--app-primary);
+      font-weight: 700;
+    }
+  }
+}
+
+.cal__day-number {
+  color: var(--app-text-secondary);
+  font-size: 11.5px;
+  font-weight: 600;
+}
+
+.cal__tasks {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  overflow: hidden;
+}
+
+.cal__task {
+  display: block;
+  width: 100%;
+  padding-block: 2px;
+  padding-inline: 5px;
+  border: none;
+  border-radius: var(--app-radius-sm);
+  background: var(--app-primary-soft);
+  color: var(--app-primary);
+  font-size: 10.5px;
+  font-weight: 500;
+  text-align: start;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  cursor: pointer;
+
+  &--overdue {
+    background: var(--app-overdue-bg);
+    color: var(--app-overdue-fg);
+  }
+
+  &--done {
+    background: var(--app-surface-hover);
+    color: var(--app-text-muted);
+    text-decoration: line-through;
+  }
+}
+
+.cal__overdue {
+  position: absolute;
+  inset-block-start: 4px;
+  inset-inline-end: 4px;
+  min-width: 15px;
+  padding-inline: 3px;
+  border-radius: var(--app-radius-pill);
+  background: var(--app-overdue-fg);
+  color: #fff;
+  font-size: 9.5px;
+  font-weight: 700;
+  line-height: 15px;
+  text-align: center;
+}
