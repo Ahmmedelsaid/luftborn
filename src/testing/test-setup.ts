@@ -1,6 +1,6 @@
 /** Stubs the browser APIs jsdom lacks but Angular Material touches. */
 
-import { beforeEach, vi } from 'vitest';
+import { afterEach, beforeEach, vi } from 'vitest';
 
 function installBrowserApiStubs(): void {
   if (!window.matchMedia) {
@@ -31,4 +31,12 @@ installBrowserApiStubs();
 
 beforeEach(() => {
   vi.clearAllMocks();
+});
+
+// Overlays (menus, dialogs) are appended to `document.body` and survive the
+// fixture, so a menu opened in one spec would still be clickable in the next.
+afterEach(() => {
+  for (const container of document.querySelectorAll('.cdk-overlay-container')) {
+    container.remove();
+  }
 });

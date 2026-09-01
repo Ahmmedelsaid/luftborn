@@ -76,6 +76,8 @@ module.exports = tseslint.config(
       '@typescript-eslint/no-unsafe-argument': 'off',
       '@typescript-eslint/no-non-null-assertion': 'off',
       '@angular-eslint/prefer-on-push-component-change-detection': 'off',
+      // Keeping every `it` async is a consistency choice in specs, not an error.
+      '@typescript-eslint/require-await': 'off',
     },
   },
   {
