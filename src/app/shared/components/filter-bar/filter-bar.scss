@@ -1,0 +1,109 @@
+@use "mixins";
+
+:host {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--app-space-3);
+  padding: var(--app-space-3) var(--app-space-4);
+
+  @include mixins.surface-card;
+}
+
+.bar__segments {
+  display: flex;
+  align-items: center;
+  gap: var(--app-space-4);
+  // Segments scroll rather than wrap on a narrow viewport, so the toolbar keeps
+  // its single-row shape.
+  overflow-x: auto;
+  max-width: 100%;
+
+  @include mixins.custom-scrollbar;
+}
+
+.bar__segment {
+  flex: 0 0 auto;
+  padding-block: 7px;
+  padding-inline: 15px;
+  border: none;
+  border-radius: 6px;
+  background: transparent;
+  color: var(--app-text-secondary);
+  font-size: 13.5px;
+  font-weight: 500;
+  white-space: nowrap;
+  cursor: pointer;
+  transition:
+    background-color var(--app-duration-fast) var(--app-easing-standard),
+    color var(--app-duration-fast) var(--app-easing-standard);
+
+  &:hover:not(.bar__segment--active) {
+    background: var(--app-surface-hover);
+    color: var(--app-text);
+  }
+
+  &--active {
+    background: var(--app-primary);
+    color: var(--app-text-on-accent);
+  }
+}
+
+.bar__actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--app-space-2);
+}
+
+.bar__dropdown,
+.bar__clear {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  height: 36px;
+  padding: 0 12px;
+  border: 1px solid var(--app-border);
+  border-radius: var(--app-radius-md);
+  background: var(--app-surface);
+  color: var(--app-text-secondary);
+  font-size: 13.5px;
+  font-weight: 500;
+  white-space: nowrap;
+  cursor: pointer;
+  transition:
+    background-color var(--app-duration-fast) var(--app-easing-standard),
+    border-color var(--app-duration-fast) var(--app-easing-standard),
+    color var(--app-duration-fast) var(--app-easing-standard);
+
+  &:hover {
+    border-color: var(--app-border-strong);
+    color: var(--app-text);
+  }
+
+  mat-icon {
+    width: 14px;
+    height: 14px;
+    font-size: 14px;
+  }
+}
+
+.bar__dropdown--active {
+  border-color: var(--app-primary);
+  background: var(--app-primary-soft);
+  color: var(--app-primary);
+}
+
+.bar__clear {
+  color: var(--app-text-muted);
+}
+
+.bar__create {
+  height: 36px;
+  font-weight: 600;
+}
+
+.bar__menu-label {
+  flex: 1 1 auto;
+}

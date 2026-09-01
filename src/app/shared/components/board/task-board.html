@@ -1,0 +1,76 @@
+@if (loading()) {
+  <div class="board__grid" aria-busy="true" aria-label="Loading tasks">
+    @for (column of columns(); track column.status) {
+      <section class="board__column">
+        <header class="board__header">
+          <app-skeleton width="72px" height="11px" />
+        </header>
+        <div class="board__list">
+          @for (row of skeletonRows; track row) {
+            <app-skeleton height="128px" radius="var(--app-radius-md)" />
+          }
+        </div>
+      </section>
+    }
+  </div>
+} @else if (isEmpty()) {
+  @if (filtered()) {
+    <app-empty-state
+      icon="search_off"
+      title="No tasks match your filters"
+      message="Try widening the search or clearing the active filters."
+    >
+      <button matButton="outlined" type="button" (click)="clearFilters.emit()">
+        Clear filters
+      </button>
+    </app-empty-state>
+  } @else {
+    <app-empty-state
+      icon="inbox"
+      title="No tasks yet"
+      message="Create your first task to start filling the board."
+    >
+      <button matButton="filled" type="button" (click)="createTask.emit()">
+        <mat-icon svgIcon="plus" aria-hidden="true" />
+        New Task
+      </button>
+    </app-empty-state>
+  }
+} @else {
+  <div class="board__grid">
+    @for (column of columns(); track column.status) {
+      <section class="board__column" [attr.aria-label]="statusLabels[column.status] + ' column'">
+        <header class="board__header">
+          <h2 class="board__title">{{ statusLabels[column.status] }}</h2>
+          <span class="board__count">{{ column.count }}</span>
+        </header>
+
+        <div
+          class="board__list"
+          cdkDropList
+          [id]="'board-column-' + column.status"
+          [cdkDropListData]="column.status"
+          [cdkDropListConnectedTo]="dropListIds()"
+          (cdkDropListDropped)="onDrop($event, column.status)"
+        >
+          @for (task of column.tasks; track task.id) {
+            <app-task-card
+              cdkDrag
+              [cdkDragData]="task.id"
+              [cdkDragDisabled]="isPending(task.id)"
+              [task]="task"
+              [pending]="isPending(task.id)"
+              [moveTargets]="moveTargetsFor(task.status)"
+              (edit)="editTask.emit($event)"
+              (remove)="deleteTask.emit($event)"
+              (open)="openTask.emit($event)"
+              (moveTo)="taskMoved.emit({ taskId: task.id, toStatus: $event, toIndex: 0 })"
+            />
+          } @empty {
+            <p class="board__column-empty">Nothing here yet</p>
+          }
+        </div>
+      </section>
+    }
+  </div>
+}

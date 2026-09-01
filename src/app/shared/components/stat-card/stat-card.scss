@@ -1,0 +1,107 @@
+@use "mixins";
+
+:host {
+  display: block;
+
+  @include mixins.surface-card;
+
+  border-radius: 10px;
+
+  transition:
+    border-color var(--app-duration-fast) var(--app-easing-standard),
+    box-shadow var(--app-duration-fast) var(--app-easing-standard);
+}
+
+:host(.stat--interactive):hover {
+  border-color: var(--app-border-strong);
+  box-shadow: var(--app-shadow-sm);
+}
+
+:host(.stat--active) {
+  border-color: var(--app-primary);
+  box-shadow: 0 0 0 3px var(--app-primary-soft);
+}
+
+.stat__button,
+.stat__static {
+  display: flex;
+  flex-direction: column;
+  gap: var(--app-space-2);
+  width: 100%;
+  padding-block: var(--app-space-3);
+  padding-inline: var(--app-space-4);
+  border: none;
+  background: transparent;
+  color: inherit;
+  font: inherit;
+  text-align: start;
+}
+
+.stat__button {
+  cursor: pointer;
+}
+
+.stat__label {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  color: var(--app-text-secondary);
+  font-size: 12.5px;
+  font-weight: 500;
+}
+
+.stat__icon {
+  width: 15px;
+  height: 15px;
+  font-size: 15px;
+  // The accent colour comes from the API payload, per card.
+  color: var(--app-stat-color);
+
+  &--emoji {
+    line-height: 15px;
+  }
+}
+
+.stat__value {
+  color: var(--app-text);
+  font-size: 24px;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  line-height: 1.1;
+}
+
+.stat__delta {
+  display: flex;
+  align-items: baseline;
+  gap: 4px;
+  font-size: 11.5px;
+  color: var(--app-text-muted);
+
+  &--positive .stat__delta-change {
+    color: var(--app-delta-positive);
+  }
+
+  &--negative .stat__delta-change {
+    color: var(--app-delta-negative);
+  }
+
+  &--neutral .stat__delta-change {
+    color: var(--app-delta-neutral);
+  }
+}
+
+.stat__delta-change {
+  font-weight: 600;
+}
+
+@include mixins.from("tablet") {
+  .stat__button,
+  .stat__static {
+    padding-block: var(--app-space-4);
+    padding-inline: var(--app-space-5);
+  }
+
+  .stat__value {
+    font-size: 28px;
+  }
+}

@@ -1,0 +1,65 @@
+@use "mixins";
+
+:host {
+  display: block;
+  padding: var(--app-space-4) var(--app-space-5);
+
+  @include mixins.surface-card;
+}
+
+.feed__title {
+  margin-bottom: var(--app-space-3);
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--app-text);
+}
+
+.feed__list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--app-space-3);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.feed__item {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--app-space-3);
+}
+
+.feed__item-lines {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  min-width: 0;
+  flex: 1 1 auto;
+}
+
+.feed__text {
+  font-size: 12.5px;
+  line-height: 1.45;
+  color: var(--app-text-secondary);
+
+  @include mixins.line-clamp(2);
+}
+
+.feed__actor {
+  color: var(--app-text);
+  font-weight: 600;
+}
+
+.feed__meta {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  color: var(--app-text-muted);
+  font-size: 11px;
+}
+
+.feed__type-icon {
+  width: 11px;
+  height: 11px;
+  font-size: 11px;
+}

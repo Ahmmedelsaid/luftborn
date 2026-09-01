@@ -1,0 +1,73 @@
+<div class="bar__segments" role="tablist" aria-label="Filter tasks by status">
+  @for (segment of segments; track segment.label) {
+    <button
+      type="button"
+      role="tab"
+      class="bar__segment"
+      [class.bar__segment--active]="activeStatus() === segment.value"
+      [attr.aria-selected]="activeStatus() === segment.value"
+      (click)="statusChange.emit(segment.value)"
+    >
+      {{ segment.label }}
+    </button>
+  }
+</div>
+
+<div class="bar__actions">
+  @if (hasFilters()) {
+    <button type="button" class="bar__clear" (click)="clearFilters.emit()">
+      <mat-icon svgIcon="close" aria-hidden="true" />
+      <span>Clear</span>
+    </button>
+  }
+
+  @if (assignees().length > 0) {
+    <button
+      type="button"
+      class="bar__dropdown"
+      [class.bar__dropdown--active]="activeAssigneeIds().length > 0"
+      [matMenuTriggerFor]="assigneeMenu"
+    >
+      <span>{{ assigneeButtonLabel() }}</span>
+      <mat-icon svgIcon="chevron-down" aria-hidden="true" />
+    </button>
+
+    <mat-menu #assigneeMenu="matMenu">
+      @for (user of assignees(); track user.id) {
+        <button mat-menu-item type="button" (click)="assigneeToggle.emit(user.id)">
+          <app-avatar [name]="user.name" [avatar]="user.avatar" [color]="user.color" [size]="20" />
+          <span class="bar__menu-label">{{ user.name }}</span>
+          @if (isAssigneeActive(user.id)) {
+            <mat-icon svgIcon="tasks" aria-hidden="true" />
+          }
+        </button>
+      }
+    </mat-menu>
+  }
+
+  <button
+    type="button"
+    class="bar__dropdown"
+    [class.bar__dropdown--active]="activePriorities().length > 0"
+    [matMenuTriggerFor]="priorityMenu"
+  >
+    <span>{{ priorityButtonLabel() }}</span>
+    <mat-icon svgIcon="chevron-down" aria-hidden="true" />
+  </button>
+
+  <mat-menu #priorityMenu="matMenu">
+    @for (priority of priorities; track priority) {
+      <button mat-menu-item type="button" (click)="priorityToggle.emit(priority)">
+        <span class="bar__menu-label">{{ priorityLabels[priority] }}</span>
+        @if (isPriorityActive(priority)) {
+          <mat-icon svgIcon="tasks" aria-hidden="true" />
+        }
+      </button>
+    }
+  </mat-menu>
+
+  <button matButton="filled" type="button" class="bar__create" (click)="createTask.emit()">
+    <mat-icon svgIcon="plus" aria-hidden="true" />
+    New Task
+  </button>
+</div>
