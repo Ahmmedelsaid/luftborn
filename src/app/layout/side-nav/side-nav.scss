@@ -1,0 +1,103 @@
+@use "mixins";
+
+:host {
+  display: flex;
+  flex-direction: column;
+  gap: var(--app-space-4);
+  height: 100%;
+  padding: var(--app-space-4) var(--app-space-3);
+  background: var(--app-surface);
+  overflow-y: auto;
+
+  @include mixins.custom-scrollbar;
+}
+
+.nav {
+  flex: 0 0 auto;
+}
+
+.nav__list {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.nav__link {
+  display: flex;
+  align-items: center;
+  gap: var(--app-space-3);
+  padding: 10px var(--app-space-3);
+  border-radius: var(--app-radius-md);
+  color: var(--app-text-secondary);
+  font-size: 14px;
+  font-weight: 500;
+  text-decoration: none;
+  transition:
+    background-color var(--app-duration-fast) var(--app-easing-standard),
+    color var(--app-duration-fast) var(--app-easing-standard);
+
+  &:hover {
+    background: var(--app-surface-hover);
+    color: var(--app-text);
+    text-decoration: none;
+  }
+
+  // The design marks the current section with a filled brand-blue row.
+  &--active {
+    background: var(--app-primary);
+    color: var(--app-text-on-accent);
+
+    &:hover {
+      background: var(--app-primary-hover);
+      color: var(--app-text-on-accent);
+    }
+  }
+}
+
+.nav__icon {
+  flex: 0 0 auto;
+  width: 20px;
+  height: 20px;
+  font-size: 20px;
+}
+
+.nav__label {
+  flex: 1 1 auto;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.nav__cta {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--app-space-2);
+  flex: 0 0 auto;
+  margin: 0 var(--app-space-1);
+  padding: 11px var(--app-space-4);
+  border: none;
+  border-radius: var(--app-radius-md);
+  background: var(--app-primary);
+  color: var(--app-text-on-accent);
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition:
+    background-color var(--app-duration-fast) var(--app-easing-standard),
+    box-shadow var(--app-duration-fast) var(--app-easing-standard);
+
+  &:hover {
+    background: var(--app-primary-hover);
+    box-shadow: var(--app-shadow-sm);
+  }
+
+  mat-icon {
+    width: 18px;
+    height: 18px;
+    font-size: 18px;
+  }
+}

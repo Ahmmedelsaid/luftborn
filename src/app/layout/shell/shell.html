@@ -1,0 +1,31 @@
+<a class="app-skip-link" href="#main-content">Skip to main content</a>
+
+<app-top-bar
+  [search]="search()"
+  [notificationCount]="notificationCount()"
+  [showMenuButton]="!isDesktop()"
+  (searchChange)="onSearchChange($event)"
+  (menuToggle)="toggleDrawer()"
+/>
+
+<mat-sidenav-container class="shell__body" [hasBackdrop]="!isDesktop()" autosize>
+  <mat-sidenav
+    class="shell__nav"
+    [mode]="isDesktop() ? 'side' : 'over'"
+    [opened]="isDesktop() || drawerOpen()"
+    [disableClose]="isDesktop()"
+    (closedStart)="closeDrawer()"
+  >
+    <app-side-nav
+      [items]="navItems"
+      (navigated)="closeDrawer()"
+      (createTask)="openTaskComposer()"
+    />
+  </mat-sidenav>
+
+  <mat-sidenav-content class="shell__content">
+    <main id="main-content" class="shell__main" tabindex="-1">
+      <router-outlet />
+    </main>
+  </mat-sidenav-content>
+</mat-sidenav-container>

@@ -1,0 +1,68 @@
+@if (showMenuButton()) {
+  <button
+    type="button"
+    class="bar__menu"
+    aria-label="Open navigation menu"
+    (click)="menuToggle.emit()"
+  >
+    <mat-icon svgIcon="menu" aria-hidden="true" />
+  </button>
+}
+
+<div class="bar__brand">
+  <span class="bar__logo" aria-hidden="true">
+    <mat-icon svgIcon="logo" />
+  </span>
+  <span class="bar__title">Task Manager</span>
+</div>
+
+<div class="bar__search" [class.bar__search--focused]="searchFocused()">
+  <mat-icon class="bar__search-icon" svgIcon="search" aria-hidden="true" />
+  <label class="app-visually-hidden" for="global-search">Search tasks</label>
+  <input
+    id="global-search"
+    class="bar__search-input"
+    type="search"
+    placeholder="Search tasks..."
+    autocomplete="off"
+    [value]="search()"
+    (input)="onSearchInput($event)"
+    (focus)="searchFocused.set(true)"
+    (blur)="searchFocused.set(false)"
+  />
+  @if (search()) {
+    <button
+      type="button"
+      class="bar__search-clear"
+      aria-label="Clear search"
+      (click)="clearSearch()"
+    >
+      <mat-icon svgIcon="close" aria-hidden="true" />
+    </button>
+  }
+</div>
+
+<div class="bar__actions">
+  <button
+    type="button"
+    class="bar__icon-button"
+    [attr.aria-label]="
+      notificationCount() > 0 ? notificationCount() + ' unread notifications' : 'Notifications'
+    "
+    matTooltip="Notifications"
+  >
+    <mat-icon svgIcon="bell" aria-hidden="true" />
+    @if (notificationCount() > 0) {
+      <span class="bar__dot" aria-hidden="true"></span>
+    }
+  </button>
+
+  <button
+    type="button"
+    class="bar__avatar"
+    [attr.aria-label]="'Signed in as ' + userName()"
+    [matTooltip]="userName()"
+  >
+    {{ userInitials() }}
+  </button>
+</div>
