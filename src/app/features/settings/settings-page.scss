@@ -1,0 +1,112 @@
+@use "mixins";
+
+.settings__grid {
+  display: grid;
+  gap: var(--app-space-4);
+  grid-template-columns: 1fr;
+  align-items: start;
+
+  @include mixins.from("desktop") {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+.settings__panel {
+  display: flex;
+  flex-direction: column;
+  gap: var(--app-space-3);
+  padding: var(--app-space-5);
+  background: var(--app-surface);
+  border: 1px solid var(--app-border);
+  border-radius: 10px;
+
+  button {
+    align-self: flex-start;
+  }
+}
+
+.settings__title {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--app-text);
+}
+
+.settings__hint {
+  color: var(--app-text-secondary);
+  font-size: 12.5px;
+  line-height: 1.5;
+}
+
+.settings__choices {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--app-space-2);
+}
+
+.settings__choice {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  padding: var(--app-space-3);
+  border: 1px solid var(--app-border);
+  border-radius: var(--app-radius-md);
+  background: var(--app-surface);
+  color: var(--app-text);
+  cursor: pointer;
+  text-align: start;
+  transition:
+    border-color var(--app-duration-fast) var(--app-easing-standard),
+    background-color var(--app-duration-fast) var(--app-easing-standard);
+
+  &:hover {
+    border-color: var(--app-border-strong);
+  }
+
+  &--active {
+    border-color: var(--app-primary);
+    background: var(--app-primary-soft);
+  }
+}
+
+.settings__choice-label {
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.settings__choice-meta {
+  color: var(--app-text-muted);
+  font-size: 11px;
+}
+
+.settings__stats {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--app-space-2);
+  margin: 0;
+}
+
+.settings__stat {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  padding: var(--app-space-3);
+  border-radius: var(--app-radius-md);
+  background: var(--app-surface-muted);
+
+  dt {
+    color: var(--app-text-muted);
+    font-size: 11px;
+    font-weight: 500;
+  }
+
+  dd {
+    margin: 0;
+    color: var(--app-text);
+    font-size: 18px;
+    font-weight: 700;
+  }
+
+  &--wide {
+    grid-column: 1 / -1;
+  }
+}

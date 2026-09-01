@@ -1,0 +1,88 @@
+<app-page-header [title]="'nav.calendar' | translate" [subtitle]="summary()">
+  <button
+    type="button"
+    class="cal__step"
+    [attr.aria-label]="'calendar.previousMonth' | translate"
+    (click)="stepMonth(-1)"
+  >
+    <mat-icon
+      svgIcon="chevron-right"
+      class="cal__step-icon cal__step-icon--prev"
+      aria-hidden="true"
+    />
+  </button>
+
+  <span class="cal__month">{{ monthLabel() }}</span>
+
+  <button
+    type="button"
+    class="cal__step"
+    [attr.aria-label]="'calendar.nextMonth' | translate"
+    (click)="stepMonth(1)"
+  >
+    <mat-icon svgIcon="chevron-right" class="cal__step-icon" aria-hidden="true" />
+  </button>
+
+  <button matButton="outlined" type="button" [disabled]="isCurrentMonth()" (click)="goToToday()">
+    {{ 'calendar.today' | translate }}
+  </button>
+</app-page-header>
+
+@if (loadError(); as error) {
+  <app-error-state
+    [error]="error"
+    [title]="'dashboard.loadFailed' | translate"
+    (retry)="onReload()"
+  />
+} @else if (loading()) {
+  <app-skeleton height="620px" radius="10px" />
+} @else {
+  <div class="cal__panel">
+    <div class="cal__weekdays" aria-hidden="true">
+      @for (weekday of weekdays(); track weekday) {
+        <span class="cal__weekday">{{ weekday }}</span>
+      }
+    </div>
+
+    <div class="cal__grid" role="grid" [attr.aria-label]="monthLabel()">
+      @for (day of days(); track day.key) {
+        <div
+          class="cal__day"
+          role="gridcell"
+          [class.cal__day--outside]="!day.inMonth"
+          [class.cal__day--today]="day.isToday"
+        >
+          <span class="cal__day-number">{{ day.dayNumber }}</span>
+
+          @if (day.tasks.length > 0) {
+            <ul class="cal__tasks">
+              @for (task of day.tasks; track task.id) {
+                <li>
+                  <button
+                    type="button"
+                    class="cal__task"
+                    [class.cal__task--overdue]="task.overdue"
+                    [class.cal__task--done]="task.status === 'done'"
+                    [matTooltip]="task.title"
+                    (click)="onOpenTask(task)"
+                  >
+                    {{ task.title }}
+                  </button>
+                </li>
+              }
+            </ul>
+          }
+
+          @if (day.overdueCount > 0) {
+            <span
+              class="cal__overdue"
+              [attr.aria-label]="'calendar.overdueOnDay' | translate: { count: day.overdueCount }"
+            >
+              {{ day.overdueCount }}
+            </span>
+          }
+        </div>
+      }
+    </div>
+  </div>
+}

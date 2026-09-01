@@ -221,5 +221,24 @@
     "loadFailed": "Could not load the team",
     "emptyTitle": "No team members yet",
     "emptyMessage": "Assignees appear here once tasks reference them."
+  },
+  "settings": {
+    "summary": "Language and diagnostics",
+    "languageHint": "Applied immediately and remembered on this device. Arabic switches the whole layout to right-to-left.",
+    "cacheTitle": "HTTP cache",
+    "cacheHint": "Live counters from the caching interceptor. Move between sections and watch hits rise while requests do not.",
+    "cacheEntries": "Entries",
+    "cacheHits": "Hits",
+    "cacheMisses": "Misses",
+    "cacheDeduplicated": "De-duplicated",
+    "cacheHitRate": "Hit rate",
+    "clearCache": "Clear cache and refetch"
+  },
+  "calendar": {
+    "summary": "{{count}} tasks due this month",
+    "today": "Today",
+    "previousMonth": "Previous month",
+    "nextMonth": "Next month",
+    "overdueOnDay": "{{count}} overdue"
   }
 }
