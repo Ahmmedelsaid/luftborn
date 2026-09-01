@@ -1,6 +1,4 @@
-// Global stylesheet: theme wiring, document defaults and the two utilities that
-// genuinely have to be global. Everything else lives in the component that owns
-// it.
+// Theme wiring, document defaults, and the two utilities that must be global.
 
 @use "tokens";
 @use "mixins";
@@ -62,7 +60,7 @@ button {
   @include mixins.visually-hidden;
 }
 
-/// Skip link: first focusable element in the shell, hidden until focused.
+/// First focusable element in the shell; hidden until focused.
 .app-skip-link {
   position: absolute;
   top: var(--app-space-2);

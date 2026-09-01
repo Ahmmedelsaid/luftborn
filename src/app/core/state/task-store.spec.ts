@@ -19,12 +19,7 @@ import { TaskStore } from './task-store';
 /** Body shape `TestRequest.flush` accepts. */
 type FlushBody = Parameters<TestRequest['flush']>[0];
 
-/**
- * Boots the store with a seeded task collection.
- *
- * `TaskStore` pulls in `ActivityStore`, which loads its own resource, so both
- * initial requests are answered here to keep each spec's arrangement to one line.
- */
+/** `TaskStore` pulls in `ActivityStore`, so both initial requests are answered. */
 async function setupStore(tasks: Task[]): Promise<TaskStore> {
   const store = TestBed.inject(TaskStore);
   await settle();
@@ -51,11 +46,8 @@ function pendingRequest(suffix: string): TestRequest {
 }
 
 /**
- * Answers a mutation, awaits it, then drains the activity write it fans out to.
- *
- * The activity `POST` is deliberately fire-and-forget in the store, so it only
- * exists once the task write has resolved — draining it any earlier would find
- * nothing and leave the request open at `verify()` time.
+ * The activity `POST` is fire-and-forget in the store, so it only exists once
+ * the task write has resolved — draining it earlier would leave it open.
  */
 async function completeMutation<T>(
   pending: Promise<T>,

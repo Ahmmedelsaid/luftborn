@@ -1,15 +1,9 @@
-// Design tokens read off the Figma frames supplied with the assignment.
-//
-// Angular Material's `--mat-sys-*` variables cover component internals; these
-// cover the application chrome the design specifies directly and Material has
-// no opinion about. Exposed as CSS custom properties so they stay inspectable
-// by name in DevTools and themable at runtime.
+// Design tokens read off the Figma frames. Material's `--mat-sys-*` variables
+// cover component internals; these cover the application chrome.
 
 @use "sass:map";
 
-/// Mobile-first breakpoints. The brief supplies a desktop design only, so
-/// `desktop` is the specified baseline and the smaller tiers are our own
-/// responsive interpretation of it.
+/// Mobile-first. `desktop` is the width the Figma frames specify.
 $breakpoints: (
   "mobile": 0,
   "tablet": 600px,

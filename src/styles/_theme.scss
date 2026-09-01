@@ -1,8 +1,5 @@
-// Angular Material M3 theme.
-//
-// Palettes come from `_theme-colors.scss`, generated with
-// `ng generate @angular/material:theme-color` from the design's brand colours:
-// primary #2563EB, tertiary #388E3C (success), error #D32F2F (danger).
+// Palettes generated with `ng generate @angular/material:theme-color` from the
+// design's brand colours: primary #2563EB, tertiary #388E3C, error #D32F2F.
 
 @use "@angular/material" as mat;
 @use "theme-colors";
@@ -34,8 +31,7 @@ html {
     )
   );
 
-  // The supplied design is light-only; pinning the scheme keeps rendering
-  // deterministic rather than flipping with the OS preference.
+  // The design is light-only; pinning it keeps rendering deterministic.
   color-scheme: light;
 }
 
@@ -45,8 +41,7 @@ html {
   }
 }
 
-// Design deviations from Material's defaults, applied through the supported
-// token mixins in one place instead of `::ng-deep` scattered across components.
+// Design deviations, via the supported token mixins rather than `::ng-deep`.
 :root {
   @include mat.card-overrides(
     (
@@ -87,6 +82,14 @@ html {
   @include mat.chips-overrides(
     (
       container-shape-radius: var(--app-radius-sm),
+    )
+  );
+
+  @include mat.sidenav-overrides(
+    (
+      container-shape: 0,
+      container-divider-color: var(--app-border),
+      container-background-color: var(--app-surface),
     )
   );
 

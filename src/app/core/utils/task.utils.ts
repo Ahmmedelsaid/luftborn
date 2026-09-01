@@ -1,10 +1,3 @@
-/**
- * Pure task derivations, composed by the store inside `computed()` signals.
- *
- * Overdue state is always recomputed from `dueDate` — never read from the wire
- * `isOverdue` flag, which is frozen at fixture-generation time.
- */
-
 import {
   DueDateState,
   LiveTaskTotals,
@@ -24,10 +17,10 @@ import {
   parseApiDate,
 } from './date.utils';
 
-/** Days ahead that still count as "due soon" and get the amber treatment. */
+/** Days ahead that still count as "due soon". */
 const DUE_SOON_THRESHOLD_DAYS = 2;
 
-/** Whether a task is overdue right now. Completed tasks never are. */
+/** Recomputed from `dueDate`; the wire `isOverdue` flag is stale by design. */
 export function isTaskOverdue(task: Task, now: Date): boolean {
   if (task.status === 'done') {
     return false;
@@ -35,7 +28,7 @@ export function isTaskOverdue(task: Task, now: Date): boolean {
   return differenceInCalendarDays(parseApiDate(task.dueDate), now) < 0;
 }
 
-/** Picks which of the four due-date treatments a task should render. */
+/** Which of the four due-date treatments to render. */
 export function resolveDueState(task: Task, daysUntilDue: number): DueDateState {
   if (task.status === 'done') {
     return 'completed';
@@ -48,10 +41,7 @@ export function resolveDueState(task: Task, daysUntilDue: number): DueDateState 
   return daysUntilDue <= DUE_SOON_THRESHOLD_DAYS ? 'due-soon' : 'upcoming';
 }
 
-/**
- * Projects a wire task into the shape templates bind to. `index` backfills
- * `order` for fixtures that carry no ordering field.
- */
+/** `index` backfills `order` for fixtures that carry no ordering field. */
 export function toTaskView(task: Task, now: Date, index = 0): TaskView {
   const daysUntilDue = differenceInCalendarDays(parseApiDate(task.dueDate), now);
   const dueState = resolveDueState(task, daysUntilDue);
@@ -71,7 +61,7 @@ export function toTaskView(task: Task, now: Date, index = 0): TaskView {
   };
 }
 
-/** Filter state the board and task list are driven by. Empty arrays mean "all". */
+/** Empty arrays mean "all". */
 export interface TaskFilters {
   readonly search: string;
   readonly statuses: readonly TaskStatus[];
@@ -99,7 +89,6 @@ export function hasActiveFilters(filters: TaskFilters): boolean {
   );
 }
 
-/** Matches title, description, tags and assignee name — everything on the card. */
 function matchesSearch(task: TaskView, needle: string): boolean {
   if (!needle) {
     return true;
@@ -140,9 +129,8 @@ export function filterTasks(tasks: readonly TaskView[], filters: TaskFilters): T
 export type TaskSortKey = 'manual' | 'dueDate' | 'priority' | 'title' | 'updatedAt';
 
 /**
- * Sorts a column of tasks. `manual` honours the drag-and-drop `order`; every
- * other key falls back to `order` as a tiebreaker so the sort is total and
- * equal-ranked tasks never swap places between renders.
+ * `manual` honours the drag-and-drop `order`; every other key falls back to it
+ * as a tiebreaker, so equal-ranked tasks never swap places between renders.
  */
 export function sortTasks(tasks: readonly TaskView[], key: TaskSortKey): TaskView[] {
   const byOrder = (a: TaskView, b: TaskView): number => a.order - b.order;
@@ -164,7 +152,7 @@ export function sortTasks(tasks: readonly TaskView[], key: TaskSortKey): TaskVie
   });
 }
 
-/** Buckets tasks by status, always returning every column in canonical order. */
+/** Always returns every column, in canonical order. */
 export function groupTasksByStatus(
   tasks: readonly TaskView[],
 ): Readonly<Record<TaskStatus, TaskView[]>> {
@@ -179,7 +167,7 @@ export function groupTasksByStatus(
   return groups;
 }
 
-/** Counts derived from the tasks loaded in the client. */
+/** Counts over the tasks loaded in the client. */
 export function computeTaskTotals(tasks: readonly TaskView[]): LiveTaskTotals {
   let todo = 0;
   let inProgress = 0;

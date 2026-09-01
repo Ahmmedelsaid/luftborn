@@ -1,5 +1,3 @@
-/** Statistic-card state, served straight from the API fixture. */
-
 import { inject, Injectable } from '@angular/core';
 import { StatisticApi } from '../api/statistic-api';
 import { resourceError, resourceValue } from './resource.utils';

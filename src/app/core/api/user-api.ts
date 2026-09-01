@@ -1,14 +1,9 @@
-/**
- * Typed HTTP client for `/api/users`. Read-only — the mock API derives users
- * from the assignees embedded in the tasks.
- */
-
 import { httpResource, HttpResourceRef } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
 import { User } from '../models';
 import { API_BASE_URL, httpOptions, ResourceFactoryOptions } from './api.config';
 
-/** Users change rarely, so they outlive the default cache TTL by a wide margin. */
+/** Users barely change, so they outlive the default cache TTL by a wide margin. */
 const USERS_CACHE_TTL_MS = 5 * 60_000;
 
 @Injectable({ providedIn: 'root' })

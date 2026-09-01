@@ -1,17 +1,10 @@
 /**
- * Task state: the single source of truth for the board, the task list, the
- * analytics charts and the team view.
+ * Single source of truth for tasks. Reads come from an `httpResource`;
+ * everything else is a `computed()` over that one collection. Mutations are
+ * optimistic and roll back on failure.
  *
- * Reads come from an `httpResource`, which supplies loading and error signals
- * and — being a `WritableResource` — lets a mutation patch the collection
- * locally for an optimistic update and roll it back on failure.
- *
- * Everything else is a `computed()` over that one collection, so filtering,
- * grouping and aggregation cannot drift out of sync with each other.
- *
- * The store never touches the UI: it reports failures through
- * {@link mutationError} and returns a boolean from each mutation, leaving
- * snackbars and dialogs to the feature components.
+ * Reports failures through {@link mutationError} and a boolean return value —
+ * snackbars and dialogs belong to the feature components.
  */
 
 import { computed, inject, Injectable, signal } from '@angular/core';
@@ -34,7 +27,7 @@ import {
 import { ActivityStore } from './activity-store';
 import { patchResource, resourceError, resourceValue } from './resource.utils';
 
-/** A board column: its status, its tasks and its header count. */
+/** One kanban column. */
 export interface BoardColumn {
   readonly status: TaskStatus;
   readonly tasks: readonly TaskView[];
@@ -55,27 +48,21 @@ export class TaskStore {
   private readonly pendingState = signal<ReadonlySet<string>>(new Set());
   private readonly mutationErrorState = signal<ApiError | null>(null);
 
-  /** Current filter state. */
   readonly filters = this.filtersState.asReadonly();
 
-  /** Current sort key applied within each column. */
   readonly sortKey = this.sortState.asReadonly();
 
-  /** Ids of tasks with an in-flight mutation, for per-card busy states. */
+  /** Tasks with an in-flight mutation, for per-card busy states. */
   readonly pendingIds = this.pendingState.asReadonly();
 
-  /** Last failed mutation, or `null`. Cleared by {@link dismissError}. */
+  /** Last failed mutation, or `null`. */
   readonly mutationError = this.mutationErrorState.asReadonly();
 
   readonly isLoading = this.resource.isLoading;
 
-  /** Failure of the initial load, normalised by the error interceptor. */
   readonly loadError = resourceError(this.resource);
 
-  /**
-   * Every task, projected for display. `index` seeds `order` for fixtures that
-   * ship without one, so drag-and-drop has a stable starting position.
-   */
+  /** `index` seeds `order` for fixtures that ship without one. */
   readonly tasks = computed<TaskView[]>(() => {
     const now = this.clock.now();
     return this.loaded().map((task, index) => toTaskView(task, now, index));
@@ -85,11 +72,7 @@ export class TaskStore {
 
   readonly hasActiveFilters = computed(() => hasActiveFilters(this.filtersState()));
 
-  /**
-   * The kanban board. Column counts reflect the *filtered* set, which is what
-   * the user is looking at — a header claiming 42 above three visible cards
-   * reads as a bug.
-   */
+  /** Column counts reflect the filtered set, which is what the user can see. */
   readonly board = computed<readonly BoardColumn[]>(() => {
     const grouped = groupTasksByStatus(this.filteredTasks());
     const sortKey = this.sortState();
@@ -100,34 +83,26 @@ export class TaskStore {
     });
   });
 
-  /** Counts over the unfiltered collection, for charts and the team view. */
   readonly totals = computed(() => computeTaskTotals(this.tasks()));
 
-  /** Counts over the filtered collection, for the board summary. */
   readonly filteredTotals = computed(() => computeTaskTotals(this.filteredTasks()));
 
-  /** Distinct tags across all tasks, for the tag filter and the task form. */
   readonly allTags = computed(() =>
     [...new Set(this.tasks().flatMap((task) => task.tags))].sort((a, b) => a.localeCompare(b)),
   );
 
   private readonly tasksById = computed(() => new Map(this.tasks().map((task) => [task.id, task])));
 
-  /** Looks up a task by id from the loaded collection. */
   taskById(id: string): TaskView | undefined {
     return this.tasksById().get(id);
   }
 
-  /** Whether a specific task has a mutation in flight. */
   isPending(id: string): boolean {
     return this.pendingState().has(id);
   }
 
-  // ---------------------------------------------------------------------------
   // Filter and sort
-  // ---------------------------------------------------------------------------
 
-  /** Merges a partial change into the filter state. */
   patchFilters(patch: Partial<TaskFilters>): void {
     this.filtersState.update((filters) => ({ ...filters, ...patch }));
   }
@@ -136,7 +111,7 @@ export class TaskStore {
     this.patchFilters({ search });
   }
 
-  /** Restricts to one status, or clears the status filter when passed `null`. */
+  /** `null` clears the status filter. */
   setStatusFilter(status: TaskStatus | null): void {
     this.patchFilters({ statuses: status ? [status] : [] });
   }
@@ -149,11 +124,8 @@ export class TaskStore {
     this.filtersState.set(EMPTY_TASK_FILTERS);
   }
 
-  // ---------------------------------------------------------------------------
   // Loading
-  // ---------------------------------------------------------------------------
 
-  /** Refetches the collection, bypassing the HTTP cache. */
   reload(): void {
     this.resource.reload();
   }
@@ -162,14 +134,9 @@ export class TaskStore {
     this.mutationErrorState.set(null);
   }
 
-  // ---------------------------------------------------------------------------
   // Mutations
-  // ---------------------------------------------------------------------------
 
-  /**
-   * Creates a task. Returns the persisted task, or `null` when the write failed
-   * and the optimistic insert was rolled back.
-   */
+  /** Returns the persisted task, or `null` when the write failed and rolled back. */
   async create(draft: TaskDraft): Promise<Task | null> {
     const now = this.clock.snapshot();
     const optimistic = this.api.buildTask(draft, this.nextOrderFor(draft.status), now);
@@ -191,7 +158,7 @@ export class TaskStore {
     }
   }
 
-  /** Applies a partial update. Returns `false` when the write failed. */
+  /** Returns `false` when the write failed and the task was restored. */
   async update(id: string, patch: TaskPatch): Promise<boolean> {
     const previous = this.loaded().find((task) => task.id === id);
 
@@ -223,7 +190,7 @@ export class TaskStore {
     }
   }
 
-  /** Deletes a task. Returns `false` when the write failed and it was restored. */
+  /** Returns `false` when the write failed and the task was restored. */
   async remove(id: string): Promise<boolean> {
     const previous = this.loaded().find((task) => task.id === id);
 
@@ -250,12 +217,8 @@ export class TaskStore {
   }
 
   /**
-   * Moves a task to a position in a column, as produced by a drag-and-drop drop
-   * event.
-   *
-   * Only the moved task is written back. Sibling positions are recomputed
-   * locally with gaps of {@link ORDER_STEP}, so a single drop is one request
-   * rather than one per card in the column.
+   * Only the moved task is written back — sibling positions are derived from
+   * fractional midpoints, so a drop is one request rather than one per card.
    */
   async move(id: string, toStatus: TaskStatus, toIndex: number): Promise<boolean> {
     const previous = this.loaded().find((task) => task.id === id);
@@ -270,11 +233,8 @@ export class TaskStore {
     return this.update(id, statusChanged ? { status: toStatus, order } : { order });
   }
 
-  // ---------------------------------------------------------------------------
   // Internals
-  // ---------------------------------------------------------------------------
 
-  /** Places a new task at the end of its column. */
   private nextOrderFor(status: TaskStatus): number {
     const orders = this.loaded()
       .filter((task) => task.status === status)
@@ -283,10 +243,7 @@ export class TaskStore {
     return orders.length === 0 ? 0 : Math.max(...orders) + ORDER_STEP;
   }
 
-  /**
-   * Computes an `order` that lands the task between its new neighbours.
-   * Fractional midpoints keep sibling rows untouched.
-   */
+  /** Lands the task between its new neighbours, leaving siblings untouched. */
   private orderForPosition(id: string, status: TaskStatus, index: number): number {
     const column = this.tasks()
       .filter((task) => task.status === status && task.id !== id)
@@ -310,10 +267,7 @@ export class TaskStore {
     return (before.order + after.order) / 2;
   }
 
-  /**
-   * Keeps `completedAt` consistent with `status`, which the API will not do for
-   * us: moving a task to Done stamps it, moving it back clears it.
-   */
+  /** The API will not do this: Done stamps `completedAt`, leaving Done clears it. */
   private withCompletionTimestamp(previous: Task, patch: TaskPatch, now: Date): TaskPatch {
     const nextStatus = patch.status ?? previous.status;
 
@@ -372,5 +326,5 @@ export class TaskStore {
   }
 }
 
-/** Gap left between consecutive `order` values, so an insert never needs a rewrite. */
+/** Gap between consecutive `order` values, so an insert never needs a rewrite. */
 const ORDER_STEP = 1000;

@@ -1,5 +1,3 @@
-/** Shared TestBed wiring for specs that need HTTP, a frozen clock, or both. */
-
 import { provideHttpClient, withInterceptors } from '@angular/common/http';
 import { HttpTestingController, provideHttpClientTesting } from '@angular/common/http/testing';
 import { EnvironmentProviders, Provider } from '@angular/core';
@@ -11,18 +9,14 @@ import { retryInterceptor } from '../app/core/interceptors/retry.interceptor';
 import { CLOCK } from '../app/core/utils/date.utils';
 import { TEST_NOW } from './task.factory';
 
-/** Base URL the specs assert against. */
 export const TEST_API_BASE_URL = '/api';
 
-/** Freezes {@link CLOCK} so every date derivation is deterministic. */
+/** Freezes {@link CLOCK} so date derivations are deterministic. */
 export function provideFrozenClock(now: Date = TEST_NOW): Provider {
   return { provide: CLOCK, useValue: () => now };
 }
 
-/**
- * HTTP testing backend without the app's interceptors, for specs that assert on
- * a service's own requests and do not want caching or retries in the way.
- */
+/** No interceptors: for specs asserting on a service's own requests. */
 export function provideTestHttp(): (Provider | EnvironmentProviders)[] {
   return [
     provideHttpClient(),
@@ -31,10 +25,7 @@ export function provideTestHttp(): (Provider | EnvironmentProviders)[] {
   ];
 }
 
-/**
- * HTTP testing backend with the real interceptor chain, in the same order as
- * `app.config.ts`, so the interceptor specs exercise the actual wiring.
- */
+/** The real interceptor chain, in the same order as `app.config.ts`. */
 export function provideTestHttpWithInterceptors(): (Provider | EnvironmentProviders)[] {
   return [
     provideHttpClient(withInterceptors([cacheInterceptor, retryInterceptor, errorInterceptor])),
@@ -43,13 +34,7 @@ export function provideTestHttpWithInterceptors(): (Provider | EnvironmentProvid
   ];
 }
 
-/**
- * HTTP testing backend with only `errorInterceptor`.
- *
- * What the stores actually depend on is normalised errors, not caching or
- * retries. Wiring just that one interceptor keeps store specs honest about the
- * contract while leaving retry backoff timers and cache hits out of the way.
- */
+/** Only `errorInterceptor` — normalised errors are all the stores depend on. */
 export function provideTestHttpWithErrorNormalisation(): (Provider | EnvironmentProviders)[] {
   return [
     provideHttpClient(withInterceptors([errorInterceptor])),
@@ -58,22 +43,15 @@ export function provideTestHttpWithErrorNormalisation(): (Provider | Environment
   ];
 }
 
-/** Convenience accessor for the mock HTTP backend. */
 export function httpBackend(): HttpTestingController {
   return TestBed.inject(HttpTestingController);
 }
 
-/** Runs Angular's reactive queue, so pending effects execute. */
 export function flushEffects(): void {
   TestBed.tick();
 }
 
-/**
- * Flushes effects and lets pending promises resolve.
- *
- * `httpResource` starts its request from an effect and the stores `await` their
- * writes, so both queues have to drain before a spec can assert.
- */
+/** Drains both the reactive queue and the microtask queue. */
 export async function settle(): Promise<void> {
   TestBed.tick();
   await new Promise<void>((resolve) => setTimeout(resolve, 0));
