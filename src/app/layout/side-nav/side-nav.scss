@@ -78,6 +78,11 @@
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
+  // Purely optical. The glyph boxes and the label already share a centre line,
+  // but an emoji carries its visual mass higher in the em box than Latin text
+  // does, so the label reads a shade high against it without this.
+  position: relative;
+  inset-block-start: 2px;
 }
 
 .nav__cta {
