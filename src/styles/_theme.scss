@@ -84,7 +84,7 @@ html {
     )
   );
 
-  @include mat.chip-overrides(
+  @include mat.chips-overrides(
     (
       container-shape-radius: var(--app-radius-sm),
     )
