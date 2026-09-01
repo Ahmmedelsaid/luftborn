@@ -1,0 +1,132 @@
+@use "mixins";
+
+.team__grid {
+  display: grid;
+  gap: var(--app-space-4);
+  grid-template-columns: 1fr;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+
+  @include mixins.from("tablet") {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  @include mixins.from("wide") {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+
+.team__card {
+  display: flex;
+  flex-direction: column;
+  gap: var(--app-space-4);
+  padding: var(--app-space-5);
+  background: var(--app-surface);
+  border: 1px solid var(--app-border);
+  border-radius: 10px;
+
+  &--busiest {
+    border-color: var(--app-primary);
+  }
+}
+
+.team__head {
+  display: flex;
+  align-items: center;
+  gap: var(--app-space-3);
+}
+
+.team__identity {
+  min-width: 0;
+  flex: 1 1 auto;
+}
+
+.team__name {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--app-text);
+}
+
+.team__email {
+  color: var(--app-text-secondary);
+  font-size: 12px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.team__flag {
+  flex: 0 0 auto;
+  padding-block: 2px;
+  padding-inline: 8px;
+  border-radius: var(--app-radius-pill);
+  background: var(--app-primary-soft);
+  color: var(--app-primary);
+  font-size: 10.5px;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.team__stats {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: var(--app-space-2);
+  margin: 0;
+}
+
+.team__stat {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  padding: var(--app-space-2);
+  border-radius: var(--app-radius-md);
+  background: var(--app-surface-muted);
+  text-align: center;
+
+  dt {
+    color: var(--app-text-muted);
+    font-size: 10.5px;
+    font-weight: 500;
+  }
+
+  dd {
+    margin: 0;
+    color: var(--app-text);
+    font-size: 17px;
+    font-weight: 700;
+  }
+
+  &--overdue dd {
+    color: var(--app-overdue-fg);
+  }
+}
+
+.team__progress-head {
+  display: flex;
+  justify-content: space-between;
+  margin-block-end: 6px;
+  color: var(--app-text-secondary);
+  font-size: 12px;
+  font-weight: 500;
+}
+
+.team__bar {
+  block-size: 6px;
+  border-radius: var(--app-radius-pill);
+  background: var(--app-surface-hover);
+  overflow: hidden;
+}
+
+.team__bar-fill {
+  display: block;
+  block-size: 100%;
+  border-radius: var(--app-radius-pill);
+  background: var(--app-completed-fg);
+  transition: inline-size var(--app-duration-slow) var(--app-easing-standard);
+}
+
+.team__action {
+  align-self: flex-start;
+}
