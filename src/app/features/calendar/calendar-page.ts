@@ -1,14 +1,18 @@
 import { ChangeDetectionStrategy, Component } from '@angular/core';
+import { TranslatePipe } from '@ngx-translate/core';
 import { EmptyState } from '../../shared/components/empty-state/empty-state';
 import { PageHeader } from '../../shared/components/page-header/page-header';
 
 /** Placeholder for the Calendar section; replaced on its own branch. */
 @Component({
   selector: 'app-calendar-page',
-  imports: [EmptyState, PageHeader],
+  imports: [EmptyState, PageHeader, TranslatePipe],
   template: `
-    <app-page-header title="Calendar" />
-    <app-empty-state title="Calendar" message="This section is not implemented yet." />
+    <app-page-header [title]="'nav.calendar' | translate" />
+    <app-empty-state
+      [title]="'nav.calendar' | translate"
+      [message]="'placeholder.message' | translate"
+    />
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

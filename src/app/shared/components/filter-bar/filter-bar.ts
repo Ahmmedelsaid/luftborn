@@ -1,23 +1,20 @@
-import { ChangeDetectionStrategy, Component, computed, input, output } from '@angular/core';
+import { ChangeDetectionStrategy, Component, computed, inject, input, output } from '@angular/core';
+import { toSignal } from '@angular/core/rxjs-interop';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatMenuModule } from '@angular/material/menu';
+import { TranslatePipe, TranslateService } from '@ngx-translate/core';
 import {
   TaskPriority,
   TaskStatus,
   TASK_PRIORITIES,
-  TASK_PRIORITY_LABELS,
+  TASK_PRIORITY_LABEL_KEYS,
   TASK_STATUSES,
-  TASK_STATUS_LABELS,
+  TASK_STATUS_LABEL_KEYS,
   User,
-} from '../../../core/models';
+} from '../../../core/interfaces';
+import { StatusSegment } from '../../interfaces';
 import { Avatar } from '../avatar/avatar';
-
-/** One entry in the status segmented control. `null` is the "All" segment. */
-interface StatusSegment {
-  readonly value: TaskStatus | null;
-  readonly label: string;
-}
 
 /**
  * Board toolbar: status segments, priority and assignee filters, and the primary
@@ -25,13 +22,15 @@ interface StatusSegment {
  */
 @Component({
   selector: 'app-filter-bar',
-  imports: [Avatar, MatButtonModule, MatIconModule, MatMenuModule],
+  imports: [Avatar, MatButtonModule, MatIconModule, MatMenuModule, TranslatePipe],
   templateUrl: './filter-bar.html',
   styleUrl: './filter-bar.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
   host: { class: 'app-filter-bar' },
 })
 export class FilterBar {
+  private readonly translate = inject(TranslateService);
+
   readonly activeStatus = input<TaskStatus | null>(null);
   readonly activePriorities = input<readonly TaskPriority[]>([]);
   readonly activeAssigneeIds = input<readonly string[]>([]);
@@ -44,38 +43,52 @@ export class FilterBar {
   readonly createTask = output<void>();
 
   protected readonly segments: readonly StatusSegment[] = [
-    { value: null, label: 'All' },
-    ...TASK_STATUSES.map((status) => ({ value: status, label: TASK_STATUS_LABELS[status] })),
+    { value: null, labelKey: 'status.all' },
+    ...TASK_STATUSES.map((status) => ({ value: status, labelKey: TASK_STATUS_LABEL_KEYS[status] })),
   ];
 
   protected readonly priorities = TASK_PRIORITIES;
-  protected readonly priorityLabels = TASK_PRIORITY_LABELS;
+  protected readonly priorityLabelKeys = TASK_PRIORITY_LABEL_KEYS;
 
-  protected readonly priorityButtonLabel = computed(() => {
+  private readonly languageRevision = toSignal(this.translate.onLangChange, {
+    initialValue: null,
+  });
+
+  /** Summarises the priority selection; the trigger has no room for a list. */
+  protected readonly priorityLabel = computed(() => {
+    this.languageRevision();
     const selected = this.activePriorities();
 
     if (selected.length === 0) {
-      return 'Priority';
+      return this.translate.instant('priority.label') as string;
     }
 
     if (selected.length === 1) {
-      return TASK_PRIORITY_LABELS[selected[0]];
+      return this.translate.instant(TASK_PRIORITY_LABEL_KEYS[selected[0]]) as string;
     }
 
-    return `Priority (${selected.length})`;
+    return this.translate.instant('priority.selected', { count: selected.length }) as string;
   });
 
-  protected readonly assigneeButtonLabel = computed(() => {
+  protected readonly assigneeLabel = computed(() => {
+    this.languageRevision();
     const selected = this.activeAssigneeIds();
 
     if (selected.length === 0) {
-      return 'Assignee';
+      return this.translate.instant('filters.assignee') as string;
     }
 
     const match = this.assignees().find((user) => user.id === selected[0]);
-    const name = match ? match.name.split(' ')[0] : 'Assignee';
+    const name = match
+      ? match.name.split(' ')[0]
+      : (this.translate.instant('filters.assignee') as string);
 
-    return selected.length === 1 ? name : `${name} +${selected.length - 1}`;
+    return selected.length === 1
+      ? name
+      : (this.translate.instant('filters.assigneeMore', {
+          name,
+          count: selected.length - 1,
+        }) as string);
   });
 
   protected readonly hasFilters = computed(

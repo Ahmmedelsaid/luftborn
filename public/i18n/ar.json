@@ -1,0 +1,227 @@
+{
+  "app": {
+    "name": "مدير المهام",
+    "skipToContent": "الانتقال إلى المحتوى الرئيسي",
+    "searchPlaceholder": "ابحث في المهام...",
+    "searchLabel": "ابحث في المهام",
+    "clearSearch": "مسح البحث",
+    "notifications": "الإشعارات",
+    "notificationsUnread": "{{count}} إشعارات غير مقروءة",
+    "openMenu": "فتح قائمة التنقل",
+    "signedInAs": "مسجَّل الدخول بحساب {{name}}",
+    "language": "اللغة",
+    "chooseLanguage": "اختيار اللغة"
+  },
+  "nav": {
+    "dashboard": "لوحة التحكم",
+    "tasks": "المهام",
+    "calendar": "التقويم",
+    "analytics": "التحليلات",
+    "team": "الفريق",
+    "settings": "الإعدادات",
+    "main": "التنقل الرئيسي"
+  },
+  "actions": {
+    "newTask": "مهمة جديدة",
+    "refresh": "تحديث",
+    "clear": "مسح",
+    "cancel": "إلغاء",
+    "confirm": "تأكيد",
+    "delete": "حذف",
+    "edit": "تعديل",
+    "save": "حفظ التغييرات",
+    "create": "إنشاء المهمة",
+    "tryAgain": "إعادة المحاولة",
+    "addTag": "إضافة وسم",
+    "keepEditing": "متابعة التعديل",
+    "discard": "تجاهل",
+    "close": "إغلاق",
+    "backToDashboard": "العودة إلى لوحة التحكم"
+  },
+  "status": {
+    "all": "الكل",
+    "todo": "للتنفيذ",
+    "in_progress": "قيد التنفيذ",
+    "done": "منجزة"
+  },
+  "priority": {
+    "label": "الأولوية",
+    "high": "عالية",
+    "medium": "متوسطة",
+    "low": "منخفضة",
+    "selected": "الأولوية ({{count}})",
+    "aria": "الأولوية: {{value}}"
+  },
+  "filters": {
+    "byStatus": "تصفية المهام حسب الحالة",
+    "assignee": "المسؤول",
+    "assigneeMore": "{{name}} +{{count}}"
+  },
+  "sort": {
+    "manual": "ترتيب اللوحة",
+    "dueDate": "تاريخ الاستحقاق",
+    "priority": "الأولوية",
+    "title": "العنوان",
+    "updatedAt": "الأحدث تحديثًا"
+  },
+  "task": {
+    "actionsFor": "إجراءات {{title}}",
+    "moveTo": "النقل إلى {{status}}",
+    "due": {
+      "today": "تستحق اليوم",
+      "tomorrow": "تستحق غدًا",
+      "inOneWeek": "تستحق بعد أسبوع",
+      "inDays": {
+        "one": "تستحق بعد يوم",
+        "two": "تستحق بعد يومين",
+        "few": "تستحق بعد {{count}} أيام",
+        "many": "تستحق بعد {{count}} يومًا",
+        "other": "تستحق بعد {{count}} يوم"
+      },
+      "overdue": {
+        "one": "متأخرة بيوم",
+        "two": "متأخرة بيومين",
+        "few": "متأخرة بـ {{count}} أيام",
+        "many": "متأخرة بـ {{count}} يومًا",
+        "other": "متأخرة بـ {{count}} يوم"
+      }
+    },
+    "completed": {
+      "today": "أُنجزت اليوم",
+      "yesterday": "أُنجزت أمس",
+      "daysAgo": {
+        "one": "أُنجزت منذ يوم",
+        "two": "أُنجزت منذ يومين",
+        "few": "أُنجزت منذ {{count}} أيام",
+        "many": "أُنجزت منذ {{count}} يومًا",
+        "other": "أُنجزت منذ {{count}} يوم"
+      },
+      "onDate": "أُنجزت في {{date}}"
+    }
+  },
+  "time": {
+    "justNow": "الآن",
+    "yesterday": "أمس",
+    "minutesAgo": {
+      "one": "منذ دقيقة",
+      "two": "منذ دقيقتين",
+      "few": "منذ {{count}} دقائق",
+      "many": "منذ {{count}} دقيقة",
+      "other": "منذ {{count}} دقيقة"
+    },
+    "hoursAgo": {
+      "one": "منذ ساعة",
+      "two": "منذ ساعتين",
+      "few": "منذ {{count}} ساعات",
+      "many": "منذ {{count}} ساعة",
+      "other": "منذ {{count}} ساعة"
+    },
+    "daysAgo": {
+      "one": "منذ يوم",
+      "two": "منذ يومين",
+      "few": "منذ {{count}} أيام",
+      "many": "منذ {{count}} يومًا",
+      "other": "منذ {{count}} يوم"
+    },
+    "onDate": "{{date}}"
+  },
+  "dashboard": {
+    "title": "لوحة التحكم",
+    "summary": "{{total}} مهمة · {{overdue}} متأخرة",
+    "statistics": "إحصاءات المهام",
+    "loadFailed": "تعذّر تحميل مهامك",
+    "activateFilter": "يطبّق التصفية المقابلة",
+    "stat": {
+      "stat-001": "إجمالي المهام",
+      "stat-002": "المنجزة",
+      "stat-003": "قيد التنفيذ",
+      "stat-004": "المتأخرة"
+    }
+  },
+  "tasks": {
+    "title": "المهام",
+    "summary": "{{shown}} معروضة · {{overdue}} متأخرة · {{done}} منجزة",
+    "column": "عمود {{status}}",
+    "columnEmpty": "لا يوجد شيء هنا بعد",
+    "loading": "جارٍ تحميل المهام",
+    "empty": {
+      "title": "لا توجد مهام بعد",
+      "message": "أنشئ مهمتك الأولى لتبدأ في تعبئة اللوحة."
+    },
+    "filtered": {
+      "title": "لا توجد مهام تطابق التصفية",
+      "message": "جرّب توسيع البحث أو مسح عوامل التصفية النشطة."
+    }
+  },
+  "activity": {
+    "title": "النشاط الأخير",
+    "emptyTitle": "لا يوجد نشاط بعد",
+    "emptyMessage": "ستظهر التغييرات على المهام هنا.",
+    "message": {
+      "created": "أنشأ \"{{title}}\"",
+      "updated": "حدَّث \"{{title}}\"",
+      "status_changed": "نقل \"{{title}}\"",
+      "completed": "أنجز \"{{title}}\"",
+      "deleted": "حذف \"{{title}}\""
+    }
+  },
+  "form": {
+    "newTitle": "مهمة جديدة",
+    "editTitle": "تعديل المهمة",
+    "title": "العنوان",
+    "titlePlaceholder": "ما المطلوب إنجازه؟",
+    "description": "الوصف",
+    "descriptionPlaceholder": "أضف التفاصيل التي سيحتاجها شخص آخر",
+    "status": "الحالة",
+    "priority": "الأولوية",
+    "dueDate": "تاريخ الاستحقاق",
+    "assignee": "المسؤول",
+    "tags": "الوسوم",
+    "tagsEmpty": "لا توجد وسوم بعد.",
+    "tagLabel": "وسم {{index}}",
+    "removeTag": "إزالة الوسم {{index}}",
+    "discardTitle": "تجاهل التغييرات؟",
+    "discardMessage": "لم يتم حفظ تعديلاتك على هذه المهمة."
+  },
+  "validation": {
+    "required": "هذا الحقل مطلوب.",
+    "notBlank": "لا يمكن أن يكون مسافات فقط.",
+    "minlength": "استخدم {{length}} حرفًا على الأقل.",
+    "maxlength": "استخدم {{length}} حرفًا على الأكثر.",
+    "dueDateInPast": {
+      "one": "هذا التاريخ في الماضي بيوم.",
+      "two": "هذا التاريخ في الماضي بيومين.",
+      "few": "هذا التاريخ في الماضي بـ {{count}} أيام.",
+      "many": "هذا التاريخ في الماضي بـ {{count}} يومًا.",
+      "other": "هذا التاريخ في الماضي بـ {{count}} يوم."
+    },
+    "dueDateInvalid": "أدخل تاريخًا صحيحًا.",
+    "dueDateTooFar": "اختر تاريخًا خلال {{years}} سنوات.",
+    "duplicateTags": {
+      "one": "أزل الوسم المكرر: {{tags}}.",
+      "two": "أزل الوسمين المكررين: {{tags}}.",
+      "few": "أزل الوسوم المكررة: {{tags}}.",
+      "many": "أزل الوسوم المكررة: {{tags}}.",
+      "other": "أزل الوسوم المكررة: {{tags}}."
+    },
+    "highPriorityNeedsDueDate": "المهمة ذات الأولوية العالية تحتاج تاريخ استحقاق.",
+    "doneCannotBeDueLater": "المهمة المنجزة لا يمكن أن تستحق في المستقبل.",
+    "generic": "هذه القيمة غير صحيحة."
+  },
+  "delete": {
+    "title": "حذف المهمة؟",
+    "message": "سيتم حذف \"{{title}}\" نهائيًا. لا يمكن التراجع عن هذا.",
+    "success": "تم حذف المهمة"
+  },
+  "errors": {
+    "genericTitle": "تعذّر تحميل هذا المحتوى",
+    "dismiss": "إخفاء"
+  },
+  "notFound": {
+    "title": "الصفحة غير موجودة",
+    "message": "الصفحة التي تبحث عنها غير موجودة أو تم نقلها."
+  },
+  "placeholder": {
+    "message": "هذا القسم غير مُنفَّذ بعد."
+  }
+}

@@ -3,6 +3,7 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { provideRouter, Router } from '@angular/router';
 import { BehaviorSubject } from 'rxjs';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
+import { provideTestTranslate, useTranslations } from '../../../testing/translate-helpers';
 import { click, query, texts } from '../../../testing/component-helpers';
 import {
   httpBackend,
@@ -54,9 +55,11 @@ describe('Shell', () => {
           { path: 'settings', children: [] },
         ]),
         { provide: BreakpointObserver, useValue: breakpoints },
+        provideTestTranslate(),
       ],
     });
 
+    useTranslations();
     fixture = TestBed.createComponent(Shell);
     await settle();
 

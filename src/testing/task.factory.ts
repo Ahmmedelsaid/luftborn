@@ -1,4 +1,4 @@
-import { Activity, Statistic, Task, TaskAssignee, TaskStatus, User } from '../app/core/models';
+import { Activity, Statistic, Task, TaskAssignee, TaskStatus, User } from '../app/core/interfaces';
 import { toApiDateString } from '../app/core/utils/date.utils';
 
 /** Frozen reference date, so nothing depends on the real clock. */

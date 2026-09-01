@@ -1,4 +1,4 @@
-<h2 class="feed__title">{{ title() }}</h2>
+<h2 class="feed__title">{{ 'activity.title' | translate }}</h2>
 
 @if (loading()) {
   <ul class="feed__list" aria-busy="true">
@@ -15,8 +15,8 @@
 } @else if (activities().length === 0) {
   <app-empty-state
     icon="clock"
-    title="No activity yet"
-    message="Changes to tasks will show up here."
+    [title]="'activity.emptyTitle' | translate"
+    [message]="'activity.emptyMessage' | translate"
   />
 } @else {
   <ul class="feed__list">
@@ -27,7 +27,7 @@
         <div class="feed__item-lines">
           <p class="feed__text">
             <span class="feed__actor">{{ activity.userName }}</span>
-            <span>&nbsp;{{ activity.message }}</span>
+            <span>&nbsp;{{ messageFor(activity) }}</span>
           </p>
           <p class="feed__meta">
             <mat-icon
@@ -35,7 +35,7 @@
               [svgIcon]="iconFor(activity.type)"
               aria-hidden="true"
             />
-            <span>{{ activity.relativeTime }}</span>
+            <span>{{ activity.relativeTime | localise }}</span>
           </p>
         </div>
       </li>

@@ -1,5 +1,6 @@
 import { HttpContext, HttpContextToken } from '@angular/common/http';
-import { InjectionToken, Injector } from '@angular/core';
+import { InjectionToken } from '@angular/core';
+import { HttpBehaviourOptions } from '../interfaces';
 
 /** Relative by default, so the dev-server proxy forwards it to json-server. */
 export const API_BASE_URL = new InjectionToken<string>('API_BASE_URL', {
@@ -23,12 +24,6 @@ export const RETRY_ATTEMPTS = new HttpContextToken<number>(() => DEFAULT_RETRY_A
  */
 export const RETRY_UNSAFE_METHOD = new HttpContextToken<boolean>(() => false);
 
-export interface HttpBehaviourOptions {
-  readonly cacheTtlMs?: number;
-  readonly retryAttempts?: number;
-  readonly retryUnsafeMethod?: boolean;
-}
-
 export function httpOptions(options: HttpBehaviourOptions): HttpContext {
   const context = new HttpContext();
 
@@ -49,9 +44,4 @@ export function httpOptions(options: HttpBehaviourOptions): HttpContext {
 
 export function noCache(): HttpContext {
   return httpOptions({ cacheTtlMs: 0 });
-}
-
-export interface ResourceFactoryOptions {
-  /** Injector to create the resource in, when not called from an injection context. */
-  readonly injector?: Injector;
 }

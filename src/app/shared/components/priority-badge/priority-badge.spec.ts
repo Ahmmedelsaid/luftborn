@@ -1,14 +1,19 @@
 import { TestBed } from '@angular/core/testing';
 import { beforeEach, describe, expect, it } from 'vitest';
-import { TaskPriority } from '../../../core/models';
+import { provideTestTranslate, useTranslations } from '../../../../testing/translate-helpers';
+import { TaskPriority } from '../../../core/interfaces';
 import { PriorityBadge } from './priority-badge';
 
 describe('PriorityBadge', () => {
   beforeEach(() => {
-    TestBed.configureTestingModule({ imports: [PriorityBadge] });
+    TestBed.configureTestingModule({
+      imports: [PriorityBadge],
+      providers: [provideTestTranslate()],
+    });
   });
 
   async function render(priority: TaskPriority): Promise<HTMLElement> {
+    useTranslations();
     const fixture = TestBed.createComponent(PriorityBadge);
     fixture.componentRef.setInput('priority', priority);
     await fixture.whenStable();

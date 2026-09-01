@@ -1,7 +1,7 @@
 import { httpResource, HttpResourceRef } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
-import { User } from '../models';
-import { API_BASE_URL, httpOptions, ResourceFactoryOptions } from './api.config';
+import { User, ResourceFactoryOptions } from '../interfaces';
+import { API_BASE_URL, httpOptions } from './api.config';
 
 /** Users barely change, so they outlive the default cache TTL by a wide margin. */
 const USERS_CACHE_TTL_MS = 5 * 60_000;

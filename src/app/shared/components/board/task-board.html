@@ -1,5 +1,5 @@
 @if (loading()) {
-  <div class="board__grid" aria-busy="true" aria-label="Loading tasks">
+  <div class="board__grid" aria-busy="true" [attr.aria-label]="'tasks.loading' | translate">
     @for (column of columns(); track column.status) {
       <section class="board__column">
         <header class="board__header">
@@ -17,31 +17,36 @@
   @if (filtered()) {
     <app-empty-state
       icon="search_off"
-      title="No tasks match your filters"
-      message="Try widening the search or clearing the active filters."
+      [title]="'tasks.filtered.title' | translate"
+      [message]="'tasks.filtered.message' | translate"
     >
       <button matButton="outlined" type="button" (click)="clearFilters.emit()">
-        Clear filters
+        {{ 'actions.clear' | translate }}
       </button>
     </app-empty-state>
   } @else {
     <app-empty-state
       icon="inbox"
-      title="No tasks yet"
-      message="Create your first task to start filling the board."
+      [title]="'tasks.empty.title' | translate"
+      [message]="'tasks.empty.message' | translate"
     >
       <button matButton="filled" type="button" (click)="createTask.emit()">
         <mat-icon svgIcon="plus" aria-hidden="true" />
-        New Task
+        {{ 'actions.newTask' | translate }}
       </button>
     </app-empty-state>
   }
 } @else {
   <div class="board__grid">
     @for (column of columns(); track column.status) {
-      <section class="board__column" [attr.aria-label]="statusLabels[column.status] + ' column'">
+      <section
+        class="board__column"
+        [attr.aria-label]="
+          'tasks.column' | translate: { status: statusLabelKeys[column.status] | translate }
+        "
+      >
         <header class="board__header">
-          <h2 class="board__title">{{ statusLabels[column.status] }}</h2>
+          <h2 class="board__title">{{ statusLabelKeys[column.status] | translate }}</h2>
           <span class="board__count">{{ column.count }}</span>
         </header>
 
@@ -67,7 +72,7 @@
               (moveTo)="taskMoved.emit({ taskId: task.id, toStatus: $event, toIndex: 0 })"
             />
           } @empty {
-            <p class="board__column-empty">Nothing here yet</p>
+            <p class="board__column-empty">{{ 'tasks.columnEmpty' | translate }}</p>
           }
         </div>
       </section>

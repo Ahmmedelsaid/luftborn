@@ -1,5 +1,7 @@
 import { provideHttpClient, withFetch, withInterceptors } from '@angular/common/http';
 import { ApplicationConfig, provideBrowserGlobalErrorListeners } from '@angular/core';
+import { provideTranslateService } from '@ngx-translate/core';
+import { provideTranslateHttpLoader } from '@ngx-translate/http-loader';
 import {
   provideRouter,
   withComponentInputBinding,
@@ -32,5 +34,12 @@ export const appConfig: ApplicationConfig = {
       withInterceptors([cacheInterceptor, retryInterceptor, errorInterceptor]),
     ),
     provideAppIcons(),
+    // Runtime language switching rather than build-time locales: the brief asks
+    // for i18n as a feature, and a switch the user can see beats one bundle per
+    // language that needs a redeploy to demonstrate.
+    provideTranslateService({
+      fallbackLang: 'en',
+      loader: provideTranslateHttpLoader({ prefix: 'i18n/', suffix: '.json' }),
+    }),
   ],
 };

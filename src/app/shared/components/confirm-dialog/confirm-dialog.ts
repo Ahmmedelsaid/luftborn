@@ -1,6 +1,7 @@
 import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MAT_DIALOG_DATA, MatDialogModule, MatDialogRef } from '@angular/material/dialog';
+import { TranslatePipe } from '@ngx-translate/core';
 
 /** Content and styling for a confirmation prompt. */
 export interface ConfirmDialogData {
@@ -14,7 +15,7 @@ export interface ConfirmDialogData {
 
 @Component({
   selector: 'app-confirm-dialog',
-  imports: [MatButtonModule, MatDialogModule],
+  imports: [MatButtonModule, MatDialogModule, TranslatePipe],
   template: `
     <h2 mat-dialog-title class="confirm__title">{{ data.title }}</h2>
 
@@ -22,7 +23,7 @@ export interface ConfirmDialogData {
 
     <mat-dialog-actions class="confirm__actions">
       <button matButton type="button" (click)="dialog.close(false)">
-        {{ data.cancelLabel ?? 'Cancel' }}
+        {{ data.cancelLabel ?? ('actions.cancel' | translate) }}
       </button>
       <button
         matButton="filled"
@@ -31,7 +32,7 @@ export interface ConfirmDialogData {
         [class.confirm__danger]="data.destructive"
         (click)="dialog.close(true)"
       >
-        {{ data.confirmLabel ?? 'Confirm' }}
+        {{ data.confirmLabel ?? ('actions.confirm' | translate) }}
       </button>
     </mat-dialog-actions>
   `,

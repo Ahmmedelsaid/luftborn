@@ -3,9 +3,11 @@ import { ChangeDetectionStrategy, Component, computed, inject, signal } from '@a
 import { toSignal } from '@angular/core/rxjs-interop';
 import { MatSidenavModule } from '@angular/material/sidenav';
 import { Router, RouterOutlet } from '@angular/router';
+import { TranslatePipe } from '@ngx-translate/core';
 import { map } from 'rxjs';
 import { TaskStore } from '../../core/state/task-store';
-import { NavItem, SideNav } from '../side-nav/side-nav';
+import { NavItem } from '../interfaces/nav-item.interface';
+import { SideNav } from '../side-nav/side-nav';
 import { TopBar } from '../top-bar/top-bar';
 
 /** Kept in sync with the `desktop` breakpoint in `_tokens.scss`. */
@@ -17,7 +19,7 @@ const DESKTOP_QUERY = '(min-width: 1024px)';
  */
 @Component({
   selector: 'app-shell',
-  imports: [MatSidenavModule, RouterOutlet, SideNav, TopBar],
+  imports: [MatSidenavModule, RouterOutlet, SideNav, TopBar, TranslatePipe],
   templateUrl: './shell.html',
   styleUrl: './shell.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -44,12 +46,12 @@ export class Shell {
 
   /** Matches the Figma navigation exactly. */
   protected readonly navItems: readonly NavItem[] = [
-    { label: 'Dashboard', icon: 'dashboard', route: '/dashboard' },
-    { label: 'Tasks', icon: 'tasks', route: '/tasks' },
-    { label: 'Calendar', icon: 'calendar', route: '/calendar' },
-    { label: 'Analytics', icon: 'analytics', route: '/analytics' },
-    { label: 'Team', icon: 'team', route: '/team' },
-    { label: 'Settings', icon: 'settings', route: '/settings' },
+    { labelKey: 'nav.dashboard', icon: 'dashboard', route: '/dashboard' },
+    { labelKey: 'nav.tasks', icon: 'tasks', route: '/tasks' },
+    { labelKey: 'nav.calendar', icon: 'calendar', route: '/calendar' },
+    { labelKey: 'nav.analytics', icon: 'analytics', route: '/analytics' },
+    { labelKey: 'nav.team', icon: 'team', route: '/team' },
+    { labelKey: 'nav.settings', icon: 'settings', route: '/settings' },
   ];
 
   protected readonly notificationCount = computed(() => this.tasks.totals().overdue);

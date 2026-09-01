@@ -1,7 +1,7 @@
 import { computed, inject, Injectable } from '@angular/core';
 import { firstValueFrom } from 'rxjs';
 import { ActivityApi } from '../api/activity-api';
-import { ActivityDraft, ActivityView } from '../models';
+import { ActivityDraft, ActivityView } from '../interfaces';
 import { ClockService } from '../services/clock';
 import { formatRelativeTime } from '../utils/date.utils';
 import { patchResource, resourceError, resourceValue } from './resource.utils';
@@ -39,7 +39,7 @@ export class ActivityStore {
     const optimistic: ActivityView = {
       ...draft,
       id: `pending-${draft.taskId}-${draft.timestamp}`,
-      relativeTime: 'just now',
+      relativeTime: { key: 'time.justNow' },
     };
 
     patchResource(this.resource, (entries) => [optimistic, ...entries]);

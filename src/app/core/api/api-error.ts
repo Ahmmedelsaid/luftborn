@@ -1,5 +1,5 @@
 import { HttpErrorResponse } from '@angular/common/http';
-import { ApiError, ApiErrorKind } from '../models';
+import { ApiError, ApiErrorKind } from '../interfaces';
 
 const RETRYABLE_STATUSES = new Set([0, 408, 429, 500, 502, 503, 504]);
 

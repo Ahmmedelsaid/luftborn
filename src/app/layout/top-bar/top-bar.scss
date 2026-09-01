@@ -175,7 +175,7 @@
 .bar__dot {
   position: absolute;
   top: 8px;
-  right: 9px;
+  inset-inline-end: 9px;
   width: 7px;
   height: 7px;
   border: 1.5px solid var(--app-surface);

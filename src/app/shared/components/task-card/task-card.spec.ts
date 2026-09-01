@@ -1,8 +1,9 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
+import { provideTestTranslate, useTranslations } from '../../../../testing/translate-helpers';
 import { click, exists, query, text } from '../../../../testing/component-helpers';
 import { createTask, dateOffsetFromNow, TEST_NOW } from '../../../../testing/task.factory';
-import { Task, TaskStatus, TaskView } from '../../../core/models';
+import { Task, TaskStatus, TaskView } from '../../../core/interfaces';
 import { toTaskView } from '../../../core/utils/task.utils';
 import { TaskCard } from './task-card';
 
@@ -14,7 +15,11 @@ describe('TaskCard', () => {
   let fixture: ComponentFixture<TaskCard>;
 
   beforeEach(() => {
-    TestBed.configureTestingModule({ imports: [TaskCard] });
+    TestBed.configureTestingModule({
+      imports: [TaskCard],
+      providers: [provideTestTranslate()],
+    });
+    useTranslations();
     fixture = TestBed.createComponent(TaskCard);
   });
 

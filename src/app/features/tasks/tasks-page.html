@@ -1,0 +1,60 @@
+<app-page-header [title]="'tasks.title' | translate" [subtitle]="summary()">
+  <button matButton="outlined" type="button" [matMenuTriggerFor]="sortMenu">
+    <mat-icon svgIcon="filter" aria-hidden="true" />
+    {{ sortLabelKey() | translate }}
+    <mat-icon svgIcon="chevron-down" aria-hidden="true" />
+  </button>
+
+  <mat-menu #sortMenu="matMenu">
+    @for (option of sortOptions; track option.key) {
+      <button mat-menu-item type="button" (click)="onSort(option.key)">
+        <span>{{ option.labelKey | translate }}</span>
+        @if (sortKey() === option.key) {
+          <mat-icon svgIcon="tasks" aria-hidden="true" />
+        }
+      </button>
+    }
+  </mat-menu>
+
+  <button matButton="outlined" type="button" (click)="onReload()">
+    <mat-icon svgIcon="refresh" aria-hidden="true" />
+    {{ 'actions.refresh' | translate }}
+  </button>
+</app-page-header>
+
+<app-filter-bar
+  class="tasks__filters"
+  [activeStatus]="activeStatus()"
+  [activePriorities]="filters().priorities"
+  [activeAssigneeIds]="filters().assigneeIds"
+  [assignees]="assignees()"
+  (statusChange)="onStatusChange($event)"
+  (priorityToggle)="onPriorityToggle($event)"
+  (assigneeToggle)="onAssigneeToggle($event)"
+  (clearFilters)="onClearFilters()"
+  (createTask)="onCreateTask()"
+/>
+
+@if (loadError(); as error) {
+  <app-error-state
+    class="tasks__error"
+    [error]="error"
+    [title]="'dashboard.loadFailed' | translate"
+    (retry)="onReload()"
+  />
+} @else {
+  <app-task-board
+    [columns]="board()"
+    [loading]="loading()"
+    [pendingIds]="pendingIds()"
+    [filtered]="hasFilters()"
+    (taskMoved)="onTaskMoved($event)"
+    (editTask)="onEditTask($event)"
+    (deleteTask)="onDeleteTask($event)"
+    (openTask)="onOpenTask($event)"
+    (createTask)="onCreateTask()"
+    (clearFilters)="onClearFilters()"
+  />
+}
+
+<router-outlet />

@@ -1,7 +1,14 @@
 import { ChangeDetectionStrategy, Component, computed, input, output } from '@angular/core';
 import { MatIconModule } from '@angular/material/icon';
 import { MatMenuModule } from '@angular/material/menu';
-import { DueDateState, TaskStatus, TaskView } from '../../../core/models';
+import { TranslatePipe } from '@ngx-translate/core';
+import { LocalisePipe } from '../../../core/i18n/localise.pipe';
+import {
+  DueDateState,
+  TaskStatus,
+  TaskView,
+  TASK_STATUS_LABEL_KEYS,
+} from '../../../core/interfaces';
 import { Avatar } from '../avatar/avatar';
 import { PriorityBadge } from '../priority-badge/priority-badge';
 
@@ -20,7 +27,7 @@ const DUE_STATE_ICONS: Readonly<Record<DueDateState, string>> = {
  */
 @Component({
   selector: 'app-task-card',
-  imports: [Avatar, MatIconModule, MatMenuModule, PriorityBadge],
+  imports: [Avatar, LocalisePipe, MatIconModule, MatMenuModule, PriorityBadge, TranslatePipe],
   templateUrl: './task-card.html',
   styleUrl: './task-card.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -51,9 +58,5 @@ export class TaskCard {
   /** The design shows `@John`, not the full name. */
   protected readonly handle = computed(() => `@${this.task().assignee.name.split(' ')[0]}`);
 
-  protected readonly statusLabels: Readonly<Record<TaskStatus, string>> = {
-    todo: 'To Do',
-    in_progress: 'In Progress',
-    done: 'Done',
-  };
+  protected readonly statusLabelKeys = TASK_STATUS_LABEL_KEYS;
 }

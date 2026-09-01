@@ -1,8 +1,15 @@
 import { HttpClient, httpResource, HttpResourceRef } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
-import { Activity, ActivityDraft, ActivityType, Task, TaskAssignee } from '../models';
-import { API_BASE_URL, httpOptions, noCache, ResourceFactoryOptions } from './api.config';
+import {
+  Activity,
+  ActivityDraft,
+  ActivityType,
+  Task,
+  TaskAssignee,
+  ResourceFactoryOptions,
+} from '../interfaces';
+import { API_BASE_URL, httpOptions, noCache } from './api.config';
 import { createId } from './id.util';
 
 export const ACTIVITY_FEED_LIMIT = 8;

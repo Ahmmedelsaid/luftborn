@@ -1,4 +1,4 @@
-<nav class="nav">
+<nav class="nav" [attr.aria-label]="'nav.main' | translate">
   <ul class="nav__list">
     @for (item of items(); track item.route) {
       <li class="nav__item">
@@ -12,7 +12,7 @@
           (click)="navigated.emit()"
         >
           <mat-icon class="nav__icon" [svgIcon]="item.icon" aria-hidden="true" />
-          <span class="nav__label">{{ item.label }}</span>
+          <span class="nav__label">{{ item.labelKey | translate }}</span>
         </a>
       </li>
     }
@@ -21,5 +21,5 @@
 
 <button type="button" class="nav__cta" (click)="createTask.emit()">
   <mat-icon svgIcon="plus" aria-hidden="true" />
-  <span>New Task</span>
+  <span>{{ 'actions.newTask' | translate }}</span>
 </button>

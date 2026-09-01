@@ -1,7 +1,7 @@
 import { TestBed } from '@angular/core/testing';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { click, exists, query, text } from '../../../testing/component-helpers';
-import { ApiError } from '../../core/models';
+import { ApiError } from '../../core/interfaces';
 import { provideAppIcons } from '../icons/provide-icons';
 import { EmptyState } from './empty-state/empty-state';
 import { ErrorState } from './error-state/error-state';

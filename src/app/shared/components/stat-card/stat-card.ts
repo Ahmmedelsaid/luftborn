@@ -1,7 +1,9 @@
-import { ChangeDetectionStrategy, Component, computed, input, output } from '@angular/core';
+import { ChangeDetectionStrategy, Component, computed, inject, input, output } from '@angular/core';
 import { NgTemplateOutlet } from '@angular/common';
+import { toSignal } from '@angular/core/rxjs-interop';
+import { TranslateService } from '@ngx-translate/core';
 import { MatIconModule } from '@angular/material/icon';
-import { Statistic } from '../../../core/models';
+import { Statistic } from '../../../core/interfaces';
 import { STATISTIC_ICON_BY_EMOJI } from '../../icons/icon-set';
 
 /**
@@ -25,6 +27,8 @@ import { STATISTIC_ICON_BY_EMOJI } from '../../icons/icon-set';
   },
 })
 export class StatCard {
+  private readonly translate = inject(TranslateService);
+
   readonly statistic = input.required<Statistic>();
 
   /** Renders the tile as a button that emits {@link filter}. */
@@ -46,9 +50,27 @@ export class StatCard {
     return change === '0' || change === '+0' || change === '' ? '' : change;
   });
 
+  private readonly languageRevision = toSignal(this.translate.onLangChange, {
+    initialValue: null,
+  });
+
+  /**
+   * The API sends English titles, so a keyed translation wins where one exists
+   * and the payload is the fallback — a statistic the bundle has never seen
+   * still renders its own label rather than a raw key.
+   */
+  protected titleFor(statistic: Statistic): string {
+    this.languageRevision();
+
+    const key = `dashboard.stat.${statistic.id}`;
+    const translated = this.translate.instant(key) as string;
+
+    return translated === key ? statistic.title : translated;
+  }
+
   protected readonly ariaLabel = computed(() => {
     const stat = this.statistic();
-    const base = `${stat.title}: ${stat.value}, ${this.delta()} ${stat.changeLabel}`;
+    const base = `${this.titleFor(stat)}: ${stat.value}, ${this.delta()} ${stat.changeLabel}`;
     const suffix = this.interactive() ? '. Activates the matching filter' : '';
 
     return `${base}${suffix}`.replace(/\s+/g, ' ');

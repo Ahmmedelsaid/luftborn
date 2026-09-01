@@ -2,18 +2,18 @@ import { CdkDragDrop, DragDropModule } from '@angular/cdk/drag-drop';
 import { ChangeDetectionStrategy, Component, computed, input, output } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
-import { TaskStatus, TaskView, TASK_STATUSES, TASK_STATUS_LABELS } from '../../../core/models';
-import { BoardColumn } from '../../../core/state/task-store';
+import { TranslatePipe } from '@ngx-translate/core';
+import {
+  BoardColumn,
+  TaskStatus,
+  TaskView,
+  TASK_STATUSES,
+  TASK_STATUS_LABEL_KEYS,
+} from '../../../core/interfaces';
+import { TaskMove } from '../../interfaces';
 import { EmptyState } from '../empty-state/empty-state';
 import { Skeleton } from '../skeleton/skeleton';
 import { TaskCard } from '../task-card/task-card';
-
-/** A drop, resolved to the values the store needs. */
-export interface TaskMove {
-  readonly taskId: string;
-  readonly toStatus: TaskStatus;
-  readonly toIndex: number;
-}
 
 /**
  * Kanban board with drag-and-drop between and within columns.
@@ -23,7 +23,15 @@ export interface TaskMove {
  */
 @Component({
   selector: 'app-task-board',
-  imports: [DragDropModule, EmptyState, MatButtonModule, MatIconModule, Skeleton, TaskCard],
+  imports: [
+    DragDropModule,
+    EmptyState,
+    MatButtonModule,
+    MatIconModule,
+    Skeleton,
+    TaskCard,
+    TranslatePipe,
+  ],
   templateUrl: './task-board.html',
   styleUrl: './task-board.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -44,7 +52,7 @@ export class TaskBoard {
   readonly createTask = output<void>();
   readonly clearFilters = output<void>();
 
-  protected readonly statusLabels = TASK_STATUS_LABELS;
+  protected readonly statusLabelKeys = TASK_STATUS_LABEL_KEYS;
 
   /** Connects every column to every other, so a card can be dropped anywhere. */
   protected readonly dropListIds = computed(() =>

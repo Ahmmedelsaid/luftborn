@@ -2,7 +2,8 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { click, exists, query, text } from '../../../../testing/component-helpers';
 import { createStatistic } from '../../../../testing/task.factory';
-import { Statistic } from '../../../core/models';
+import { provideTestTranslate, useTranslations } from '../../../../testing/translate-helpers';
+import { Statistic } from '../../../core/interfaces';
 import { provideAppIcons } from '../../icons/provide-icons';
 import { StatCard } from './stat-card';
 
@@ -12,8 +13,9 @@ describe('StatCard', () => {
   beforeEach(() => {
     TestBed.configureTestingModule({
       imports: [StatCard],
-      providers: [provideAppIcons()],
+      providers: [provideAppIcons(), provideTestTranslate()],
     });
+    useTranslations();
     fixture = TestBed.createComponent(StatCard);
   });
 

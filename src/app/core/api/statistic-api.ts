@@ -1,7 +1,7 @@
 import { httpResource, HttpResourceRef } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
-import { Statistic } from '../models';
-import { API_BASE_URL, httpOptions, ResourceFactoryOptions } from './api.config';
+import { Statistic, ResourceFactoryOptions } from '../interfaces';
+import { API_BASE_URL, httpOptions } from './api.config';
 
 const STATISTICS_CACHE_TTL_MS = 60_000;
 

@@ -1,3 +1,5 @@
+import { LocalisedLabel } from './i18n.interface';
+
 export type TaskStatus = 'todo' | 'in_progress' | 'done';
 export type TaskPriority = 'low' | 'medium' | 'high';
 
@@ -9,16 +11,17 @@ export const TASK_STATUSES = [
 
 export const TASK_PRIORITIES = ['high', 'medium', 'low'] as const satisfies readonly TaskPriority[];
 
-export const TASK_STATUS_LABELS: Readonly<Record<TaskStatus, string>> = {
-  todo: 'To Do',
-  in_progress: 'In Progress',
-  done: 'Done',
+/** Translation keys, so no English leaks out of the domain layer. */
+export const TASK_STATUS_LABEL_KEYS: Readonly<Record<TaskStatus, string>> = {
+  todo: 'status.todo',
+  in_progress: 'status.in_progress',
+  done: 'status.done',
 };
 
-export const TASK_PRIORITY_LABELS: Readonly<Record<TaskPriority, string>> = {
-  high: 'High',
-  medium: 'Medium',
-  low: 'Low',
+export const TASK_PRIORITY_LABEL_KEYS: Readonly<Record<TaskPriority, string>> = {
+  high: 'priority.high',
+  medium: 'priority.medium',
+  low: 'priority.low',
 };
 
 /** Sort weight for priority; higher sorts first. */
@@ -89,7 +92,8 @@ export interface TaskView extends Task {
   readonly overdue: boolean;
   readonly dueState: DueDateState;
   /** e.g. `"Overdue by 2 days"`. */
-  readonly dueLabel: string;
+  /** Translation key plus params; the view layer renders it. */
+  readonly dueLabel: LocalisedLabel;
   /** Negative when overdue. */
   readonly daysUntilDue: number;
   readonly order: number;

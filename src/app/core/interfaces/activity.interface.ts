@@ -1,3 +1,5 @@
+import { LocalisedLabel } from './i18n.interface';
+
 export type ActivityType = 'created' | 'updated' | 'status_changed' | 'completed' | 'deleted';
 
 /** An entry in the recent-activity feed, from `GET /api/activities`. */
@@ -18,6 +20,6 @@ export interface Activity {
 export type ActivityDraft = Omit<Activity, 'id'>;
 
 export interface ActivityView extends Activity {
-  /** e.g. `"just now"`, `"yesterday"`. */
-  readonly relativeTime: string;
+  /** Translation key plus params; the view layer renders it. */
+  readonly relativeTime: LocalisedLabel;
 }

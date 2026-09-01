@@ -1,5 +1,5 @@
-<div class="bar__segments" role="tablist" aria-label="Filter tasks by status">
-  @for (segment of segments; track segment.label) {
+<div class="bar__segments" role="tablist" [attr.aria-label]="'filters.byStatus' | translate">
+  @for (segment of segments; track segment.labelKey) {
     <button
       type="button"
       role="tab"
@@ -8,7 +8,7 @@
       [attr.aria-selected]="activeStatus() === segment.value"
       (click)="statusChange.emit(segment.value)"
     >
-      {{ segment.label }}
+      {{ segment.labelKey | translate }}
     </button>
   }
 </div>
@@ -17,7 +17,7 @@
   @if (hasFilters()) {
     <button type="button" class="bar__clear" (click)="clearFilters.emit()">
       <mat-icon svgIcon="close" aria-hidden="true" />
-      <span>Clear</span>
+      <span>{{ 'actions.clear' | translate }}</span>
     </button>
   }
 
@@ -28,7 +28,7 @@
       [class.bar__dropdown--active]="activeAssigneeIds().length > 0"
       [matMenuTriggerFor]="assigneeMenu"
     >
-      <span>{{ assigneeButtonLabel() }}</span>
+      <span>{{ assigneeLabel() }}</span>
       <mat-icon svgIcon="chevron-down" aria-hidden="true" />
     </button>
 
@@ -51,14 +51,14 @@
     [class.bar__dropdown--active]="activePriorities().length > 0"
     [matMenuTriggerFor]="priorityMenu"
   >
-    <span>{{ priorityButtonLabel() }}</span>
+    <span>{{ priorityLabel() }}</span>
     <mat-icon svgIcon="chevron-down" aria-hidden="true" />
   </button>
 
   <mat-menu #priorityMenu="matMenu">
     @for (priority of priorities; track priority) {
       <button mat-menu-item type="button" (click)="priorityToggle.emit(priority)">
-        <span class="bar__menu-label">{{ priorityLabels[priority] }}</span>
+        <span class="bar__menu-label">{{ priorityLabelKeys[priority] | translate }}</span>
         @if (isPriorityActive(priority)) {
           <mat-icon svgIcon="tasks" aria-hidden="true" />
         }
@@ -68,6 +68,6 @@
 
   <button matButton="filled" type="button" class="bar__create" (click)="createTask.emit()">
     <mat-icon svgIcon="plus" aria-hidden="true" />
-    New Task
+    {{ 'actions.newTask' | translate }}
   </button>
 </div>

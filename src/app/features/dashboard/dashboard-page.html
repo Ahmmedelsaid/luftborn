@@ -1,11 +1,11 @@
-<app-page-header title="Dashboard" [subtitle]="summary()">
+<app-page-header [title]="'dashboard.title' | translate" [subtitle]="summary()">
   <button matButton="outlined" type="button" (click)="onReload()">
     <mat-icon svgIcon="refresh" aria-hidden="true" />
-    Refresh
+    {{ 'actions.refresh' | translate }}
   </button>
 </app-page-header>
 
-<section class="dash__stats" aria-label="Task statistics">
+<section class="dash__stats" [attr.aria-label]="'dashboard.statistics' | translate">
   @if (statisticsLoading()) {
     @for (row of statisticSkeletons; track row) {
       <app-skeleton height="104px" radius="var(--app-radius-md)" />
@@ -39,7 +39,7 @@
   <app-error-state
     class="dash__error"
     [error]="error"
-    title="Could not load your tasks"
+    [title]="'dashboard.loadFailed' | translate"
     (retry)="onReload()"
   />
 } @else {

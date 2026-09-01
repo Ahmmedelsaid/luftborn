@@ -1,4 +1,5 @@
 import { InjectionToken } from '@angular/core';
+import { LocalisedLabel } from '../interfaces';
 
 const MS_PER_DAY = 24 * 60 * 60 * 1000;
 
@@ -47,79 +48,81 @@ export function differenceInCalendarDays(to: Date, from: Date): number {
   return Math.round(diff / MS_PER_DAY);
 }
 
-function plural(count: number, unit: string): string {
-  return `${count} ${unit}${count === 1 ? '' : 's'}`;
-}
-
-export function formatDueLabel(daysUntilDue: number): string {
+/**
+ * The due-date line on a task card, as a key the view layer translates.
+ *
+ * Returning a key rather than a sentence keeps these functions free of any
+ * language, and lets Arabic choose its own plural form.
+ */
+export function formatDueLabel(daysUntilDue: number): LocalisedLabel {
   if (daysUntilDue < 0) {
-    return `Overdue by ${plural(Math.abs(daysUntilDue), 'day')}`;
+    const overdueBy = Math.abs(daysUntilDue);
+    return { key: 'task.due.overdue', params: { count: overdueBy }, count: overdueBy };
   }
 
   if (daysUntilDue === 0) {
-    return 'Due today';
+    return { key: 'task.due.today' };
   }
 
   if (daysUntilDue === 1) {
-    return 'Due tomorrow';
+    return { key: 'task.due.tomorrow' };
   }
 
   if (daysUntilDue === 7) {
-    return 'Due in 1 week';
+    return { key: 'task.due.inOneWeek' };
   }
 
-  return `Due in ${plural(daysUntilDue, 'day')}`;
+  return { key: 'task.due.inDays', params: { count: daysUntilDue }, count: daysUntilDue };
 }
 
-export function formatCompletedLabel(completedAt: string, now: Date): string {
+/** The completion line on `done` cards, as a key the view layer translates. */
+export function formatCompletedLabel(completedAt: string, now: Date): LocalisedLabel {
   const completed = parseApiDate(completedAt);
   const days = differenceInCalendarDays(now, completed);
 
   if (days <= 0) {
-    return 'Completed today';
+    return { key: 'task.completed.today' };
   }
 
   if (days === 1) {
-    return 'Completed yesterday';
+    return { key: 'task.completed.yesterday' };
   }
 
   if (days < 7) {
-    return `Completed ${plural(days, 'day')} ago`;
+    return { key: 'task.completed.daysAgo', params: { count: days }, count: days };
   }
 
-  return `Completed on ${completed.toLocaleDateString(undefined, {
-    month: 'short',
-    day: 'numeric',
-  })}`;
+  return { key: 'task.completed.onDate', params: { date: completed.toISOString() } };
 }
 
-export function formatRelativeTime(timestamp: string, now: Date): string {
+/** Coarse relative timestamp for the activity feed, as a translation key. */
+export function formatRelativeTime(timestamp: string, now: Date): LocalisedLabel {
   const parsed = new Date(timestamp);
   const elapsedMinutes = Math.floor((now.getTime() - parsed.getTime()) / 60_000);
 
   if (elapsedMinutes < 1) {
-    return 'just now';
+    return { key: 'time.justNow' };
   }
 
   if (elapsedMinutes < 60) {
-    return `${plural(elapsedMinutes, 'minute')} ago`;
+    return { key: 'time.minutesAgo', params: { count: elapsedMinutes }, count: elapsedMinutes };
   }
 
   const elapsedHours = Math.floor(elapsedMinutes / 60);
 
   if (elapsedHours < 24) {
-    return `${plural(elapsedHours, 'hour')} ago`;
+    return { key: 'time.hoursAgo', params: { count: elapsedHours }, count: elapsedHours };
   }
 
   const elapsedDays = differenceInCalendarDays(now, parsed);
 
   if (elapsedDays === 1) {
-    return 'yesterday';
+    return { key: 'time.yesterday' };
   }
 
   if (elapsedDays < 7) {
-    return `${plural(elapsedDays, 'day')} ago`;
+    return { key: 'time.daysAgo', params: { count: elapsedDays }, count: elapsedDays };
   }
 
-  return parsed.toLocaleDateString(undefined, { month: 'short', day: 'numeric' });
+  return { key: 'time.onDate', params: { date: parsed.toISOString() } };
 }
