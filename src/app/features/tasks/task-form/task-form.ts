@@ -47,21 +47,12 @@ import {
 } from '../../../core/validators/task.validators';
 import { Avatar } from '../../../shared/components/avatar/avatar';
 import { FieldError } from '../../../shared/components/field-error/field-error';
+import { TaskFormShape } from '../interfaces';
 
 const TITLE_MAX = 120;
 const DESCRIPTION_MAX = 600;
 const TAG_MAX = 24;
 const MAX_TAGS = 6;
-
-interface TaskFormShape {
-  title: FormControl<string>;
-  description: FormControl<string>;
-  status: FormControl<TaskStatus>;
-  priority: FormControl<TaskPriority>;
-  dueDate: FormControl<Date | null>;
-  assigneeId: FormControl<string>;
-  tags: FormArray<FormControl<string>>;
-}
 
 /**
  * Create/edit form for a task.
