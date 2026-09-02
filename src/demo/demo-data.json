@@ -1,0 +1,504 @@
+{
+  "tasks": [
+    {
+      "id": "task-001",
+      "title": "Design new homepage layout",
+      "description": "Create wireframes and mockups for the new homepage redesign with modern UI elements",
+      "status": "todo",
+      "priority": "high",
+      "dueDate": "2026-09-03",
+      "assignee": {
+        "id": "user-001",
+        "name": "John Doe",
+        "avatar": "JD",
+        "email": "john.doe@company.com"
+      },
+      "tags": [
+        "Design"
+      ],
+      "createdAt": "2026-08-30T13:48:29.737Z",
+      "updatedAt": "2026-09-01T13:48:29.737Z"
+    },
+    {
+      "id": "task-002",
+      "title": "Update documentation",
+      "description": "Review and update API documentation for v2.0 release",
+      "status": "todo",
+      "priority": "medium",
+      "dueDate": "2026-09-06",
+      "assignee": {
+        "id": "user-002",
+        "name": "Sarah Smith",
+        "avatar": "SS",
+        "email": "sarah.smith@company.com"
+      },
+      "tags": [
+        "Documentation"
+      ],
+      "createdAt": "2026-08-29T13:48:29.737Z",
+      "updatedAt": "2026-08-31T13:48:29.737Z"
+    },
+    {
+      "id": "task-003",
+      "title": "Organize team meeting",
+      "description": "Schedule and prepare agenda for quarterly planning session",
+      "status": "todo",
+      "priority": "low",
+      "dueDate": "2026-09-08",
+      "assignee": {
+        "id": "user-003",
+        "name": "Mike Johnson",
+        "avatar": "MJ",
+        "email": "mike.johnson@company.com"
+      },
+      "tags": [
+        "Admin"
+      ],
+      "createdAt": "2026-08-28T13:48:29.737Z",
+      "updatedAt": "2026-08-31T13:48:29.737Z"
+    },
+    {
+      "id": "task-015",
+      "title": "Prepare Q4 budget report",
+      "description": "Compile and analyze financial data for quarterly budget presentation",
+      "status": "todo",
+      "priority": "high",
+      "dueDate": "2026-08-30",
+      "isOverdue": true,
+      "assignee": {
+        "id": "user-002",
+        "name": "Sarah Smith",
+        "avatar": "SS",
+        "email": "sarah.smith@company.com"
+      },
+      "tags": [
+        "Finance"
+      ],
+      "createdAt": "2026-08-16T13:48:29.737Z",
+      "updatedAt": "2026-09-01T13:48:29.737Z"
+    },
+    {
+      "id": "task-016",
+      "title": "Review client feedback",
+      "description": "Analyze customer feedback from user testing sessions",
+      "status": "todo",
+      "priority": "medium",
+      "dueDate": "2026-08-29",
+      "isOverdue": true,
+      "assignee": {
+        "id": "user-004",
+        "name": "Emily Davis",
+        "avatar": "ED",
+        "email": "emily.davis@company.com"
+      },
+      "tags": [
+        "Research"
+      ],
+      "createdAt": "2026-08-17T13:48:29.737Z",
+      "updatedAt": "2026-08-31T13:48:29.737Z"
+    },
+    {
+      "id": "task-004",
+      "title": "Fix responsive design issues",
+      "description": "Address layout problems on mobile and tablet devices",
+      "status": "todo",
+      "priority": "high",
+      "dueDate": "2026-09-04",
+      "assignee": {
+        "id": "user-004",
+        "name": "Emily Davis",
+        "avatar": "ED",
+        "email": "emily.davis@company.com"
+      },
+      "tags": [
+        "Frontend"
+      ],
+      "createdAt": "2026-08-27T13:48:29.737Z",
+      "updatedAt": "2026-09-01T13:48:29.737Z"
+    },
+    {
+      "id": "task-005",
+      "title": "Implement user authentication",
+      "description": "Add JWT-based authentication system with refresh tokens",
+      "status": "in_progress",
+      "priority": "high",
+      "dueDate": "2026-09-04",
+      "assignee": {
+        "id": "user-001",
+        "name": "John Doe",
+        "avatar": "JD",
+        "email": "john.doe@company.com"
+      },
+      "tags": [
+        "Backend"
+      ],
+      "createdAt": "2026-08-25T13:48:29.737Z",
+      "updatedAt": "2026-09-01T13:48:29.737Z"
+    },
+    {
+      "id": "task-006",
+      "title": "Optimize database queries",
+      "description": "Review and optimize slow queries identified in performance audit",
+      "status": "in_progress",
+      "priority": "medium",
+      "dueDate": "2026-09-05",
+      "assignee": {
+        "id": "user-002",
+        "name": "Sarah Smith",
+        "avatar": "SS",
+        "email": "sarah.smith@company.com"
+      },
+      "tags": [
+        "Performance"
+      ],
+      "createdAt": "2026-08-26T13:48:29.737Z",
+      "updatedAt": "2026-08-31T13:48:29.737Z"
+    },
+    {
+      "id": "task-007",
+      "title": "Create API endpoints",
+      "description": "Develop RESTful API endpoints for task management features",
+      "status": "in_progress",
+      "priority": "high",
+      "dueDate": "2026-09-03",
+      "assignee": {
+        "id": "user-003",
+        "name": "Mike Johnson",
+        "avatar": "MJ",
+        "email": "mike.johnson@company.com"
+      },
+      "tags": [
+        "Backend"
+      ],
+      "createdAt": "2026-08-24T13:48:29.737Z",
+      "updatedAt": "2026-09-01T13:48:29.737Z"
+    },
+    {
+      "id": "task-008",
+      "title": "Add dark mode support",
+      "description": "Implement theme toggle with dark/light mode preferences",
+      "status": "in_progress",
+      "priority": "medium",
+      "dueDate": "2026-09-07",
+      "assignee": {
+        "id": "user-004",
+        "name": "Emily Davis",
+        "avatar": "ED",
+        "email": "emily.davis@company.com"
+      },
+      "tags": [
+        "Frontend"
+      ],
+      "createdAt": "2026-08-23T13:48:29.737Z",
+      "updatedAt": "2026-08-31T13:48:29.737Z"
+    },
+    {
+      "id": "task-017",
+      "title": "Update payment gateway integration",
+      "description": "Migrate to new payment provider API and update billing logic",
+      "status": "in_progress",
+      "priority": "high",
+      "dueDate": "2026-08-31",
+      "isOverdue": true,
+      "assignee": {
+        "id": "user-001",
+        "name": "John Doe",
+        "avatar": "JD",
+        "email": "john.doe@company.com"
+      },
+      "tags": [
+        "Backend",
+        "Critical"
+      ],
+      "createdAt": "2026-08-18T13:48:29.737Z",
+      "updatedAt": "2026-09-01T13:48:29.737Z"
+    },
+    {
+      "id": "task-009",
+      "title": "Fix critical login bug",
+      "description": "Resolved issue preventing users from logging in on mobile devices",
+      "status": "done",
+      "priority": "high",
+      "dueDate": "2026-08-31",
+      "completedAt": "2026-09-01T13:48:29.737Z",
+      "assignee": {
+        "id": "user-003",
+        "name": "Mike Johnson",
+        "avatar": "MJ",
+        "email": "mike.johnson@company.com"
+      },
+      "tags": [
+        "Bug Fix"
+      ],
+      "createdAt": "2026-08-30T13:48:29.737Z",
+      "updatedAt": "2026-09-01T13:48:29.737Z"
+    },
+    {
+      "id": "task-010",
+      "title": "Setup CI/CD pipeline",
+      "description": "Configured GitHub Actions for automated testing and deployment",
+      "status": "done",
+      "priority": "medium",
+      "dueDate": "2026-08-30",
+      "completedAt": "2026-08-31T13:48:29.737Z",
+      "assignee": {
+        "id": "user-001",
+        "name": "John Doe",
+        "avatar": "JD",
+        "email": "john.doe@company.com"
+      },
+      "tags": [
+        "DevOps"
+      ],
+      "createdAt": "2026-08-23T13:48:29.737Z",
+      "updatedAt": "2026-08-31T13:48:29.737Z"
+    },
+    {
+      "id": "task-011",
+      "title": "Write unit tests",
+      "description": "Add comprehensive unit tests for authentication module",
+      "status": "done",
+      "priority": "high",
+      "dueDate": "2026-08-29",
+      "completedAt": "2026-08-30T13:48:29.737Z",
+      "assignee": {
+        "id": "user-002",
+        "name": "Sarah Smith",
+        "avatar": "SS",
+        "email": "sarah.smith@company.com"
+      },
+      "tags": [
+        "Testing"
+      ],
+      "createdAt": "2026-08-22T13:48:29.737Z",
+      "updatedAt": "2026-08-30T13:48:29.737Z"
+    },
+    {
+      "id": "task-012",
+      "title": "Refactor payment module",
+      "description": "Clean up and optimize payment processing code",
+      "status": "done",
+      "priority": "medium",
+      "dueDate": "2026-08-28",
+      "completedAt": "2026-08-29T13:48:29.737Z",
+      "assignee": {
+        "id": "user-004",
+        "name": "Emily Davis",
+        "avatar": "ED",
+        "email": "emily.davis@company.com"
+      },
+      "tags": [
+        "Refactoring"
+      ],
+      "createdAt": "2026-08-20T13:48:29.737Z",
+      "updatedAt": "2026-08-29T13:48:29.737Z"
+    },
+    {
+      "id": "task-013",
+      "title": "Security audit",
+      "description": "Conduct comprehensive security review of the application",
+      "status": "done",
+      "priority": "high",
+      "dueDate": "2026-08-27",
+      "completedAt": "2026-08-28T13:48:29.737Z",
+      "assignee": {
+        "id": "user-001",
+        "name": "John Doe",
+        "avatar": "JD",
+        "email": "john.doe@company.com"
+      },
+      "tags": [
+        "Security"
+      ],
+      "createdAt": "2026-08-19T13:48:29.737Z",
+      "updatedAt": "2026-08-28T13:48:29.737Z"
+    },
+    {
+      "id": "task-014",
+      "title": "Update dependencies",
+      "description": "Update all npm packages to latest stable versions",
+      "status": "done",
+      "priority": "low",
+      "dueDate": "2026-08-26",
+      "completedAt": "2026-08-27T13:48:29.737Z",
+      "assignee": {
+        "id": "user-003",
+        "name": "Mike Johnson",
+        "avatar": "MJ",
+        "email": "mike.johnson@company.com"
+      },
+      "tags": [
+        "Maintenance"
+      ],
+      "createdAt": "2026-08-18T13:48:29.737Z",
+      "updatedAt": "2026-08-27T13:48:29.737Z"
+    }
+  ],
+  "users": [
+    {
+      "id": "user-001",
+      "name": "John Doe",
+      "avatar": "JD",
+      "email": "john.doe@company.com",
+      "color": "#1976D2"
+    },
+    {
+      "id": "user-002",
+      "name": "Sarah Smith",
+      "avatar": "SS",
+      "email": "sarah.smith@company.com",
+      "color": "#7B1FA2"
+    },
+    {
+      "id": "user-003",
+      "name": "Mike Johnson",
+      "avatar": "MJ",
+      "email": "mike.johnson@company.com",
+      "color": "#00897B"
+    },
+    {
+      "id": "user-004",
+      "name": "Emily Davis",
+      "avatar": "ED",
+      "email": "emily.davis@company.com",
+      "color": "#EF6C00"
+    }
+  ],
+  "activities": [
+    {
+      "id": "activity-001",
+      "type": "updated",
+      "taskId": "task-001",
+      "taskTitle": "Design new homepage layout",
+      "userId": "user-001",
+      "userName": "John Doe",
+      "userAvatar": "JD",
+      "message": "updated \"Design new homepage layout\"",
+      "timestamp": "2026-09-01T13:48:29.737Z"
+    },
+    {
+      "id": "activity-002",
+      "type": "updated",
+      "taskId": "task-015",
+      "taskTitle": "Prepare Q4 budget report",
+      "userId": "user-002",
+      "userName": "Sarah Smith",
+      "userAvatar": "SS",
+      "message": "updated \"Prepare Q4 budget report\"",
+      "timestamp": "2026-09-01T13:48:29.737Z"
+    },
+    {
+      "id": "activity-003",
+      "type": "updated",
+      "taskId": "task-004",
+      "taskTitle": "Fix responsive design issues",
+      "userId": "user-004",
+      "userName": "Emily Davis",
+      "userAvatar": "ED",
+      "message": "updated \"Fix responsive design issues\"",
+      "timestamp": "2026-09-01T13:48:29.737Z"
+    },
+    {
+      "id": "activity-004",
+      "type": "status_changed",
+      "taskId": "task-005",
+      "taskTitle": "Implement user authentication",
+      "userId": "user-001",
+      "userName": "John Doe",
+      "userAvatar": "JD",
+      "message": "moved \"Implement user authentication\" to In Progress",
+      "timestamp": "2026-09-01T13:48:29.737Z"
+    },
+    {
+      "id": "activity-005",
+      "type": "status_changed",
+      "taskId": "task-007",
+      "taskTitle": "Create API endpoints",
+      "userId": "user-003",
+      "userName": "Mike Johnson",
+      "userAvatar": "MJ",
+      "message": "moved \"Create API endpoints\" to In Progress",
+      "timestamp": "2026-09-01T13:48:29.737Z"
+    },
+    {
+      "id": "activity-006",
+      "type": "status_changed",
+      "taskId": "task-017",
+      "taskTitle": "Update payment gateway integration",
+      "userId": "user-001",
+      "userName": "John Doe",
+      "userAvatar": "JD",
+      "message": "moved \"Update payment gateway integration\" to In Progress",
+      "timestamp": "2026-09-01T13:48:29.737Z"
+    },
+    {
+      "id": "activity-007",
+      "type": "completed",
+      "taskId": "task-009",
+      "taskTitle": "Fix critical login bug",
+      "userId": "user-003",
+      "userName": "Mike Johnson",
+      "userAvatar": "MJ",
+      "message": "completed \"Fix critical login bug\"",
+      "timestamp": "2026-09-01T13:48:29.737Z"
+    },
+    {
+      "id": "activity-008",
+      "type": "updated",
+      "taskId": "task-002",
+      "taskTitle": "Update documentation",
+      "userId": "user-002",
+      "userName": "Sarah Smith",
+      "userAvatar": "SS",
+      "message": "updated \"Update documentation\"",
+      "timestamp": "2026-08-31T13:48:29.737Z"
+    }
+  ],
+  "statistics": [
+    {
+      "id": "stat-001",
+      "title": "Total Tasks",
+      "icon": "📊",
+      "value": 156,
+      "change": "+12",
+      "changeLabel": "this week",
+      "changeType": "positive",
+      "color": "#1976D2"
+    },
+    {
+      "id": "stat-002",
+      "title": "Completed",
+      "icon": "✅",
+      "value": 89,
+      "change": "+8",
+      "changeLabel": "today",
+      "changeType": "positive",
+      "color": "#388E3C"
+    },
+    {
+      "id": "stat-003",
+      "title": "In Progress",
+      "icon": "🔄",
+      "value": 42,
+      "change": "0",
+      "changeLabel": "Same as yesterday",
+      "changeType": "neutral",
+      "color": "#FF6F00"
+    },
+    {
+      "id": "stat-004",
+      "title": "Overdue",
+      "icon": "⚠️",
+      "value": 25,
+      "change": "+3",
+      "changeLabel": "today",
+      "changeType": "negative",
+      "color": "#D32F2F"
+    }
+  ],
+  "meta": {
+    "totalCount": 17,
+    "lastUpdated": "2026-09-01T13:48:29.737Z",
+    "statisticsLastUpdated": "2026-09-01T13:48:29.733Z"
+  }
+}

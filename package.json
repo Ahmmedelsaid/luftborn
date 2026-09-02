@@ -8,6 +8,8 @@
     "api": "json-server --watch server/db.js --port 3000 --routes server/routes.json --middlewares server/middlewares.js",
     "build": "ng build",
     "build:stats": "ng build --stats-json",
+    "generate:demo-data": "node scripts/generate-demo-data.js",
+    "build:demo": "npm run generate:demo-data && ng build --configuration demo && node -e \"require('node:fs').copyFileSync('dist/task-management-dashboard/browser/index.html','dist/task-management-dashboard/browser/404.html')\"",
     "watch": "ng build --watch --configuration development",
     "test": "ng test",
     "test:watch": "ng test --watch",
@@ -54,7 +56,7 @@
     "typescript-eslint": "^8.69.0",
     "vitest": "^4.0.8"
   },
-  "description": "Task Management Dashboard — Angular 21 technical assignment for Luftborn",
+  "description": "Task Management Dashboard \u2014 Angular 21 technical assignment for Luftborn",
   "engines": {
     "node": ">=20.19.0",
     "npm": ">=10"
