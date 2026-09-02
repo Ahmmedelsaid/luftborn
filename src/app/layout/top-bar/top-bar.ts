@@ -19,9 +19,9 @@ import { LanguageSwitcher } from '../../shared/components/language-switcher/lang
 export class TopBar {
   readonly search = input<string>('');
 
-  readonly userInitials = input<string>('JD');
+  readonly userInitials = input<string>('AE');
 
-  readonly userName = input<string>('John Doe');
+  readonly userName = input<string>('Ahmed Elsaid');
 
   /** The dot is hidden at zero. */
   readonly notificationCount = input<number>(0);
