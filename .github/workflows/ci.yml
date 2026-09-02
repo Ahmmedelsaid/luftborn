@@ -94,6 +94,53 @@ jobs:
           path: dist/
           retention-days: 7
 
+  # Only from main, and only once every gate above has passed: a broken demo is
+  # worse than no demo, because the link is what a reviewer clicks first.
+  deploy:
+    name: Deploy demo to Pages
+    if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+    needs: [quality, test, build, docker]
+    runs-on: ubuntu-latest
+
+    permissions:
+      contents: read
+      pages: write
+      id-token: write
+
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+
+    steps:
+      - uses: actions/checkout@v7
+
+      - uses: actions/setup-node@v7
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: npm
+
+      - run: npm ci
+
+      # Fixtures first, so the published demo never shows due dates relative to
+      # whenever they were last committed.
+      - name: Regenerate fixtures
+        run: npm run generate:data
+
+      # Builds the `demo` configuration: base href for the repository subpath,
+      # the in-browser stand-in for the API swapped in, and a copy of index.html
+      # at 404.html so a pasted deep link still boots the router.
+      - name: Build the demo
+        run: npm run build:demo
+
+      - uses: actions/configure-pages@v5
+
+      - uses: actions/upload-pages-artifact@v4
+        with:
+          path: dist/task-management-dashboard/browser
+
+      - id: deployment
+        uses: actions/deploy-pages@v4
+
   docker:
     name: Docker image
     runs-on: ubuntu-latest

@@ -9,6 +9,7 @@ import {
   withRouterConfig,
 } from '@angular/router';
 
+import { DEMO_INTERCEPTORS } from '../demo/demo.providers';
 import { routes } from './app.routes';
 import { cacheInterceptor } from './core/interceptors/cache.interceptor';
 import { errorInterceptor } from './core/interceptors/error.interceptor';
@@ -31,7 +32,15 @@ export const appConfig: ApplicationConfig = {
       // Order matters. Requests travel down this list and responses back up, so
       // `errorInterceptor` normalises a failure before `retryInterceptor` decides
       // whether to retry it, and a cache hit short-circuits both.
-      withInterceptors([cacheInterceptor, retryInterceptor, errorInterceptor]),
+      // `DEMO_INTERCEPTORS` is empty here and holds the in-browser stand-in for
+      // the API in the GitHub Pages build. It goes last, in the network's own
+      // position, so everything above it behaves identically either way.
+      withInterceptors([
+        cacheInterceptor,
+        retryInterceptor,
+        errorInterceptor,
+        ...DEMO_INTERCEPTORS,
+      ]),
     ),
     provideAppIcons(),
     // Runtime language switching rather than build-time locales: the brief asks

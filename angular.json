@@ -60,6 +60,28 @@
               "optimization": false,
               "extractLicenses": false,
               "sourceMap": true
+            },
+            "demo": {
+              "budgets": [
+                {
+                  "type": "initial",
+                  "maximumWarning": "550kB",
+                  "maximumError": "800kB"
+                },
+                {
+                  "type": "anyComponentStyle",
+                  "maximumWarning": "6kB",
+                  "maximumError": "10kB"
+                }
+              ],
+              "outputHashing": "all",
+              "baseHref": "/luftborn/",
+              "fileReplacements": [
+                {
+                  "replace": "src/demo/demo.providers.ts",
+                  "with": "src/demo/demo.providers.demo.ts"
+                }
+              ]
             }
           },
           "defaultConfiguration": "production"
