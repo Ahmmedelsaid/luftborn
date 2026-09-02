@@ -35,10 +35,4 @@ function failureInjection(req, res, next) {
   next();
 }
 
-/** Keeps control params out of json-server's filtering. */
-function stripControlParams(req, _res, next) {
-  delete req.query['__fail'];
-  next();
-}
-
-module.exports = [failureInjection, stripControlParams, latency];
+module.exports = [failureInjection, latency];
