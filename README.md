@@ -117,8 +117,9 @@ src/
 │  │  └─ interfaces/
 │  ├─ layout/                 # shell, top bar, side nav
 │  │  └─ interfaces/
-│  ├─ shared/                 # presentational components, pipes, icons
+│  ├─ shared/                 # presentational components and icons
 │  │  ├─ components/
+│  │  ├─ icons/
 │  │  └─ interfaces/
 │  └─ features/               # one folder per route, lazy-loaded
 ├─ styles/                    # tokens, mixins, theme
